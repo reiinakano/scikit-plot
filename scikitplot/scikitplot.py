@@ -108,7 +108,5 @@ if __name__ == '__main__':
     X, y = load_breast_cancer(return_X_y=True)
     rf = RandomForestClassifier()
     rf = classifier_factory(rf)
-    rf.plot_learning_curve(X, y)
-    plt.show()
     rf.plot_learning_curve(X, y, train_sizes=np.linspace(.1, 1.0, 10))
     plt.show()
