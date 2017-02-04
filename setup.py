@@ -44,7 +44,7 @@ setup(
     tests_require=['pytest'],
     install_requires=[
         'matplotlib>=1.3.1',
-        'scikit-learn==0.18.1'
+        'scikit-learn>=0.18'
     ],
     cmdclass={'test': PyTest},
     author_email='reiichiro.s.nakano@gmail.com',
@@ -61,7 +61,7 @@ setup(
         'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
-        'Topic :: Software Development :: Libraries :: Python Modules',
+        'Topic :: Scientific/Engineering :: Visualization',
         ],
     extras_require={
         'testing': ['pytest'],
