@@ -60,5 +60,19 @@ class TestClassifierFactory(unittest.TestCase):
             assert issubclass(w[-1].category, UserWarning)
             assert " not in clf. Some plots may not be possible to generate." in str(w[-1].message)
 
+    def test_plot_learning_curve_insertion(self):
+
+        clf = self.Classifier()
+        scikitplot.classifier_factory(clf)
+        assert hasattr(clf, 'plot_learning_curve')
+
+        with warnings.catch_warnings(record=True) as w:
+            warnings.simplefilter('always')
+            scikitplot.classifier_factory(clf)
+            assert len(w) == 1
+            assert issubclass(w[-1].category, UserWarning)
+            assert '"plot_learning_curve" method already in clf. ' \
+                   'Overriding anyway. This may result in unintended behavior.' in str(w[-1].message)
+
 if __name__ == '__main__':
     unittest.main()

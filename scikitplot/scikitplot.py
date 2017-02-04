@@ -31,6 +31,9 @@ def classifier_factory(clf):
         if not hasattr(clf, method):
             warnings.warn('{} not in clf. Some plots may not be possible to generate.'.format(method))
 
+    if hasattr(clf, 'plot_learning_curve'):
+        warnings.warn('"plot_learning_curve" method already in clf. '
+                      'Overriding anyway. This may result in unintended behavior.')
     clf.plot_learning_curve = types.MethodType(plot_learning_curve, clf)
     return clf
 
