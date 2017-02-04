@@ -1,0 +1,1 @@
+Scikit-plot is an intuitive library to add plotting functionality to scikit-learn objects.
