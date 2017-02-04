@@ -3,10 +3,10 @@ from __future__ import absolute_import
 import matplotlib.pyplot as plt
 from scikitplot.scikitplot import classifier_factory
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.datasets import load_breast_cancer
+from sklearn.datasets import load_breast_cancer as load_data
 
 
-X, y = load_breast_cancer(return_X_y=True)
+X, y = load_data(return_X_y=True)
 rf = RandomForestClassifier()
 rf = classifier_factory(rf)
 rf.plot_learning_curve(X, y)
