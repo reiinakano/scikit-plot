@@ -66,7 +66,7 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
             or if ``y`` is neither binary nor multiclass, :class:`KFold` is used.
 
         train_sizes (iterable, optional): Determines the training sizes used to plot the
-            learning curve.
+            learning curve. If None, np.linspace(.1, 1.0, 5) is used.
 
         n_jobs (int, optional): Number of jobs to run in parallel. Defaults to 1.
 
@@ -75,6 +75,9 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
     """
     if ax is None:
         fig, ax = plt.subplots(1, 1)
+
+    if train_sizes is None:
+        train_sizes = np.linspace(.1, 1.0, 5)
 
     ax.set_title(title)
     ax.set_xlabel("Training examples")
@@ -97,3 +100,15 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
     ax.legend(loc="best")
 
     return ax
+
+
+if __name__ == '__main__':
+    from sklearn.ensemble import RandomForestClassifier
+    from sklearn.datasets import load_breast_cancer
+    X, y = load_breast_cancer(return_X_y=True)
+    rf = RandomForestClassifier()
+    rf = classifier_factory(rf)
+    rf.plot_learning_curve(X, y)
+    plt.show()
+    rf.plot_learning_curve(X, y, train_sizes=np.linspace(.1, 1.0, 10))
+    plt.show()
