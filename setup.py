@@ -57,7 +57,8 @@ setup(
     classifiers = [
         'Programming Language :: Python',
         'Natural Language :: English',
-        'Intended Audience :: Developers, Data scientists',
+        'Intended Audience :: Developers',
+        'Intended Audience :: Science/Research',
         'License :: OSI Approved :: MIT License',
         'Operating System :: OS Independent',
         'Topic :: Software Development :: Libraries :: Python Modules',
