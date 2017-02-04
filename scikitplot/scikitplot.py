@@ -100,13 +100,3 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
     ax.legend(loc="best")
 
     return ax
-
-
-if __name__ == '__main__':
-    from sklearn.ensemble import RandomForestClassifier
-    from sklearn.datasets import load_breast_cancer
-    X, y = load_breast_cancer(return_X_y=True)
-    rf = RandomForestClassifier()
-    rf = classifier_factory(rf)
-    rf.plot_learning_curve(X, y, train_sizes=np.linspace(.1, 1.0, 10))
-    plt.show()
