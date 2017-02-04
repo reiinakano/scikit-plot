@@ -40,7 +40,7 @@ def classifier_factory(clf):
 
 def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=None, n_jobs=1,
                         ax=None):
-    """Generates a plot of the train and test learning curves fora given classifier.
+    """Generates a plot of the train and test learning curves for a given classifier.
 
     Args:
         clf: Object type that implements "fit" and "predict" methods.
@@ -49,7 +49,7 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
             Training vector, where n_samples is the number of samples and
             n_features is the number of features.
 
-        y (array-like, shape (n_samples) or (n_samples, n_features), optional):
+        y (array-like, shape (n_samples) or (n_samples, n_features)):
             Target relative to X for classification or regression;
             None for unsupervised learning.
 
@@ -103,3 +103,48 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
     ax.legend(loc="best")
 
     return ax
+
+
+def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv=None, n_jobs=1,
+                          ax=None):
+    """Generates the confusion matrix for a given classifier and dataset.
+
+    Args:
+        clf: Object type that implements "fit" and "predict" methods.
+
+        X (array-like, shape (n_samples, n_features)):
+            Training vector, where n_samples is the number of samples and
+            n_features is the number of features.
+
+        y (array-like, shape (n_samples) or (n_samples, n_features)):
+            Target relative to X for classification.
+
+        title (string, optional): Title of the generated plot. Defaults to "Confusion Matrix" if
+            `normalize` is True. Else, defaults to "Normalized Confusion Matrix.
+
+        normalize (bool, optional): If True, normalizes the confusion matrix before plotting.
+            Defaults to False.
+
+        do_cv (bool, optional): If True, the classifier is cross-validated on the dataset using the
+            cross-validation strategy in `cv` to generate the confusion matrix. If False, the
+            confusion matrix is generated without training or cross-validating the classifier.
+            This assumes that the classifier has already been called with its `fit` method beforehand.
+
+        cv (int, cross-validation generator, iterable, optional): Determines the
+            cross-validation strategy to be used for splitting.
+
+            Possible inputs for cv are:
+              - None, to use the default 3-fold cross-validation,
+              - integer, to specify the number of folds.
+              - An object to be used as a cross-validation generator.
+              - An iterable yielding train/test splits.
+
+            For integer/None inputs, if ``y`` is binary or multiclass,
+            :class:`StratifiedKFold` used. If the estimator is not a classifier
+            or if ``y`` is neither binary nor multiclass, :class:`KFold` is used.
+
+        n_jobs (int, optional): Number of jobs to run in parallel. Defaults to 1.
+
+        ax (:object:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+            the learning curve. If None, the plot is drawn on a new set of axes.
+    """
