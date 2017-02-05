@@ -1,9 +1,13 @@
 from __future__ import absolute_import
 import warnings
 import types
+import itertools
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.model_selection import learning_curve
+from sklearn.metrics import confusion_matrix
+from sklearn.model_selection import StratifiedKFold
+from sklearn.base import clone
 
 
 def classifier_factory(clf):
@@ -31,10 +35,16 @@ def classifier_factory(clf):
         if not hasattr(clf, method):
             warnings.warn('{} not in clf. Some plots may not be possible to generate.'.format(method))
 
-    if hasattr(clf, 'plot_learning_curve'):
-        warnings.warn('"plot_learning_curve" method already in clf. '
-                      'Overriding anyway. This may result in unintended behavior.')
-    clf.plot_learning_curve = types.MethodType(plot_learning_curve, clf)
+    additional_methods = {
+        'plot_learning_curve': plot_learning_curve,
+        'plot_confusion_matrix': plot_confusion_matrix
+    }
+
+    for key, fn in additional_methods.iteritems():
+        if hasattr(clf, key):
+            warnings.warn('"{}" method already in clf. '
+                          'Overriding anyway. This may result in unintended behavior.'.format(key))
+        setattr(clf, key, types.MethodType(fn, clf))
     return clf
 
 
@@ -148,3 +158,61 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
         ax (:object:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
     """
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+
+    if not do_cv:
+        preds = clf.predict(X)
+        cm = confusion_matrix(y, preds)
+        classes = clf.classes_
+
+    else:
+        if cv is None:
+            cv = StratifiedKFold(shuffle=True)
+        elif isinstance(cv, int):
+            cv = StratifiedKFold(n_splits=cv, shuffle=True)
+        else:
+            pass
+
+        clf_clone = clone(clf)
+
+        cms = []
+        for train_index, test_index in cv.split(X, y):
+            X_train, X_test = X[train_index], X[test_index]
+            y_train, y_test = y[train_index], y[test_index]
+            clf_clone.fit(X_train, y_train)
+            preds = clf_clone.predict(X)
+            cms.append(confusion_matrix(y, preds))
+
+        classes = clf_clone.classes_
+        cm = np.sum(cms, axis=0)
+
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+        cm = np.around(cm, decimals=2)
+
+    if title:
+        ax.set_title(title)
+    elif normalize:
+        ax.set_title('Normalized Confusion Matrix')
+    else:
+        ax.set_title('Confusion Matrix')
+
+    image = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    plt.colorbar(mappable=image)
+    tick_marks = np.arange(len(classes))
+    ax.set_xticks(tick_marks)
+    ax.set_xticklabels(classes)
+    ax.set_yticks(tick_marks)
+    ax.set_yticklabels(classes)
+
+    thresh = cm.max() / 2.
+    for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
+        ax.text(j, i, cm[i, j],
+                horizontalalignment="center",
+                color="white" if cm[i, j] > thresh else "black")
+
+    ax.set_ylabel('True label')
+    ax.set_xlabel('Predicted label')
+
+    return ax
