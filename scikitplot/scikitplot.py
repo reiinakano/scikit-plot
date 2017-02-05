@@ -179,8 +179,8 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
             X_train, X_test = X[train_index], X[test_index]
             y_train, y_test = y[train_index], y[test_index]
             clf_clone.fit(X_train, y_train)
-            preds = clf_clone.predict(X)
-            cms.append(confusion_matrix(y, preds))
+            preds = clf_clone.predict(X_test)
+            cms.append(confusion_matrix(y_test, preds))
 
         classes = clf_clone.classes_
         cm = np.sum(cms, axis=0)
