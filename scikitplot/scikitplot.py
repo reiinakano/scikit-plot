@@ -115,7 +115,7 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
     return ax
 
 
-def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv=None, n_jobs=1,
+def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv=None,
                           ax=None):
     """Generates the confusion matrix for a given classifier and dataset.
 
@@ -152,8 +152,6 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
             For integer/None inputs, if ``y`` is binary or multiclass,
             :class:`StratifiedKFold` used. If the estimator is not a classifier
             or if ``y`` is neither binary nor multiclass, :class:`KFold` is used.
-
-        n_jobs (int, optional): Number of jobs to run in parallel. Defaults to 1.
 
         ax (:object:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
