@@ -50,7 +50,7 @@ class TestClassifierFactory(unittest.TestCase):
         scikitplot.classifier_factory(clf)
 
         not_clf = self.NotClassifier()
-        self.assertRaises(ValueError, scikitplot.classifier_factory, not_clf)
+        self.assertRaises(TypeError, scikitplot.classifier_factory, not_clf)
 
         partial_clf = self.PartialClassifier()
         with warnings.catch_warnings(record=True) as w:

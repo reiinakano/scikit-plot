@@ -7,7 +7,6 @@ from sklearn.datasets import load_breast_cancer as load_data
 
 
 X, y = load_data(return_X_y=True)
-rf = RandomForestClassifier()
-rf = classifier_factory(rf)
+rf = classifier_factory(RandomForestClassifier())
 rf.plot_learning_curve(X, y)
 plt.show()
