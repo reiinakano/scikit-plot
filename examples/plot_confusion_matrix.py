@@ -1,3 +1,4 @@
+"""An example showing the plot_confusion_matrix method used by a scikit-learn classifier"""
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import load_digits as load_data
 import matplotlib.pyplot as plt
