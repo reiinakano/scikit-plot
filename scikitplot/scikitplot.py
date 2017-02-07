@@ -43,7 +43,8 @@ def classifier_factory(clf):
     additional_methods = {
         'plot_learning_curve': plot_learning_curve,
         'plot_confusion_matrix': plot_confusion_matrix,
-        'plot_roc_curve': plot_roc_curve
+        'plot_roc_curve': plot_roc_curve,
+        'plot_ks_statistic': plot_ks_statistic
     }
 
     for key, fn in additional_methods.iteritems():
@@ -230,7 +231,7 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_split=True,
     """Generates the ROC curves for a given classifier and dataset.
 
     Args:
-        clf: Object type that implements "fit" and "predict" methods.
+        clf: Object type that implements "fit" and "predict_proba" methods.
 
         X (array-like, shape (n_samples, n_features)):
             Training vector, where n_samples is the number of samples and
@@ -340,3 +341,36 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_split=True,
     ax.set_ylabel('True Positive Rate')
     ax.legend(loc='lower right')
     return ax
+
+
+def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_split=True,
+                      test_split_ratio=0.33, random_state=None, ax=None):
+    """Generates the KS Statistic plot for a given classifier and dataset.
+
+    Args:
+        clf: Object type that implements "fit" and "predict_proba" methods.
+
+        X (array-like, shape (n_samples, n_features)):
+            Training vector, where n_samples is the number of samples and
+            n_features is the number of features.
+
+        y (array-like, shape (n_samples) or (n_samples, n_features)):
+            Target relative to X for classification.
+
+        title (string, optional): Title of the generated plot. Defaults to "KS Statistic Plot".
+
+        do_split (bool, optional): If True, the dataset is split into training and testing sets.
+            The classifier is trained on the training set and the KS curves are plotted using the
+            performance of the classifier on the testing set. If False, the KS curves are generated
+            without splitting the dataset or training the classifier. This assumes that the
+            classifier has already been called with its `fit` method beforehand.
+
+        test_split_ratio (float, optional): Used when do_split is set to True. Determines the
+            proportion of the entire dataset to use in the testing split. Default is set to 0.33.
+
+        random_state (int :object:`RandomState`): Pseudo-random number generator state used
+            for random sampling.
+
+        ax (:object:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+            the learning curve. If None, the plot is drawn on a new set of axes.
+    """

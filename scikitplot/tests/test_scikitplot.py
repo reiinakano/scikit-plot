@@ -67,12 +67,13 @@ class TestClassifierFactory(unittest.TestCase):
         assert hasattr(clf, 'plot_learning_curve')
         assert hasattr(clf, 'plot_confusion_matrix')
         assert hasattr(clf, 'plot_roc_curve')
+        assert hasattr(clf, 'plot_ks_statistic')
 
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always')
             scikitplot.classifier_factory(clf)
 
-            assert len(w) == 3
+            assert len(w) == 4
             for warning in w:
                 assert issubclass(warning.category, UserWarning)
                 assert ' method already in clf. ' \
