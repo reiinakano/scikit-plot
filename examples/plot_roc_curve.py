@@ -1,3 +1,4 @@
+"""An example showing the plot_roc_curve method used by a scikit-learn classifier"""
 from __future__ import absolute_import
 import matplotlib.pyplot as plt
 from scikitplot.scikitplot import classifier_factory

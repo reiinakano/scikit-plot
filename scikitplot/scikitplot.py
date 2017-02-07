@@ -13,6 +13,7 @@ from sklearn.preprocessing import label_binarize
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import train_test_split
 from sklearn.base import clone
+from scikitplot.helpers import binary_ks_curve
 
 
 def classifier_factory(clf):
@@ -260,9 +261,6 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_split=True,
     if not hasattr(clf, 'predict_proba'):
         raise TypeError('"predict_proba" method not in classifier. Cannot calculate ROC Curve.')
 
-    if ax is None:
-        fig, ax = plt.subplots(1, 1)
-
     if not do_split:
         classes = clf.classes_
         probas = clf.predict_proba(X)
@@ -320,12 +318,15 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_split=True,
     tpr[macro_key] = mean_tpr
     roc_auc[macro_key] = auc(fpr[macro_key], tpr[macro_key])
 
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+
     ax.set_title(title)
 
     for i in range(len(classes)):
-        plt.plot(fpr[i], tpr[i], lw=2,
-                 label='ROC curve of class {0} (area = {1:0.2f})'
-                 ''.format(classes[i], roc_auc[i]))
+        ax.plot(fpr[i], tpr[i], lw=2,
+                label='ROC curve of class {0} (area = {1:0.2f})'
+                ''.format(classes[i], roc_auc[i]))
 
     ax.plot(fpr[micro_key], tpr[micro_key],
             label='micro-average ROC curve (area = {0:0.2f})'.format(roc_auc[micro_key]),
@@ -374,3 +375,48 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_split=True,
         ax (:object:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
     """
+    if not hasattr(clf, 'predict_proba'):
+        raise TypeError('"predict_proba" method not in classifier. Cannot calculate ROC Curve.')
+
+    if not do_split:
+        if len(clf.classes_) != 2:
+            raise ValueError('Cannot calculate KS statistic for data with '
+                             '{} category/ies'.format(len(clf.classes_)))
+        probas = clf.predict_proba(X)
+        y_true = y
+
+    else:
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_split_ratio,
+                                                            stratify=y, random_state=random_state)
+        clf_clone = clone(clf)
+        clf_clone.fit(X_train, y_train)
+        if len(clf_clone.classes_) != 2:
+            raise ValueError('Cannot calculate KS statistic for data with '
+                             '{} category/ies'.format(len(clf_clone.classes_)))
+        probas = clf_clone.predict_proba(X_test)
+        y_true = y_test
+
+    # Compute KS Statistic curves
+    thresholds, pct1, pct2, ks_statistic, \
+        max_distance_at, classes = binary_ks_curve(y_true, probas[:, 1].ravel())
+
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+
+    ax.set_title(title)
+
+    ax.plot(thresholds, pct1, lw=3, label='Class {}'.format(classes[0]))
+    ax.plot(thresholds, pct2, lw=3, label='Class {}'.format(classes[1]))
+    idx = np.where(thresholds == max_distance_at)[0][0]
+    ax.axvline(max_distance_at, *sorted([pct1[idx], pct2[idx]]),
+               label='KS Statistic: {} at {}'.format(ks_statistic, max_distance_at),
+               linestyle=':', lw=3, color='black')
+
+    ax.set_xlim([0.0, 1.0])
+    ax.set_ylim([0.0, 1.0])
+
+    ax.set_xlabel('Threshold')
+    ax.set_ylabel('Percentage below threshold')
+    ax.legend(loc='lower right')
+
+    return ax
