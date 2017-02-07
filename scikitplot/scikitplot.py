@@ -409,7 +409,7 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_split=True,
     ax.plot(thresholds, pct2, lw=3, label='Class {}'.format(classes[1]))
     idx = np.where(thresholds == max_distance_at)[0][0]
     ax.axvline(max_distance_at, *sorted([pct1[idx], pct2[idx]]),
-               label='KS Statistic: {} at {}'.format(ks_statistic, max_distance_at),
+               label='KS Statistic: {:.3f} at {:.3f}'.format(ks_statistic, max_distance_at),
                linestyle=':', lw=3, color='black')
 
     ax.set_xlim([0.0, 1.0])
