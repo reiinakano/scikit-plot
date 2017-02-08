@@ -9,6 +9,8 @@ from sklearn.model_selection import learning_curve
 from sklearn.metrics import confusion_matrix
 from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import average_precision_score
 from sklearn.preprocessing import label_binarize
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import train_test_split
@@ -45,7 +47,8 @@ def classifier_factory(clf):
         'plot_learning_curve': plot_learning_curve,
         'plot_confusion_matrix': plot_confusion_matrix,
         'plot_roc_curve': plot_roc_curve,
-        'plot_ks_statistic': plot_ks_statistic
+        'plot_ks_statistic': plot_ks_statistic,
+        'plot_precision_recall_curve': plot_precision_recall_curve
     }
 
     for key, fn in additional_methods.iteritems():
@@ -419,4 +422,99 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_split=True,
     ax.set_ylabel('Percentage below threshold')
     ax.legend(loc='lower right')
 
+    return ax
+
+
+def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_split=True,
+                                test_split_ratio=0.33, random_state=None, ax=None):
+    """Generates the Precision-Recall curve for a given classifier and dataset.
+
+    Args:
+        clf: Object type that implements "fit" and "predict_proba" methods.
+
+        X (array-like, shape (n_samples, n_features)):
+            Training vector, where n_samples is the number of samples and
+            n_features is the number of features.
+
+        y (array-like, shape (n_samples) or (n_samples, n_features)):
+            Target relative to X for classification.
+
+        title (string, optional): Title of the generated plot. Defaults to "Precision-Recall Curve".
+
+        do_split (bool, optional): If True, the dataset is split into training and testing sets.
+            The classifier is trained on the training set and the Precision-Recall curves are
+            plotted using the performance of the classifier on the testing set. If False, the
+            Precision-Recall curves are generatedwithout splitting the dataset or training the
+            classifier. This assumes that the classifier has already been called with its `fit`
+            method beforehand.
+
+        test_split_ratio (float, optional): Used when do_split is set to True. Determines the
+            proportion of the entire dataset to use in the testing split. Default is set to 0.33.
+
+        random_state (int :object:`RandomState`): Pseudo-random number generator state used
+            for random sampling.
+
+        ax (:object:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+            the learning curve. If None, the plot is drawn on a new set of axes.
+    """
+    if not hasattr(clf, 'predict_proba'):
+        raise TypeError('"predict_proba" method not in classifier. '
+                        'Cannot calculate Precision-Recall Curve.')
+
+    if not do_split:
+        classes = clf.classes_
+        probas = clf.predict_proba(X)
+        y_true = y
+
+    else:
+        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_split_ratio,
+                                                            stratify=y, random_state=random_state)
+        clf_clone = clone(clf)
+        probas = clf_clone.fit(X_train, y_train).predict_proba(X_test)
+        classes = clf_clone.classes_
+        y_true = y_test
+
+    # Compute Precision-Recall curve and area for each class
+    precision = dict()
+    recall = dict()
+    average_precision = dict()
+    for i in range(len(classes)):
+        precision[i], recall[i], _ = precision_recall_curve(y_true, probas[:, i],
+                                                            pos_label=classes[i])
+
+    y_true = label_binarize(y_true, classes=classes)
+    if len(classes) == 2:
+        y_true = np.hstack((1 - y_true, y_true))
+
+    for i in range(len(classes)):
+        average_precision[i] = average_precision_score(y_true[:, i], probas[:, i])
+
+    # Compute micro-average ROC curve and ROC area
+    micro_key = 'micro'
+    i = 0
+    while micro_key in precision:
+        i += 1
+        micro_key += str(i)
+
+    precision[micro_key], recall[micro_key], _ = precision_recall_curve(y_true.ravel(),
+                                                                        probas.ravel())
+    average_precision[micro_key] = average_precision_score(y_true, probas, average='micro')
+
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+
+    ax.set_title(title)
+    for i in range(len(classes)):
+        ax.plot(recall[i], precision[i], lw=2,
+                label='Precision-recall curve of class {0} '
+                      '(area = {1:0.3f})'.format(classes[i], average_precision[i]))
+    ax.plot(recall[micro_key], precision[micro_key], lw=2, color='gold',
+            label='micro-average Precision-recall curve '
+                  '(area = {0:0.3f})'.format(average_precision[micro_key]))
+
+    ax.set_xlim([0.0, 1.0])
+    ax.set_ylim([0.0, 1.05])
+    ax.set_xlabel('Recall')
+    ax.set_ylabel('Precision')
+    ax.legend(loc='best')
     return ax
