@@ -5,9 +5,9 @@
 
 ## Scikit-plot? As in Scikit-learn with plotting?
 
-Yes. Scikit-plot is the result of an unartistic data scientist's dreadful realization that *visualization is not just a mere afterthought, but one of the most crucial components in the data science process*.
+Yes. Scikit-plot is the result of an unartistic data scientist's dreadful realization that *visualization is one of the most crucial components in the data science process, not just a mere afterthought*.
 
-Getting insights from ML algorithms is simply a lot more pleasant when you're looking at a pretty heatmap of a confusion matrix complete with class labels rather than a single-line dump of numbers enclosed in brackets. Also, if you ever need to present your results (virtually any time somebody hires you to do data science), you show visualizations, not a bunch of numbers in Excel.
+Gaining insights is simply a lot easier when you're looking at a pretty heatmap of a confusion matrix complete with class labels rather than a single-line dump of numbers enclosed in brackets. Besides, if you ever need to present your results to someone (virtually any time anybody hires you to do data science), you show them visualizations, not a bunch of numbers in Excel.
 
 That said, there are a number of visualizations that frequently pop up in machine learning. Scikit-plot is a humble attempt to provide aesthetically-challenged programmers (such as myself) the opportunity to generate quick and beautiful graphs and plots with as little boilerplate as possible.
 
@@ -33,8 +33,29 @@ plt.show()
 ```
 ![roc_curves](examples/roc_curves.png)
 
-So what happened here? First, `classifier_factory` is a function that modifies an __instance__ of a scikit-learn classifier. The `classifier_factory` function merely __appends__ new plotting methods to the instance, one of which is `plot_roc_curve`, while leaving everything else alone. 
+Pretty.
 
-This means that the instance will behave the same way as before, with all its original variables and methods intact. In fact, if you pass your classifier to `classifier_factory` at the top of any of your existing scripts and run them, you'll likely never notice a difference!
+Let's recap. First, we created a regular Naive Bayes classifier instance from scikit-learn and assigned it to `nb`. We then passed `nb` to `classifier_factory`. Then, like magic, we call `nb`'s *instance method* `plot_roc_curve` and pass it a features array and corresponding label array. Finally, we call `plt.show()` to display the corresponding plot.
 
-`classifier_factory` adds a lot more plotting methods to classifier instances and they are all as easy to use as that first example. Visit the docs for a complete list of what you can accomplish.
+So what happened here? `classifier_factory` is a function that modifies an __instance__ of a scikit-learn classifier. The `classifier_factory` function merely __appends__ new plotting methods to the instance, one of which is `plot_roc_curve`, while leaving everything else alone. 
+
+This means that our classifier instance `nb` will behave the same way as before, with all its original variables and methods intact. In fact, if you take any of your existing scripts, pass your classifier instances to `classifier_factory` at the top and run them, you'll likely never notice a difference!
+
+`classifier_factory` adds a lot more plotting methods to classifier instances. Visit the docs for a complete list of what you can accomplish.
+
+Finally, compare and [view the non-scikit-plot way of plotting the multi-class ROC curve](http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html).
+
+## Great! How do I install it?
+
+Simple!
+```bash
+pip install scikit-plot
+```
+
+Or if you want, clone this repo and run
+```bash
+python setup.py install
+```
+at the root folder.
+
+Happy plotting!
