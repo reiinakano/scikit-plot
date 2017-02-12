@@ -1,4 +1,5 @@
-from __future__ import absolute_import
+from __future__ import absolute_import, division, print_function, unicode_literals
+import six
 import warnings
 import types
 import itertools
@@ -51,7 +52,7 @@ def classifier_factory(clf):
         'plot_precision_recall_curve': plot_precision_recall_curve
     }
 
-    for key, fn in additional_methods.iteritems():
+    for key, fn in six.iteritems(additional_methods):
         if hasattr(clf, key):
             warnings.warn('"{}" method already in clf. '
                           'Overriding anyway. This may result in unintended behavior.'.format(key))
