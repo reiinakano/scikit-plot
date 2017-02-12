@@ -45,9 +45,9 @@ This means that our classifier instance `nb` will behave the same way as before,
 
 Finally, compare and [view the non-scikit-plot way of plotting the multi-class ROC curve](http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html). Which one would you rather do?
 
-## Great! How do I install it?
+## Installation
 
-Simple!
+Installation is simple!
 ```bash
 pip install scikit-plot
 ```
@@ -57,5 +57,13 @@ Or if you want, clone this repo and run
 python setup.py install
 ```
 at the root folder.
+
+## Documentation and Examples
+
+Want to explore the full features of Scikit-plot?
+
+You can find detailed documentation [here](http://scikit-plot.readthedocs.io/en/latest/).
+
+Examples are found in the [examples folder of this repo](examples/).
 
 Happy plotting!
