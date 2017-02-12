@@ -41,7 +41,7 @@ Wait, what? The scikit-learn `GaussianNB` classifier doesn't have a `plot_roc_cu
 
 This means that our classifier instance `nb` will behave the same way as before, with all its original variables and methods intact. In fact, if you take any of your existing scripts, pass your classifier instances to `classifier_factory` at the top and run them, you'll likely never notice a difference!
 
-`classifier_factory` adds a lot more plotting methods to classifier instances. Visit the docs for a complete list of what you can accomplish.
+`classifier_factory` adds a lot more plotting methods to classifier instances. Visit the [docs](http://scikit-plot.readthedocs.io/en/latest/) for a complete list of what you can accomplish.
 
 Finally, compare and [view the non-scikit-plot way of plotting the multi-class ROC curve](http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html). Which one would you rather do?
 
