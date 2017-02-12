@@ -84,4 +84,4 @@ And that's it! A quick glance of our confusion matrix shows that our classifier 
 More Plots
 ----------
 
-Want to know the other plots you can generate using Scikit-plot? Visit the API documentation.
+Want to know the other plots you can generate using Scikit-plot? Visit the :ref:`apidocs`.

@@ -12,6 +12,7 @@ Welcome to Scikit-plot's documentation!
    :name: mastertoc
 
    First Steps with Scikit-plot <Quickstart>
+   API Reference <apidocs>
 
 
 Indices and tables

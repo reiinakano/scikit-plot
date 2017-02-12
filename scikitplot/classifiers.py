@@ -25,10 +25,10 @@ def classifier_factory(clf):
         clf: Scikit-learn classifier instance
 
     Returns:
-        plot_clf: The scikit-learn classifier with embedded scikit-plot instance methods.
+        The same scikit-learn classifier instance with embedded scikit-plot instance methods.
 
     Raises:
-        ValueError: If `clf` does not contain the instance methods necessary for scikit-plot
+        ValueError: If **clf** does not contain the instance methods necessary for scikit-plot
             instance methods.
     """
     required_methods = ['fit', 'score', 'predict']
@@ -94,7 +94,7 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
 
         n_jobs (int, optional): Number of jobs to run in parallel. Defaults to 1.
 
-        ax (:object:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
     """
     if ax is None:
@@ -167,7 +167,7 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
         shuffle (bool, optional): Used when do_cv is set to True. Determines whether to shuffle the
             training data before splitting using cross-validation. Default set to True.
 
-        ax (:object:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
     """
     if ax is None:
@@ -255,10 +255,10 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_split=True,
         test_split_ratio (float, optional): Used when do_split is set to True. Determines the
             proportion of the entire dataset to use in the testing split. Default is set to 0.33.
 
-        random_state (int :object:`RandomState`): Pseudo-random number generator state used
+        random_state (int :class:`RandomState`): Pseudo-random number generator state used
             for random sampling.
 
-        ax (:object:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
     """
     if not hasattr(clf, 'predict_proba'):
@@ -372,10 +372,10 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_split=True,
         test_split_ratio (float, optional): Used when do_split is set to True. Determines the
             proportion of the entire dataset to use in the testing split. Default is set to 0.33.
 
-        random_state (int :object:`RandomState`): Pseudo-random number generator state used
+        random_state (int :class:`RandomState`): Pseudo-random number generator state used
             for random sampling.
 
-        ax (:object:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
     """
     if not hasattr(clf, 'predict_proba'):
@@ -451,10 +451,10 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_sp
         test_split_ratio (float, optional): Used when do_split is set to True. Determines the
             proportion of the entire dataset to use in the testing split. Default is set to 0.33.
 
-        random_state (int :object:`RandomState`): Pseudo-random number generator state used
+        random_state (int :class:`RandomState`): Pseudo-random number generator state used
             for random sampling.
 
-        ax (:object:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
     """
     if not hasattr(clf, 'predict_proba'):
