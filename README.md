@@ -60,7 +60,7 @@ at the root folder.
 
 ## Documentation and Examples
 
-Want to explore the full features of Scikit-plot?
+Explore the full features of Scikit-plot.
 
 You can find detailed documentation [here](http://scikit-plot.readthedocs.io/en/latest/).
 
