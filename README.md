@@ -23,7 +23,7 @@ from sklearn.naive_bayes import GaussianNB
 
 # This is all that's needed for scikit-plot
 import matplotlib.pyplot as plt
-from scikitplot.scikitplot import classifier_factory
+from scikitplot import classifier_factory
 
 X, y = load_data(return_X_y=True)
 nb = GaussianNB()

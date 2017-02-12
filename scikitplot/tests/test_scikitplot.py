@@ -1,6 +1,6 @@
 from __future__ import absolute_import
 import unittest
-from scikitplot import scikitplot
+import scikitplot
 import warnings
 
 
