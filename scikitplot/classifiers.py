@@ -26,7 +26,7 @@ def classifier_factory(clf):
         clf: Scikit-learn classifier instance
 
     Returns:
-        The same scikit-learn classifier instance with embedded scikit-plot instance methods.
+        The same scikit-learn classifier instance passed in **clf** with embedded scikit-plot instance methods.
 
     Raises:
         ValueError: If **clf** does not contain the instance methods necessary for scikit-plot
@@ -65,7 +65,7 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
     """Generates a plot of the train and test learning curves for a given classifier.
 
     Args:
-        clf: Object type that implements "fit" and "predict" methods.
+        clf: Classifier instance that implements ``fit`` and ``predict`` methods.
 
         X (array-like, shape (n_samples, n_features)):
             Training vector, where n_samples is the number of samples and
@@ -97,6 +97,9 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
     """
     if ax is None:
         fig, ax = plt.subplots(1, 1)
@@ -132,7 +135,7 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
     """Generates the confusion matrix for a given classifier and dataset.
 
     Args:
-        clf: Object type that implements "fit" and "predict" methods.
+        clf: Classifier instance that implements ``fit`` and ``predict`` methods.
 
         X (array-like, shape (n_samples, n_features)):
             Training vector, where n_samples is the number of samples and
@@ -170,6 +173,9 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
     """
     if ax is None:
         fig, ax = plt.subplots(1, 1)
@@ -236,7 +242,7 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_split=True,
     """Generates the ROC curves for a given classifier and dataset.
 
     Args:
-        clf: Object type that implements "fit" and "predict_proba" methods.
+        clf: Classifier instance that implements "fit" and "predict_proba" methods.
 
         X (array-like, shape (n_samples, n_features)):
             Training vector, where n_samples is the number of samples and
@@ -261,6 +267,9 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_split=True,
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
     """
     if not hasattr(clf, 'predict_proba'):
         raise TypeError('"predict_proba" method not in classifier. Cannot calculate ROC Curve.')
@@ -353,7 +362,7 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_split=True,
     """Generates the KS Statistic plot for a given classifier and dataset.
 
     Args:
-        clf: Object type that implements "fit" and "predict_proba" methods.
+        clf: Classifier instance that implements "fit" and "predict_proba" methods.
 
         X (array-like, shape (n_samples, n_features)):
             Training vector, where n_samples is the number of samples and
@@ -378,6 +387,9 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_split=True,
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
     """
     if not hasattr(clf, 'predict_proba'):
         raise TypeError('"predict_proba" method not in classifier. Cannot calculate ROC Curve.')
@@ -431,7 +443,7 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_sp
     """Generates the Precision-Recall curve for a given classifier and dataset.
 
     Args:
-        clf: Object type that implements "fit" and "predict_proba" methods.
+        clf: Classifier instance that implements "fit" and "predict_proba" methods.
 
         X (array-like, shape (n_samples, n_features)):
             Training vector, where n_samples is the number of samples and
@@ -457,6 +469,9 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_sp
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
     """
     if not hasattr(clf, 'predict_proba'):
         raise TypeError('"predict_proba" method not in classifier. '
