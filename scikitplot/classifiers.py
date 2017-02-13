@@ -49,7 +49,8 @@ def classifier_factory(clf):
         'plot_confusion_matrix': plot_confusion_matrix,
         'plot_roc_curve': plot_roc_curve,
         'plot_ks_statistic': plot_ks_statistic,
-        'plot_precision_recall_curve': plot_precision_recall_curve
+        'plot_precision_recall_curve': plot_precision_recall_curve,
+        'plot_feature_importances': plot_feature_importances
     }
 
     for key, fn in six.iteritems(additional_methods):
@@ -497,7 +498,7 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_sp
         do_split (bool, optional): If True, the dataset is split into training and testing sets.
             The classifier is trained on the training set and the Precision-Recall curves are
             plotted using the performance of the classifier on the testing set. If False, the
-            Precision-Recall curves are generatedwithout splitting the dataset or training the
+            Precision-Recall curves are generated without splitting the dataset or training the
             classifier. This assumes that the classifier has already been called with its `fit`
             method beforehand.
 
@@ -584,3 +585,25 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_sp
     ax.set_ylabel('Precision')
     ax.legend(loc='best')
     return ax
+
+
+def plot_feature_importances(clf, title='Feature importances', feature_names=None,
+                             max_num_features=20, ax=None):
+    """Generates a plot of a classifier's feature importances.
+
+    Args:
+        clf: Classifier instance that implements "fit" and "predict_proba" methods.
+
+        title (string, optional): Title of the generated plot. Defaults to "Feature importances".
+
+        feature_names (None, :obj:`list` of string, optional): Determines the feature names used
+            to plot the feature importances. If None, feature names will be numbered.
+
+        max_num_features (int): Determines the maximum number of features to plot. Defaults to 20.
+
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+            the learning curve. If None, the plot is drawn on a new set of axes.
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+    """
