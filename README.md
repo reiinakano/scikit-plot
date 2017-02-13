@@ -47,7 +47,9 @@ Finally, compare and [view the non-scikit-plot way of plotting the multi-class R
 
 ## Installation
 
-Installation is simple!
+Installation is simple! First, make sure you have the dependencies [Scikit-learn](http://scikit-learn.org) and [Matplotlib](http://matplotlib.org/) installed.
+
+Then just run:
 ```bash
 pip install scikit-plot
 ```
