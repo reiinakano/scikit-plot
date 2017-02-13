@@ -91,7 +91,7 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
             or if ``y`` is neither binary nor multiclass, :class:`KFold` is used.
 
         train_sizes (iterable, optional): Determines the training sizes used to plot the
-            learning curve. If None, np.linspace(.1, 1.0, 5) is used.
+            learning curve. If None, ``np.linspace(.1, 1.0, 5)`` is used.
 
         n_jobs (int, optional): Number of jobs to run in parallel. Defaults to 1.
 
@@ -100,6 +100,16 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+
+    Example:
+        >>> rf = classifier_factory(RandomForestClassifier())
+        >>> rf.plot_learning_curve(X, y)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
+
+        .. image:: _static/examples/plot_learning_curve.png
+           :align: center
+           :alt: Learning Curve
     """
     if ax is None:
         fig, ax = plt.subplots(1, 1)
@@ -176,6 +186,16 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+
+    Example:
+        >>> rf = classifier_factory(RandomForestClassifier())
+        >>> rf.plot_learning_curve(X, y, normalize=True)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
+
+        .. image:: _static/examples/plot_confusion_matrix.png
+           :align: center
+           :alt: Confusion matrix
     """
     if ax is None:
         fig, ax = plt.subplots(1, 1)
@@ -270,6 +290,16 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_split=True,
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+
+    Example:
+            >>> nb = classifier_factory(GaussianNB())
+            >>> nb.plot_roc_curve(X, y, random_state=1)
+            <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+            >>> plt.show()
+
+        .. image:: _static/examples/plot_roc_curve.png
+           :align: center
+           :alt: ROC Curves
     """
     if not hasattr(clf, 'predict_proba'):
         raise TypeError('"predict_proba" method not in classifier. Cannot calculate ROC Curve.')
@@ -390,6 +420,16 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_split=True,
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+
+    Example:
+            >>> lr = classifier_factory(LogisticRegression())
+            >>> lr.plot_ks_statistic(X, y, random_state=1)
+            <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+            >>> plt.show()
+
+        .. image:: _static/examples/plot_ks_statistic.png
+           :align: center
+           :alt: KS Statistic
     """
     if not hasattr(clf, 'predict_proba'):
         raise TypeError('"predict_proba" method not in classifier. Cannot calculate ROC Curve.')
@@ -472,6 +512,16 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_sp
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+
+    Example:
+            >>> nb = classifier_factory(GaussianNB())
+            >>> nb.plot_precision_recall_curve(X, y, random_state=1)
+            <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+            >>> plt.show()
+
+        .. image:: _static/examples/plot_precision_recall_curve.png
+           :align: center
+           :alt: Precision Recall Curve
     """
     if not hasattr(clf, 'predict_proba'):
         raise TypeError('"predict_proba" method not in classifier. '
