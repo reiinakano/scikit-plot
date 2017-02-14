@@ -10,4 +10,4 @@ Classifier plotting
 .. autofunction:: scikitplot.classifier_factory
 
 .. automodule:: scikitplot.classifiers
-   :members: plot_learning_curve, plot_confusion_matrix, plot_roc_curve, plot_ks_statistic, plot_precision_recall_curve
+   :members: plot_learning_curve, plot_confusion_matrix, plot_roc_curve, plot_ks_statistic, plot_precision_recall_curve, plot_feature_importances
