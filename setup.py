@@ -44,7 +44,8 @@ setup(
     tests_require=['pytest'],
     install_requires=[
         'matplotlib>=1.3.1',
-        'scikit-learn>=0.18'
+        'scikit-learn>=0.18',
+        'scipy>=0.9'
     ],
     cmdclass={'test': PyTest},
     author_email='reiichiro.s.nakano@gmail.com',
