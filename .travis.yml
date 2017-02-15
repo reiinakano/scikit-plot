@@ -6,6 +6,7 @@ python:
 # command to install dependencies
 install:
   - pip install --upgrade pip setuptools wheel
+  - pip install pytest
   - pip install --only-binary=numpy,scipy numpy scipy
   - pip install -r requirements.txt
 # command to run tests
