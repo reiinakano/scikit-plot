@@ -24,7 +24,7 @@ install:
   # Replace dep1 dep2 ... with your dependencies
   - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib scikit-learn=0.18
   - source activate test-environment
-  - conda install matplotlib
+  - pip install nose nose-exclude
   - python setup.py install
 # command to run tests
-script: pytest
+script: nosetests -v
