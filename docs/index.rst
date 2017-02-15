@@ -8,7 +8,6 @@ Welcome to Scikit-plot's documentation!
 
 .. toctree::
    :maxdepth: 2
-   :caption: Contents:
    :name: mastertoc
 
    First Steps with Scikit-plot <Quickstart>
