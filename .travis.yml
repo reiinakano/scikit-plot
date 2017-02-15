@@ -1,9 +1,6 @@
 language: python
 python:
-  - "2.6"
   - "2.7"
-  - "3.3"
-  - "3.4"
   - "3.5"
   - "3.6"
 # command to install dependencies
@@ -25,7 +22,7 @@ install:
   - conda info -a
 
   # Replace dep1 dep2 ... with your dependencies
-  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib scikit-learn
+  - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION numpy scipy matplotlib scikit-learn=0.18
   - source activate test-environment
   - python setup.py install
 # command to run tests
