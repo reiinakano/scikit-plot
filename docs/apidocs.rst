@@ -18,4 +18,4 @@ Clustering Plots
 .. autofunction:: scikitplot.clustering_factory
 
 .. automodule:: scikitplot.clustering
-   :members: plot_silhouette
+   :members: plot_silhouette, plot_elbow_curve

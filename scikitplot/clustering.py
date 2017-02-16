@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.base import clone
 from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples
+from scipy.spatial.distance import cdist, pdist
 
 
 def clustering_factory(clf):
@@ -132,11 +133,12 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
     return ax
 
 
-def plot_elbow_curve(clf, X, title='Elbow Plot', n_clusters=None, copy=False, ax=None):
-    """Plots silhouette analysis of clusters using fit_predict.
+def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None):
+    """Plots elbow curve of different values of K for KMeans clustering.
 
     Args:
-        clf: Clusterer instance that implements ``fit`` and ``fit_predict`` methods.
+        clf: Clusterer instance that implements ``fit`` and ``fit_predict`` methods and an
+            ``n_clusters`` parameter.
 
         X (array-like, shape (n_samples, n_features)):
             Data to cluster, where n_samples is the number of samples and
@@ -144,7 +146,7 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', n_clusters=None, copy=False, ax
 
         title (string, optional): Title of the generated plot. Defaults to "Elbow Plot"
 
-        n_clusters (None or :obj:`list` of int, optional): List of n_clusters for which
+        cluster_ranges (None or :obj:`list` of int, optional): List of n_clusters for which
             to plot the explained variances. Defaults to ``range(0, 11, 2)``.
 
         copy (boolean, optional): Determines whether ``fit`` is used on **clf** or on a
@@ -155,4 +157,49 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', n_clusters=None, copy=False, ax
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+
+    Example:
+            >>> kmeans = clustering_factory(KMeans(random_state=1))
+            >>> kmeans.plot_elbow_curve(X, cluster_ranges=range(1, 11))
+            <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+            >>> plt.show()
+
+        .. image:: _static/examples/plot_elbow_curve.png
+           :align: center
+           :alt: Elbow Curve
     """
+    if cluster_ranges is None:
+        cluster_ranges = range(1, 12, 2)
+    else:
+        cluster_ranges = sorted(cluster_ranges)
+
+    if not hasattr(clf, 'n_clusters'):
+        raise TypeError('"n_clusters" attribute not in classifier. '
+                        'Cannot plot elbow method.')
+
+    clfs = []
+    for i in cluster_ranges:
+        current_clf = clone(clf)
+        setattr(current_clf, "n_clusters", i)
+        clfs.append(current_clf.fit(X))
+
+    centroids = [k.cluster_centers_ for k in clfs]
+
+    D_k = [cdist(X, cent, 'euclidean') for cent in centroids]
+    dist = [np.min(D, axis=1) for D in D_k]
+    # avgWithinSS = [np.sum(d)/X.shape[0] for d in dist]
+
+    wcss = [np.sum(d**2) for d in dist]
+    tss = np.sum(pdist(X)**2)/X.shape[0]
+    bss = tss - wcss
+
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+
+    ax.set_title(title)
+    ax.plot(cluster_ranges, bss/tss*100, 'b*-')
+    ax.grid(True)
+    ax.set_xlabel('Number of clusters')
+    ax.set_ylabel('Percent variance explained')
+
+    return ax
