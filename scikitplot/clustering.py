@@ -31,7 +31,8 @@ def clustering_factory(clf):
             raise TypeError('"{}" is not in clf. Did you pass a clusterer instance?'.format(method))
 
     additional_methods = {
-        'plot_silhouette': plot_silhouette
+        'plot_silhouette': plot_silhouette,
+        'plot_elbow_curve': plot_elbow_curve
     }
 
     for key, fn in six.iteritems(additional_methods):
@@ -129,3 +130,29 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
     ax.legend(loc='best')
 
     return ax
+
+
+def plot_elbow_curve(clf, X, title='Elbow Plot', n_clusters=None, copy=False, ax=None):
+    """Plots silhouette analysis of clusters using fit_predict.
+
+    Args:
+        clf: Clusterer instance that implements ``fit`` and ``fit_predict`` methods.
+
+        X (array-like, shape (n_samples, n_features)):
+            Data to cluster, where n_samples is the number of samples and
+            n_features is the number of features.
+
+        title (string, optional): Title of the generated plot. Defaults to "Elbow Plot"
+
+        n_clusters (None or :obj:`list` of int, optional): List of n_clusters for which
+            to plot the explained variances. Defaults to ``range(0, 11, 2)``.
+
+        copy (boolean, optional): Determines whether ``fit`` is used on **clf** or on a
+            copy of **clf**.
+
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+            the learning curve. If None, the plot is drawn on a new set of axes.
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+    """
