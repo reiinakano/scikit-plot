@@ -1,6 +1,4 @@
 from __future__ import absolute_import
-import matplotlib
-matplotlib.use('Template')
 import unittest
 import scikitplot
 import warnings
@@ -105,6 +103,30 @@ class TestPlotLearningCurve(unittest.TestCase):
         ax.figure.show()
         ax = clf.plot_learning_curve(self.X, self.y, cv=5)
         ax.figure.show()
+
+    def test_train_sizes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_learning_curve(self.X, self.y, train_sizes=np.linspace(0.1, 1.0, 8))
+        ax.figure.show()
+
+    def test_n_jobs(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_learning_curve(self.X, self.y, n_jobs=-1)
+        ax.figure.show()
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = clf.plot_learning_curve(self.X, self.y)
+        assert ax is not out_ax
+        out_ax = clf.plot_learning_curve(self.X, self.y, ax=ax)
+        assert ax is out_ax
 
 
 if __name__ == '__main__':
