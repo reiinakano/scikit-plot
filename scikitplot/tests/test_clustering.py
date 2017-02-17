@@ -84,5 +84,50 @@ class TestPlotSilhouette(unittest.TestCase):
         out_ax = clf.plot_silhouette(self.X, ax=ax)
         assert ax is out_ax
 
+
+class TestPlotElbow(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_n_clusters_in_clf(self):
+        np.random.seed(0)
+
+        class DummyClusterer:
+            def __init__(self):
+                pass
+
+            def fit(self):
+                pass
+
+            def fit_predict(self):
+                pass
+
+        clf = DummyClusterer()
+        scikitplot.clustering_factory(clf)
+        self.assertRaises(TypeError, clf.plot_elbow_curve, self.X)
+
+    def test_cluster_ranges(self):
+        np.random.seed(0)
+        clf = KMeans()
+        scikitplot.clustering_factory(clf)
+        ax = clf.plot_elbow_curve(self.X, cluster_ranges=range(1, 10))
+        ax = clf.plot_elbow_curve(self.X)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = KMeans()
+        scikitplot.clustering_factory(clf)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = clf.plot_elbow_curve(self.X)
+        assert ax is not out_ax
+        out_ax = clf.plot_elbow_curve(self.X, ax=ax)
+        assert ax is out_ax
+
 if __name__ == '__main__':
     unittest.main()
