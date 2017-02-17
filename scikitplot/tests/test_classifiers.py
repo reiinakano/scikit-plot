@@ -3,6 +3,7 @@ import unittest
 import scikitplot
 import warnings
 from sklearn.datasets import load_iris as load_data
+from sklearn.datasets import load_breast_cancer
 from sklearn.linear_model import LogisticRegression
 from sklearn.exceptions import NotFittedError
 import numpy as np
@@ -96,6 +97,9 @@ class TestPlotLearningCurve(unittest.TestCase):
         p = np.random.permutation(len(self.X))
         self.X, self.y = self.X[p], self.y[p]
 
+    def tearDown(self):
+        plt.close("all")
+
     def test_cv(self):
         np.random.seed(0)
         clf = LogisticRegression()
@@ -132,6 +136,9 @@ class TestPlotConfusionMatrix(unittest.TestCase):
         self.X, self.y = load_data(return_X_y=True)
         p = np.random.permutation(len(self.X))
         self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
 
     def test_cv(self):
         np.random.seed(0)
@@ -179,6 +186,29 @@ class TestPlotROCCurve(unittest.TestCase):
         p = np.random.permutation(len(self.X))
         self.X, self.y = self.X[p], self.y[p]
 
+    def tearDown(self):
+        plt.close("all")
+
+    def test_predict_proba(self):
+        np.random.seed(0)
+
+        class DummyClassifier:
+            def __init__(self):
+                pass
+
+            def fit(self):
+                pass
+
+            def predict(self):
+                pass
+
+            def score(self):
+                pass
+
+        clf = DummyClassifier()
+        scikitplot.classifier_factory(clf)
+        self.assertRaises(TypeError, clf.plot_roc_curve, self.X, self.y)
+
     def test_do_split(self):
         np.random.seed(0)
         clf = LogisticRegression()
@@ -195,6 +225,61 @@ class TestPlotROCCurve(unittest.TestCase):
         out_ax = clf.plot_roc_curve(self.X, self.y)
         assert ax is not out_ax
         out_ax = clf.plot_roc_curve(self.X, self.y, ax=ax)
+        assert ax is out_ax
+
+
+class TestPlotKSStatistic(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_breast_cancer(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_predict_proba(self):
+        np.random.seed(0)
+
+        class DummyClassifier:
+            def __init__(self):
+                pass
+
+            def fit(self):
+                pass
+
+            def predict(self):
+                pass
+
+            def score(self):
+                pass
+
+        clf = DummyClassifier()
+        scikitplot.classifier_factory(clf)
+        self.assertRaises(TypeError, clf.plot_ks_statistic, self.X, self.y)
+
+    def test_two_classes(self):
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        X, y = load_data(return_X_y=True)
+        self.assertRaises(ValueError, clf.plot_ks_statistic, X, y)
+
+    def test_do_split(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_ks_statistic(self.X, self.y)
+        self.assertRaises(AttributeError, clf.plot_ks_statistic, self.X, self.y,
+                          do_split=False)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = clf.plot_ks_statistic(self.X, self.y)
+        assert ax is not out_ax
+        out_ax = clf.plot_ks_statistic(self.X, self.y, ax=ax)
         assert ax is out_ax
 
 
