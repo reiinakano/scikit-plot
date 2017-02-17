@@ -44,7 +44,7 @@ def clustering_factory(clf):
     return clf
 
 
-def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', copy=False, ax=None):
+def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', copy=True, ax=None):
     """Plots silhouette analysis of clusters using fit_predict.
 
     Args:

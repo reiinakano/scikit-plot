@@ -2,6 +2,10 @@ from __future__ import absolute_import
 import unittest
 import scikitplot
 import warnings
+import numpy as np
+from sklearn.datasets import load_iris as load_data
+from sklearn.cluster import KMeans
+import matplotlib.pyplot as plt
 
 
 class TestClassifierFactory(unittest.TestCase):
@@ -49,6 +53,36 @@ class TestClassifierFactory(unittest.TestCase):
                 assert ' method already in clf. ' \
                        'Overriding anyway. This may ' \
                        'result in unintended behavior.' in str(warning.message)
+
+
+class TestPlotSilhouette(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_copy(self):
+        np.random.seed(0)
+        clf = KMeans()
+        scikitplot.clustering_factory(clf)
+        ax = clf.plot_silhouette(self.X)
+        assert not hasattr(clf, "cluster_centers_")
+        ax = clf.plot_silhouette(self.X, copy=False)
+        assert hasattr(clf, "cluster_centers_")
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = KMeans()
+        scikitplot.clustering_factory(clf)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = clf.plot_silhouette(self.X)
+        assert ax is not out_ax
+        out_ax = clf.plot_silhouette(self.X, ax=ax)
+        assert ax is out_ax
 
 if __name__ == '__main__':
     unittest.main()
