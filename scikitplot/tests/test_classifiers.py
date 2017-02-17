@@ -2,6 +2,10 @@ from __future__ import absolute_import
 import unittest
 import scikitplot
 import warnings
+from sklearn.datasets import load_iris as load_data
+from sklearn.linear_model import LogisticRegression
+import numpy as np
+import matplotlib.pyplot as plt
 
 
 class TestClassifierFactory(unittest.TestCase):
@@ -81,6 +85,23 @@ class TestClassifierFactory(unittest.TestCase):
                 assert ' method already in clf. ' \
                        'Overriding anyway. This may ' \
                        'result in unintended behavior.' in str(warning.message)
+
+
+class TestPlotLearningCurve(unittest.TestCase):
+
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def test_cv(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_learning_curve(self.X, self.y)
+        ax.figure.show()
+
 
 if __name__ == '__main__':
     unittest.main()
