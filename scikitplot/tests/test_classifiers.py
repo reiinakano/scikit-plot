@@ -283,5 +283,54 @@ class TestPlotKSStatistic(unittest.TestCase):
         assert ax is out_ax
 
 
+class TestPlotPrecisionRecall(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_predict_proba(self):
+        np.random.seed(0)
+
+        class DummyClassifier:
+            def __init__(self):
+                pass
+
+            def fit(self):
+                pass
+
+            def predict(self):
+                pass
+
+            def score(self):
+                pass
+
+        clf = DummyClassifier()
+        scikitplot.classifier_factory(clf)
+        self.assertRaises(TypeError, clf.plot_precision_recall_curve, self.X, self.y)
+
+    def test_do_split(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_precision_recall_curve(self.X, self.y)
+        self.assertRaises(AttributeError, clf.plot_precision_recall_curve, self.X, self.y,
+                          do_split=False)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = clf.plot_precision_recall_curve(self.X, self.y)
+        assert ax is not out_ax
+        out_ax = clf.plot_precision_recall_curve(self.X, self.y, ax=ax)
+        assert ax is out_ax
+
+
 if __name__ == '__main__':
     unittest.main()
