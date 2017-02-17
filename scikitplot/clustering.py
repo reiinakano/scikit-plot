@@ -44,7 +44,7 @@ def clustering_factory(clf):
     return clf
 
 
-def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', copy=False, ax=None):
+def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', copy=True, ax=None):
     """Plots silhouette analysis of clusters using fit_predict.
 
     Args:
@@ -147,7 +147,7 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None):
         title (string, optional): Title of the generated plot. Defaults to "Elbow Plot"
 
         cluster_ranges (None or :obj:`list` of int, optional): List of n_clusters for which
-            to plot the explained variances. Defaults to ``range(0, 11, 2)``.
+            to plot the explained variances. Defaults to ``range(1, 12, 2)``.
 
         copy (boolean, optional): Determines whether ``fit`` is used on **clf** or on a
             copy of **clf**.
