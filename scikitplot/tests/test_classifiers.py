@@ -5,6 +5,7 @@ import warnings
 from sklearn.datasets import load_iris as load_data
 from sklearn.datasets import load_breast_cancer
 from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.exceptions import NotFittedError
 import numpy as np
 import matplotlib.pyplot as plt
@@ -329,6 +330,60 @@ class TestPlotPrecisionRecall(unittest.TestCase):
         out_ax = clf.plot_precision_recall_curve(self.X, self.y)
         assert ax is not out_ax
         out_ax = clf.plot_precision_recall_curve(self.X, self.y, ax=ax)
+        assert ax is out_ax
+
+
+class TestFeatureImportances(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_feature_importances_in_clf(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        clf.fit(self.X, self.y)
+        self.assertRaises(TypeError, clf.plot_feature_importances)
+
+    def test_feature_names(self):
+        np.random.seed(0)
+        clf = RandomForestClassifier()
+        scikitplot.classifier_factory(clf)
+        clf.fit(self.X, self.y)
+        ax = clf.plot_feature_importances(feature_names=["a", "b", "c", "d"])
+
+    def test_max_num_features(self):
+        np.random.seed(0)
+        clf = RandomForestClassifier()
+        scikitplot.classifier_factory(clf)
+        clf.fit(self.X, self.y)
+        ax = clf.plot_feature_importances(max_num_features=2)
+        ax = clf.plot_feature_importances(max_num_features=4)
+        ax = clf.plot_feature_importances(max_num_features=6)
+
+    def test_order(self):
+        np.random.seed(0)
+        clf = RandomForestClassifier()
+        scikitplot.classifier_factory(clf)
+        clf.fit(self.X, self.y)
+        ax = clf.plot_feature_importances(order='ascending')
+        ax = clf.plot_feature_importances(order='descending')
+        ax = clf.plot_feature_importances(order=None)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = RandomForestClassifier()
+        scikitplot.classifier_factory(clf)
+        clf.fit(self.X, self.y)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = clf.plot_feature_importances()
+        assert ax is not out_ax
+        out_ax = clf.plot_feature_importances(ax=ax)
         assert ax is out_ax
 
 
