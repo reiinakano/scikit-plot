@@ -1,13 +1,13 @@
+# Welcome to Scikit-plot
+
 [![PyPI version](https://badge.fury.io/py/scikit-plot.svg)](https://badge.fury.io/py/scikit-plot)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 [![Build Status](https://travis-ci.org/reiinakano/scikit-plot.svg?branch=master)](https://travis-ci.org/reiinakano/scikit-plot)
 [![PyPI](https://img.shields.io/pypi/pyversions/scikit-plot.svg)]()
 
-# Scikit-plot
-
 ### Scikit-learn with plotting.
 
-Yes. Scikit-plot is the result of an unartistic data scientist's dreadful realization that *visualization is one of the most crucial components in the data science process, not just a mere afterthought*.
+Scikit-plot is the result of an unartistic data scientist's dreadful realization that *visualization is one of the most crucial components in the data science process, not just a mere afterthought*.
 
 Gaining insights is simply a lot easier when you're looking at a colored heatmap of a confusion matrix complete with class labels rather than a single-line dump of numbers enclosed in brackets. Besides, if you ever need to present your results to someone (virtually any time anybody hires you to do data science), you show them visualizations, not a bunch of numbers in Excel.
 
