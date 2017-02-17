@@ -4,6 +4,7 @@ import scikitplot
 import warnings
 from sklearn.datasets import load_iris as load_data
 from sklearn.linear_model import LogisticRegression
+from sklearn.exceptions import NotFittedError
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -126,6 +127,59 @@ class TestPlotLearningCurve(unittest.TestCase):
         out_ax = clf.plot_learning_curve(self.X, self.y)
         assert ax is not out_ax
         out_ax = clf.plot_learning_curve(self.X, self.y, ax=ax)
+        assert ax is out_ax
+
+
+class TestPlotConfusionMatrix(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def test_cv(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_confusion_matrix(self.X, self.y)
+        ax.figure.show()
+        ax = clf.plot_confusion_matrix(self.X, self.y, cv=5)
+        ax.figure.show()
+
+    def test_normalize(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_confusion_matrix(self.X, self.y, normalize=True)
+        ax.figure.show()
+        ax = clf.plot_confusion_matrix(self.X, self.y, normalize=False)
+        ax.figure.show()
+
+    def test_do_cv(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_confusion_matrix(self.X, self.y)
+        ax.figure.show()
+        self.assertRaises(NotFittedError, clf.plot_confusion_matrix, self.X, self.y, do_cv=False)
+
+    def test_shuffle(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_confusion_matrix(self.X, self.y, shuffle=True)
+        ax.figure.show()
+        ax = clf.plot_confusion_matrix(self.X, self.y, shuffle=False)
+        ax.figure.show()
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = clf.plot_confusion_matrix(self.X, self.y)
+        assert ax is not out_ax
+        out_ax = clf.plot_confusion_matrix(self.X, self.y, ax=ax)
         assert ax is out_ax
 
 
