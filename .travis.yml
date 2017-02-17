@@ -4,6 +4,10 @@ python:
   - "3.5"
   - "3.6"
 # command to install dependencies
+before_script: # configure a headless display to test plot generation
+- "export DISPLAY=:99.0"
+- "sh -e /etc/init.d/xvfb start"
+- sleep 3 # give xvfb some time to start
 install:
   - pip install --upgrade pip setuptools wheel
   - pip install --only-binary=numpy,scipy numpy scipy

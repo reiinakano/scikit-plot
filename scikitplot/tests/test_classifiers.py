@@ -1,4 +1,6 @@
 from __future__ import absolute_import
+import matplotlib
+matplotlib.use('Template')
 import unittest
 import scikitplot
 import warnings
@@ -100,6 +102,8 @@ class TestPlotLearningCurve(unittest.TestCase):
         clf = LogisticRegression()
         scikitplot.classifier_factory(clf)
         ax = clf.plot_learning_curve(self.X, self.y)
+        ax.figure.show()
+        ax = clf.plot_learning_curve(self.X, self.y, cv=5)
         ax.figure.show()
 
 
