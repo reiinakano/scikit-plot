@@ -101,23 +101,19 @@ class TestPlotLearningCurve(unittest.TestCase):
         clf = LogisticRegression()
         scikitplot.classifier_factory(clf)
         ax = clf.plot_learning_curve(self.X, self.y)
-        ax.figure.show()
         ax = clf.plot_learning_curve(self.X, self.y, cv=5)
-        ax.figure.show()
 
     def test_train_sizes(self):
         np.random.seed(0)
         clf = LogisticRegression()
         scikitplot.classifier_factory(clf)
         ax = clf.plot_learning_curve(self.X, self.y, train_sizes=np.linspace(0.1, 1.0, 8))
-        ax.figure.show()
 
     def test_n_jobs(self):
         np.random.seed(0)
         clf = LogisticRegression()
         scikitplot.classifier_factory(clf)
         ax = clf.plot_learning_curve(self.X, self.y, n_jobs=-1)
-        ax.figure.show()
 
     def test_ax(self):
         np.random.seed(0)
@@ -142,25 +138,20 @@ class TestPlotConfusionMatrix(unittest.TestCase):
         clf = LogisticRegression()
         scikitplot.classifier_factory(clf)
         ax = clf.plot_confusion_matrix(self.X, self.y)
-        ax.figure.show()
         ax = clf.plot_confusion_matrix(self.X, self.y, cv=5)
-        ax.figure.show()
 
     def test_normalize(self):
         np.random.seed(0)
         clf = LogisticRegression()
         scikitplot.classifier_factory(clf)
         ax = clf.plot_confusion_matrix(self.X, self.y, normalize=True)
-        ax.figure.show()
         ax = clf.plot_confusion_matrix(self.X, self.y, normalize=False)
-        ax.figure.show()
 
     def test_do_cv(self):
         np.random.seed(0)
         clf = LogisticRegression()
         scikitplot.classifier_factory(clf)
         ax = clf.plot_confusion_matrix(self.X, self.y)
-        ax.figure.show()
         self.assertRaises(NotFittedError, clf.plot_confusion_matrix, self.X, self.y, do_cv=False)
 
     def test_shuffle(self):
@@ -168,9 +159,7 @@ class TestPlotConfusionMatrix(unittest.TestCase):
         clf = LogisticRegression()
         scikitplot.classifier_factory(clf)
         ax = clf.plot_confusion_matrix(self.X, self.y, shuffle=True)
-        ax.figure.show()
         ax = clf.plot_confusion_matrix(self.X, self.y, shuffle=False)
-        ax.figure.show()
 
     def test_ax(self):
         np.random.seed(0)
@@ -180,6 +169,32 @@ class TestPlotConfusionMatrix(unittest.TestCase):
         out_ax = clf.plot_confusion_matrix(self.X, self.y)
         assert ax is not out_ax
         out_ax = clf.plot_confusion_matrix(self.X, self.y, ax=ax)
+        assert ax is out_ax
+
+
+class TestPlotROCCurve(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def test_do_split(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_roc_curve(self.X, self.y)
+        self.assertRaises(AttributeError, clf.plot_roc_curve, self.X, self.y,
+                          do_split=False)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = clf.plot_roc_curve(self.X, self.y)
+        assert ax is not out_ax
+        out_ax = clf.plot_roc_curve(self.X, self.y, ax=ax)
         assert ax is out_ax
 
 
