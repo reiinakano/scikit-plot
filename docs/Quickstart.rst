@@ -108,4 +108,4 @@ And again, that's it! You'll notice that in this plot, all we needed to do was p
 More Plots
 ----------
 
-Want to know the other plots you can generate using Scikit-plot? Visit the :ref:`factoryapidocs`.
+Want to know the other plots you can generate using Scikit-plot? Visit the :ref:`factoryapidocs` or the :ref:`functionsapidocs`.

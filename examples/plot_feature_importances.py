@@ -12,9 +12,9 @@ rf.plot_feature_importances(feature_names=['petal length', 'petal width',
 plt.show()
 
 # Using the more flexible functions API
-from scikitplot import plotters
+from scikitplot import plotters as skplt
 rf = RandomForestClassifier()
 rf = rf.fit(X, y)
-plotters.plot_feature_importances(rf, feature_names=['petal length', 'petal width',
-                                                     'sepal length', 'sepal width'])
+skplt.plot_feature_importances(rf, feature_names=['petal length', 'petal width',
+                                                  'sepal length', 'sepal width'])
 plt.show()

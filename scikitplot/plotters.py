@@ -45,10 +45,11 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None):
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
     Example:
+        >>> import scikitplot.plotters as skplt
         >>> rf = RandomForestClassifier()
         >>> rf = rf.fit(X_train, y_train)
         >>> y_pred = rf.predict(X_test)
-        >>> plot_confusion_matrix(y_test, y_pred, normalize=True)
+        >>> skplt.plot_confusion_matrix(y_test, y_pred, normalize=True)
         <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
         >>> plt.show()
 
@@ -112,10 +113,11 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
     Example:
+        >>> import scikitplot.plotters as skplt
         >>> nb = GaussianNB()
         >>> nb = nb.fit(X_train, y_train)
         >>> y_probas = nb.predict_proba(X_test)
-        >>> plot_roc_curve(y_test, y_probas)
+        >>> skplt.plot_roc_curve(y_test, y_probas)
         <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
         >>> plt.show()
 
@@ -215,10 +217,11 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None):
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
     Example:
+        >>> import scikitplot.plotters as skplt
         >>> lr = LogisticRegression()
         >>> lr = lr.fit(X_train, y_train)
         >>> y_probas = lr.predict_proba(X_test)
-        >>> plot_ks_statistic(y_test, y_probas)
+        >>> skplt.plot_ks_statistic(y_test, y_probas)
         <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
         >>> plt.show()
 
@@ -275,10 +278,11 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
     Example:
+        >>> import scikitplot.plotters as skplt
         >>> nb = GaussianNB()
         >>> nb = nb.fit(X_train, y_train)
         >>> y_probas = nb.predict_proba(X_test)
-        >>> plot_precision_recall_curve(y_test, y_probas)
+        >>> skplt.plot_precision_recall_curve(y_test, y_probas)
         <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
         >>> plt.show()
 
@@ -360,12 +364,13 @@ def plot_feature_importances(clf, title='Feature Importance', feature_names=None
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
     Example:
-            >>> rf = RandomForestClassifier()
-            >>> rf.fit(X, y)
-            >>> plot_feature_importances(rf, feature_names=['petal length', 'petal width',
-            ...                                             'sepal length', 'sepal width'])
-            <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
-            >>> plt.show()
+        >>> import scikitplot.plotters as skplt
+        >>> rf = RandomForestClassifier()
+        >>> rf.fit(X, y)
+        >>> skplt.plot_feature_importances(rf, feature_names=['petal length', 'petal width',
+        ...                                                   'sepal length', 'sepal width'])
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
 
         .. image:: _static/examples/plot_feature_importances.png
            :align: center
@@ -465,8 +470,9 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
     Example:
-        >>> rf = classifier_factory(RandomForestClassifier())
-        >>> rf.plot_learning_curve(X, y)
+        >>> import scikitplot.plotters as skplt
+        >>> rf = RandomForestClassifier()
+        >>> skplt.plot_learning_curve(rf, X, y)
         <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
         >>> plt.show()
 
@@ -530,10 +536,11 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
     Example:
-            >>> kmeans = KMeans(n_clusters=4, random_state=1)
-            >>> plot_silhouette(kmeans, X)
-            <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
-            >>> plt.show()
+        >>> import scikitplot.plotters as skplt
+        >>> kmeans = KMeans(n_clusters=4, random_state=1)
+        >>> skplt.plot_silhouette(kmeans, X)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
 
         .. image:: _static/examples/plot_silhouette.png
            :align: center
@@ -618,10 +625,11 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None):
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
     Example:
-            >>> kmeans = KMeans(random_state=1)
-            >>> plot_elbow_curve(kmeans, cluster_ranges=range(1, 11))
-            <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
-            >>> plt.show()
+        >>> import scikitplot.plotters as skplt
+        >>> kmeans = KMeans(random_state=1)
+        >>> skplt.plot_elbow_curve(kmeans, cluster_ranges=range(1, 11))
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
 
         .. image:: _static/examples/plot_elbow_curve.png
            :align: center

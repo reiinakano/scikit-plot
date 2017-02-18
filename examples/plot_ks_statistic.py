@@ -12,9 +12,9 @@ lr.plot_ks_statistic(X, y, random_state=1)
 plt.show()
 
 # Using the more flexible functions API
-from scikitplot import plotters
+from scikitplot import plotters as skplt
 lr = LogisticRegression()
 lr = lr.fit(X, y)
 probas = lr.predict_proba(X)
-plotters.plot_ks_statistic(y_true=y, y_probas=probas)
+skplt.plot_ks_statistic(y_true=y, y_probas=probas)
 plt.show()
