@@ -327,8 +327,8 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_cv=True, cv=None,
     return ax
 
 
-def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_split=True,
-                                test_split_ratio=0.33, random_state=None, ax=None):
+def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv=True,
+                                cv=None, shuffle=True, random_state=None, ax=None):
     """Generates the Precision-Recall curve for a given classifier and dataset.
 
     Args:
@@ -343,15 +343,26 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_sp
 
         title (string, optional): Title of the generated plot. Defaults to "Precision-Recall Curve".
 
-        do_split (bool, optional): If True, the dataset is split into training and testing sets.
-            The classifier is trained on the training set and the Precision-Recall curves are
-            plotted using the performance of the classifier on the testing set. If False, the
-            Precision-Recall curves are generated without splitting the dataset or training the
-            classifier. This assumes that the classifier has already been called with its `fit`
-            method beforehand.
+        do_cv (bool, optional): If True, the classifier is cross-validated on the dataset using the
+            cross-validation strategy in `cv` to generate the confusion matrix. If False, the
+            confusion matrix is generated without training or cross-validating the classifier.
+            This assumes that the classifier has already been called with its `fit` method beforehand.
 
-        test_split_ratio (float, optional): Used when do_split is set to True. Determines the
-            proportion of the entire dataset to use in the testing split. Default is set to 0.33.
+        cv (int, cross-validation generator, iterable, optional): Determines the
+            cross-validation strategy to be used for splitting.
+
+            Possible inputs for cv are:
+              - None, to use the default 3-fold cross-validation,
+              - integer, to specify the number of folds.
+              - An object to be used as a cross-validation generator.
+              - An iterable yielding train/test splits.
+
+            For integer/None inputs, if ``y`` is binary or multiclass,
+            :class:`StratifiedKFold` used. If the estimator is not a classifier
+            or if ``y`` is neither binary nor multiclass, :class:`KFold` is used.
+
+        shuffle (bool, optional): Used when do_cv is set to True. Determines whether to shuffle the
+            training data before splitting using cross-validation. Default set to True.
 
         random_state (int :class:`RandomState`): Pseudo-random number generator state used
             for random sampling.
@@ -376,16 +387,31 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_sp
         raise TypeError('"predict_proba" method not in classifier. '
                         'Cannot calculate Precision-Recall Curve.')
 
-    if not do_split:
+    if not do_cv:
         probas = clf.predict_proba(X)
         y_true = y
 
     else:
-        X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=test_split_ratio,
-                                                            stratify=y, random_state=random_state)
+        if cv is None:
+            cv = StratifiedKFold(shuffle=shuffle, random_state=random_state)
+        elif isinstance(cv, int):
+            cv = StratifiedKFold(n_splits=cv, shuffle=shuffle, random_state=random_state)
+        else:
+            pass
+
         clf_clone = clone(clf)
-        probas = clf_clone.fit(X_train, y_train).predict_proba(X_test)
-        y_true = y_test
+
+        preds_list = []
+        trues_list = []
+        for train_index, test_index in cv.split(X, y):
+            X_train, X_test = X[train_index], X[test_index]
+            y_train, y_test = y[train_index], y[test_index]
+            clf_clone.fit(X_train, y_train)
+            preds = clf_clone.predict_proba(X_test)
+            preds_list.append(preds)
+            trues_list.append(y_test)
+        probas = np.concatenate(preds_list, axis=0)
+        y_true = np.concatenate(trues_list)
 
     # Compute Precision-Recall curve and area for each class
     ax = plotters.plot_precision_recall_curve(y_true, probas, title=title, ax=ax)
