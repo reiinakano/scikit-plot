@@ -6,12 +6,10 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scikitplot import plotters
 from sklearn.model_selection import learning_curve
-from sklearn.metrics import precision_recall_curve
-from sklearn.metrics import average_precision_score
-from sklearn.preprocessing import label_binarize
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import train_test_split
 from sklearn.base import clone
+from scikitplot.plotters import plot_feature_importances
 
 
 def classifier_factory(clf):
@@ -415,91 +413,4 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_sp
 
     # Compute Precision-Recall curve and area for each class
     ax = plotters.plot_precision_recall_curve(y_true, probas, title=title, ax=ax)
-    return ax
-
-
-def plot_feature_importances(clf, title='Feature Importance', feature_names=None,
-                             max_num_features=20, order='descending', ax=None):
-    """Generates a plot of a classifier's feature importances.
-
-    Args:
-        clf: Classifier instance that implements "fit" and "predict_proba" methods.
-
-        title (string, optional): Title of the generated plot. Defaults to "Feature importances".
-
-        feature_names (None, :obj:`list` of string, optional): Determines the feature names used
-            to plot the feature importances. If None, feature names will be numbered.
-
-        max_num_features (int): Determines the maximum number of features to plot. Defaults to 20.
-
-        order ('ascending', 'descending', or None, optional): Determines the order in which the
-            feature importances are plotted. Defaults to 'descending'.
-
-        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
-            the learning curve. If None, the plot is drawn on a new set of axes.
-
-    Returns:
-        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
-
-    Example:
-            >>> rf = classifier_factory(RandomForestClassifier())
-            >>> rf.fit(X, y)
-            >>> rf.plot_feature_importances(feature_names=['petal length', 'petal width',
-            ...                                            'sepal length', 'sepal width'])
-            <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
-            >>> plt.show()
-
-        .. image:: _static/examples/plot_feature_importances.png
-           :align: center
-           :alt: Feature Importances
-    """
-    if not hasattr(clf, 'feature_importances_'):
-        raise TypeError('"feature_importances_" attribute not in classifier. '
-                        'Cannot plot feature importances.')
-
-    importances = clf.feature_importances_
-
-    if hasattr(clf, 'estimators_')\
-            and isinstance(clf.estimators_, list)\
-            and hasattr(clf.estimators_[0], 'feature_importances_'):
-        std = np.std([tree.feature_importances_ for tree in clf.estimators_],
-                     axis=0)
-
-    else:
-        std = None
-
-    if order == 'descending':
-        indices = np.argsort(importances)[::-1]
-
-    elif order == 'ascending':
-        indices = np.argsort(importances)
-
-    elif order is None:
-        indices = np.array(range(len(importances)))
-
-    else:
-        raise ValueError('Invalid argument {} for "order"'.format(order))
-
-    if ax is None:
-        fig, ax = plt.subplots(1, 1)
-
-    if feature_names is None:
-        feature_names = indices
-    else:
-        feature_names = np.array(feature_names)[indices]
-
-    max_num_features = min(max_num_features, len(importances))
-
-    ax.set_title(title)
-
-    if std is not None:
-        ax.bar(range(max_num_features), importances[indices][:max_num_features], color='r',
-               yerr=std[indices][:max_num_features], align='center')
-    else:
-        ax.bar(range(max_num_features), importances[indices][:max_num_features],
-               color='r', align='center')
-
-    ax.set_xticks(range(max_num_features))
-    ax.set_xticklabels(feature_names[:max_num_features])
-    ax.set_xlim([-1, max_num_features])
     return ax
