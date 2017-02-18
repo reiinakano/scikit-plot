@@ -210,13 +210,13 @@ class TestPlotROCCurve(unittest.TestCase):
         scikitplot.classifier_factory(clf)
         self.assertRaises(TypeError, clf.plot_roc_curve, self.X, self.y)
 
-    def test_do_split(self):
+    def test_do_cv(self):
         np.random.seed(0)
         clf = LogisticRegression()
         scikitplot.classifier_factory(clf)
         ax = clf.plot_roc_curve(self.X, self.y)
         self.assertRaises(AttributeError, clf.plot_roc_curve, self.X, self.y,
-                          do_split=False)
+                          do_cv=False)
 
     def test_ax(self):
         np.random.seed(0)
