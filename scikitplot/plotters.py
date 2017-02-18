@@ -9,6 +9,8 @@ from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import label_binarize
 from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
+from sklearn.metrics import precision_recall_curve
+from sklearn.metrics import average_precision_score
 from scipy import interp
 import itertools
 from scikitplot.helpers import binary_ks_curve
@@ -104,9 +106,9 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
     Example:
-        >>> rf = RandomForestClassifier()
-        >>> rf = rf.fit(X_train, y_train)
-        >>> y_probas = rf.predict_proba(X_test)
+        >>> nb = GaussianNB()
+        >>> nb = nb.fit(X_train, y_train)
+        >>> y_probas = nb.predict_proba(X_test)
         >>> plot_roc_curve(y_test, y_probas)
         <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
         >>> plt.show()
@@ -207,10 +209,12 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None):
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
     Example:
-            >>> lr = classifier_factory(LogisticRegression())
-            >>> lr.plot_ks_statistic(X, y, random_state=1)
-            <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
-            >>> plt.show()
+        >>> lr = LogisticRegression()
+        >>> lr = lr.fit(X_train, y_train)
+        >>> y_probas = lr.predict_proba(X_test)
+        >>> plot_ks_statistic(y_test, y_probas)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
 
         .. image:: _static/examples/plot_ks_statistic.png
            :align: center
@@ -245,4 +249,81 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None):
     ax.set_ylabel('Percentage below threshold')
     ax.legend(loc='lower right')
 
+    return ax
+
+
+def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve', ax=None):
+    """Generates the Precision Recall Curve for a set of ground truth labels and classifier probability predictions.
+
+    Args:
+        y_true (array-like, shape (n_samples)):
+            Ground truth (correct) target values.
+
+        y_probas (array-like, shape (n_samples, n_classes)):
+            Prediction probabilities for each class returned by a classifier.
+
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+            the learning curve. If None, the plot is drawn on a new set of axes.
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+
+    Example:
+        >>> nb = GaussianNB()
+        >>> nb = nb.fit(X_train, y_train)
+        >>> y_probas = nb.predict_proba(X_test)
+        >>> plot_precision_recall_curve(y_test, y_probas)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
+
+        .. image:: _static/examples/plot_precision_recall_curve.png
+           :align: center
+           :alt: Precision Recall Curve
+    """
+    classes = np.unique(y_true)
+    probas = y_probas
+
+    # Compute Precision-Recall curve and area for each class
+    precision = dict()
+    recall = dict()
+    average_precision = dict()
+    for i in range(len(classes)):
+        precision[i], recall[i], _ = precision_recall_curve(y_true, probas[:, i],
+                                                            pos_label=classes[i])
+
+    y_true = label_binarize(y_true, classes=classes)
+    if len(classes) == 2:
+        y_true = np.hstack((1 - y_true, y_true))
+
+    for i in range(len(classes)):
+        average_precision[i] = average_precision_score(y_true[:, i], probas[:, i])
+
+    # Compute micro-average ROC curve and ROC area
+    micro_key = 'micro'
+    i = 0
+    while micro_key in precision:
+        i += 1
+        micro_key += str(i)
+
+    precision[micro_key], recall[micro_key], _ = precision_recall_curve(y_true.ravel(),
+                                                                        probas.ravel())
+    average_precision[micro_key] = average_precision_score(y_true, probas, average='micro')
+
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+
+    ax.set_title(title)
+    for i in range(len(classes)):
+        ax.plot(recall[i], precision[i], lw=2,
+                label='Precision-recall curve of class {0} '
+                      '(area = {1:0.3f})'.format(classes[i], average_precision[i]))
+    ax.plot(recall[micro_key], precision[micro_key], lw=2, color='gold',
+            label='micro-average Precision-recall curve '
+                  '(area = {0:0.3f})'.format(average_precision[micro_key]))
+
+    ax.set_xlim([0.0, 1.0])
+    ax.set_ylim([0.0, 1.05])
+    ax.set_xlabel('Recall')
+    ax.set_ylabel('Precision')
+    ax.legend(loc='best')
     return ax

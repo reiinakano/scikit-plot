@@ -403,7 +403,6 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_sp
                         'Cannot calculate Precision-Recall Curve.')
 
     if not do_split:
-        classes = clf.classes_
         probas = clf.predict_proba(X)
         y_true = y
 
@@ -412,52 +411,10 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_sp
                                                             stratify=y, random_state=random_state)
         clf_clone = clone(clf)
         probas = clf_clone.fit(X_train, y_train).predict_proba(X_test)
-        classes = clf_clone.classes_
         y_true = y_test
 
     # Compute Precision-Recall curve and area for each class
-    precision = dict()
-    recall = dict()
-    average_precision = dict()
-    for i in range(len(classes)):
-        precision[i], recall[i], _ = precision_recall_curve(y_true, probas[:, i],
-                                                            pos_label=classes[i])
-
-    y_true = label_binarize(y_true, classes=classes)
-    if len(classes) == 2:
-        y_true = np.hstack((1 - y_true, y_true))
-
-    for i in range(len(classes)):
-        average_precision[i] = average_precision_score(y_true[:, i], probas[:, i])
-
-    # Compute micro-average ROC curve and ROC area
-    micro_key = 'micro'
-    i = 0
-    while micro_key in precision:
-        i += 1
-        micro_key += str(i)
-
-    precision[micro_key], recall[micro_key], _ = precision_recall_curve(y_true.ravel(),
-                                                                        probas.ravel())
-    average_precision[micro_key] = average_precision_score(y_true, probas, average='micro')
-
-    if ax is None:
-        fig, ax = plt.subplots(1, 1)
-
-    ax.set_title(title)
-    for i in range(len(classes)):
-        ax.plot(recall[i], precision[i], lw=2,
-                label='Precision-recall curve of class {0} '
-                      '(area = {1:0.3f})'.format(classes[i], average_precision[i]))
-    ax.plot(recall[micro_key], precision[micro_key], lw=2, color='gold',
-            label='micro-average Precision-recall curve '
-                  '(area = {0:0.3f})'.format(average_precision[micro_key]))
-
-    ax.set_xlim([0.0, 1.0])
-    ax.set_ylim([0.0, 1.05])
-    ax.set_xlabel('Recall')
-    ax.set_ylabel('Precision')
-    ax.legend(loc='best')
+    ax = plotters.plot_precision_recall_curve(y_true, probas, title=title, ax=ax)
     return ax
 
 
