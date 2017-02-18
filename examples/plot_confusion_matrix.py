@@ -8,3 +8,11 @@ X, y = load_data(return_X_y=True)
 rf = classifier_factory(RandomForestClassifier())
 rf.plot_confusion_matrix(X, y, normalize=True)
 plt.show()
+
+# Using the more flexible functions API
+from scikitplot import plotters
+rf = RandomForestClassifier()
+rf = rf.fit(X, y)
+preds = rf.predict(X)
+plotters.plot_confusion_matrix(y_true=y, y_pred=preds)
+plt.show()

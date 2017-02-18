@@ -1,8 +1,14 @@
 .. apidocs file containing the API Documentation
-.. _apidocs:
+.. _factoryapidocs:
 
-API Reference
-=============
+Factory API Reference
+=====================
+
+This document contains the plotting methods that are embedded into scikit-learn objects by the factory functions :func:`~scikitplot.clustering_factory`  and :func:`~scikitplot.classifier_factory`.
+
+.. admonition:: Important Note
+
+   If you want to use stand-alone functions and not bother with the factory functions, view the :ref:`functionsapidocs` instead.
 
 Classifier Plots
 ----------------

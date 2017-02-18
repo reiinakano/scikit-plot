@@ -11,6 +11,10 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
+def convert_labels_into_string(y_true):
+    return ["A" if x==0 else x for x in y_true]
+
+
 class TestClassifierFactory(unittest.TestCase):
 
     def setUp(self):
@@ -101,6 +105,12 @@ class TestPlotLearningCurve(unittest.TestCase):
     def tearDown(self):
         plt.close("all")
 
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_learning_curve(self.X, convert_labels_into_string(self.y))
+
     def test_cv(self):
         np.random.seed(0)
         clf = LogisticRegression()
@@ -140,6 +150,12 @@ class TestPlotConfusionMatrix(unittest.TestCase):
 
     def tearDown(self):
         plt.close("all")
+
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_confusion_matrix(self.X, convert_labels_into_string(self.y))
 
     def test_cv(self):
         np.random.seed(0)
@@ -190,6 +206,12 @@ class TestPlotROCCurve(unittest.TestCase):
     def tearDown(self):
         plt.close("all")
 
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_roc_curve(self.X, convert_labels_into_string(self.y))
+
     def test_predict_proba(self):
         np.random.seed(0)
 
@@ -210,13 +232,13 @@ class TestPlotROCCurve(unittest.TestCase):
         scikitplot.classifier_factory(clf)
         self.assertRaises(TypeError, clf.plot_roc_curve, self.X, self.y)
 
-    def test_do_split(self):
+    def test_do_cv(self):
         np.random.seed(0)
         clf = LogisticRegression()
         scikitplot.classifier_factory(clf)
         ax = clf.plot_roc_curve(self.X, self.y)
         self.assertRaises(AttributeError, clf.plot_roc_curve, self.X, self.y,
-                          do_split=False)
+                          do_cv=False)
 
     def test_ax(self):
         np.random.seed(0)
@@ -238,6 +260,12 @@ class TestPlotKSStatistic(unittest.TestCase):
 
     def tearDown(self):
         plt.close("all")
+
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_ks_statistic(self.X, convert_labels_into_string(self.y))
 
     def test_predict_proba(self):
         np.random.seed(0)
@@ -265,13 +293,13 @@ class TestPlotKSStatistic(unittest.TestCase):
         X, y = load_data(return_X_y=True)
         self.assertRaises(ValueError, clf.plot_ks_statistic, X, y)
 
-    def test_do_split(self):
+    def test_do_cv(self):
         np.random.seed(0)
         clf = LogisticRegression()
         scikitplot.classifier_factory(clf)
         ax = clf.plot_ks_statistic(self.X, self.y)
         self.assertRaises(AttributeError, clf.plot_ks_statistic, self.X, self.y,
-                          do_split=False)
+                          do_cv=False)
 
     def test_ax(self):
         np.random.seed(0)
@@ -294,6 +322,12 @@ class TestPlotPrecisionRecall(unittest.TestCase):
     def tearDown(self):
         plt.close("all")
 
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_precision_recall_curve(self.X, convert_labels_into_string(self.y))
+
     def test_predict_proba(self):
         np.random.seed(0)
 
@@ -314,13 +348,13 @@ class TestPlotPrecisionRecall(unittest.TestCase):
         scikitplot.classifier_factory(clf)
         self.assertRaises(TypeError, clf.plot_precision_recall_curve, self.X, self.y)
 
-    def test_do_split(self):
+    def test_do_cv(self):
         np.random.seed(0)
         clf = LogisticRegression()
         scikitplot.classifier_factory(clf)
         ax = clf.plot_precision_recall_curve(self.X, self.y)
         self.assertRaises(AttributeError, clf.plot_precision_recall_curve, self.X, self.y,
-                          do_split=False)
+                          do_cv=False)
 
     def test_ax(self):
         np.random.seed(0)
@@ -342,6 +376,13 @@ class TestFeatureImportances(unittest.TestCase):
 
     def tearDown(self):
         plt.close("all")
+
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = RandomForestClassifier()
+        scikitplot.classifier_factory(clf)
+        clf.fit(self.X, convert_labels_into_string(self.y))
+        ax = clf.plot_feature_importances()
 
     def test_feature_importances_in_clf(self):
         np.random.seed(0)

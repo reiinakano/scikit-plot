@@ -11,7 +11,8 @@ Welcome to Scikit-plot's documentation!
    :name: mastertoc
 
    First Steps with Scikit-plot <Quickstart>
-   API Reference <apidocs>
+   Factory API Reference <apidocs>
+   Functions API Reference <functionsapidocs>
 
 
 Indices and tables

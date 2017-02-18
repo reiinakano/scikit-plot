@@ -10,3 +10,11 @@ X, y = load_data(return_X_y=True)
 nb = classifier_factory(GaussianNB())
 nb.plot_roc_curve(X, y, random_state=1)
 plt.show()
+
+# Using the more flexible functions API
+from scikitplot import plotters
+nb = GaussianNB()
+nb = nb.fit(X, y)
+probas = nb.predict_proba(X)
+plotters.plot_roc_curve(y_true=y, y_probas=probas)
+plt.show()

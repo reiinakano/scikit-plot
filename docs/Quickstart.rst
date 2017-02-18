@@ -79,9 +79,33 @@ And that's it! A quick glance of our confusion matrix shows that our classifier 
 
    If you do not wish to do cross-validation e.g. you have separate training and testing datasets, simply set ``do_cv`` to **False** and make sure the classifier is already trained prior to calling :func:`~scikitplot.classifiers.plot_confusion_matrix`. In this case, the confusion matrix will be generated on the predictions of the trained classifier on the passed ``X`` and ``y``.
 
-   In some cases, instead of ``do_cv``, Scikit-plot exposes a ``do_split`` parameter to specify that the passed dataset must be split once into a training and testing dataset to generate the plot.
+The Functions API
+-----------------
+
+Although convenient, the Factory API may feel a little restrictive for more advanced users and users of external libraries. Thus, to offer more flexibility over your plotting, Scikit-plot also exposes a Functions API that, well, exposes functions.
+
+The nature of the Functions API offers compatibility with non-scikit-learn objects.
+
+Here's a quick example to generate the precision-recall curves of a Keras classifier on a sample dataset.
+
+    >>> # Import what's needed for the Functions API
+    >>> import matplotlib.pyplot as plt
+    >>> import scikitplot.plotters as skplt
+    >>> # This is a Keras classifier. We'll generate probabilities on the test set.
+    >>> keras_clf.fit(X_train, y_train, batch_size=64, nb_epoch=10, verbose=2)
+    >>> probas = keras_clf.predict_proba(X_test, batch_size=64)
+    >>> # Now plot.
+    >>> skplt.plot_precision_recall_curve(y_test, probas)
+    <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+    >>> plt.show()
+
+.. image:: _static/quickstart_plot_precision_recall_curve.png
+   :align: center
+   :alt: Precision Recall Curves
+
+And again, that's it! You'll notice that in this plot, all we needed to do was pass the ground truth labels and predicted probabilities to :func:`~scikitplot.plotters.plot_precision_recall_curve` to generate the precision-recall curves. This means you can use literally any classifier you want to generate the precision-recall curves, from Keras classifiers to NLTK Naive Bayes to XGBoost, as long as you pass in the predicted probabilities in the correct format.
 
 More Plots
 ----------
 
-Want to know the other plots you can generate using Scikit-plot? Visit the :ref:`apidocs`.
+Want to know the other plots you can generate using Scikit-plot? Visit the :ref:`factoryapidocs`.
