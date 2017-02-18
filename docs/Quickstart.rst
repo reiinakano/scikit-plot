@@ -79,10 +79,12 @@ And that's it! A quick glance of our confusion matrix shows that our classifier 
 
    If you do not wish to do cross-validation e.g. you have separate training and testing datasets, simply set ``do_cv`` to **False** and make sure the classifier is already trained prior to calling :func:`~scikitplot.classifiers.plot_confusion_matrix`. In this case, the confusion matrix will be generated on the predictions of the trained classifier on the passed ``X`` and ``y``.
 
-Maximum flexibility and compatibility with non-scikit-learn objects
--------------------------------------------------------------------
+The Functions API
+-----------------
 
 Although convenient, the Factory API may feel a little restrictive for more advanced users and users of external libraries. Thus, to offer more flexibility over your plotting, Scikit-plot also exposes a Functions API that, well, exposes functions.
+
+The nature of the Functions API offers compatibility with non-scikit-learn objects.
 
 Here's a quick example to generate the precision-recall curves of a Keras classifier on a sample dataset.
 
@@ -106,4 +108,4 @@ And again, that's it! You'll notice that in this plot, all we needed to do was p
 More Plots
 ----------
 
-Want to know the other plots you can generate using Scikit-plot? Visit the :ref:`apidocs`.
+Want to know the other plots you can generate using Scikit-plot? Visit the :ref:`factoryapidocs`.

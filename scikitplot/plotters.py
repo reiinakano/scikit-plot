@@ -530,8 +530,8 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
     Example:
-            >>> kmeans = clustering_factory(KMeans(n_clusters=4, random_state=1))
-            >>> kmeans.plot_silhouette(X)
+            >>> kmeans = KMeans(n_clusters=4, random_state=1)
+            >>> plot_silhouette(kmeans, X)
             <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
             >>> plt.show()
 
@@ -618,8 +618,8 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None):
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
     Example:
-            >>> kmeans = clustering_factory(KMeans(random_state=1))
-            >>> kmeans.plot_elbow_curve(X, cluster_ranges=range(1, 11))
+            >>> kmeans = KMeans(random_state=1)
+            >>> plot_elbow_curve(kmeans, cluster_ranges=range(1, 11))
             <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
             >>> plt.show()
 
