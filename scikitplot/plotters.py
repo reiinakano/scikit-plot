@@ -11,6 +11,7 @@ from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
 from scipy import interp
 import itertools
+from scikitplot.helpers import binary_ks_curve
 
 
 def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None):
@@ -114,7 +115,6 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
            :align: center
            :alt: ROC Curves
     """
-
     classes = np.unique(y_true)
     probas = y_probas
 
@@ -185,4 +185,64 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
     ax.set_xlabel('False Positive Rate')
     ax.set_ylabel('True Positive Rate')
     ax.legend(loc='lower right')
+    return ax
+
+
+def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None):
+    """Generates the KS Statistic plot for a set of ground truth labels and classifier probability predictions.
+
+    Args:
+        y_true (array-like, shape (n_samples)):
+            Ground truth (correct) target values.
+
+        y_probas (array-like, shape (n_samples, n_classes)):
+            Prediction probabilities for each class returned by a classifier.
+
+        title (string, optional): Title of the generated plot. Defaults to "KS Statistic Plot".
+
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+            the learning curve. If None, the plot is drawn on a new set of axes.
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+
+    Example:
+            >>> lr = classifier_factory(LogisticRegression())
+            >>> lr.plot_ks_statistic(X, y, random_state=1)
+            <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+            >>> plt.show()
+
+        .. image:: _static/examples/plot_ks_statistic.png
+           :align: center
+           :alt: KS Statistic
+    """
+    classes = np.unique(y_true)
+    if len(classes) != 2:
+        raise ValueError('Cannot calculate KS statistic for data with '
+                         '{} category/ies'.format(len(classes)))
+    probas = y_probas
+
+    # Compute KS Statistic curves
+    thresholds, pct1, pct2, ks_statistic, \
+        max_distance_at, classes = binary_ks_curve(y_true, probas[:, 1].ravel())
+
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+
+    ax.set_title(title)
+
+    ax.plot(thresholds, pct1, lw=3, label='Class {}'.format(classes[0]))
+    ax.plot(thresholds, pct2, lw=3, label='Class {}'.format(classes[1]))
+    idx = np.where(thresholds == max_distance_at)[0][0]
+    ax.axvline(max_distance_at, *sorted([pct1[idx], pct2[idx]]),
+               label='KS Statistic: {:.3f} at {:.3f}'.format(ks_statistic, max_distance_at),
+               linestyle=':', lw=3, color='black')
+
+    ax.set_xlim([0.0, 1.0])
+    ax.set_ylim([0.0, 1.0])
+
+    ax.set_xlabel('Threshold')
+    ax.set_ylabel('Percentage below threshold')
+    ax.legend(loc='lower right')
+
     return ax

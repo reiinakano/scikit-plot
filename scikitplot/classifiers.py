@@ -12,7 +12,6 @@ from sklearn.preprocessing import label_binarize
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import train_test_split
 from sklearn.base import clone
-from scikitplot.helpers import binary_ks_curve
 
 
 def classifier_factory(clf):
@@ -338,9 +337,6 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_split=True,
         raise TypeError('"predict_proba" method not in classifier. Cannot calculate ROC Curve.')
 
     if not do_split:
-        if len(clf.classes_) != 2:
-            raise ValueError('Cannot calculate KS statistic for data with '
-                             '{} category/ies'.format(len(clf.classes_)))
         probas = clf.predict_proba(X)
         y_true = y
 
@@ -349,34 +345,10 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_split=True,
                                                             stratify=y, random_state=random_state)
         clf_clone = clone(clf)
         clf_clone.fit(X_train, y_train)
-        if len(clf_clone.classes_) != 2:
-            raise ValueError('Cannot calculate KS statistic for data with '
-                             '{} category/ies'.format(len(clf_clone.classes_)))
         probas = clf_clone.predict_proba(X_test)
         y_true = y_test
 
-    # Compute KS Statistic curves
-    thresholds, pct1, pct2, ks_statistic, \
-        max_distance_at, classes = binary_ks_curve(y_true, probas[:, 1].ravel())
-
-    if ax is None:
-        fig, ax = plt.subplots(1, 1)
-
-    ax.set_title(title)
-
-    ax.plot(thresholds, pct1, lw=3, label='Class {}'.format(classes[0]))
-    ax.plot(thresholds, pct2, lw=3, label='Class {}'.format(classes[1]))
-    idx = np.where(thresholds == max_distance_at)[0][0]
-    ax.axvline(max_distance_at, *sorted([pct1[idx], pct2[idx]]),
-               label='KS Statistic: {:.3f} at {:.3f}'.format(ks_statistic, max_distance_at),
-               linestyle=':', lw=3, color='black')
-
-    ax.set_xlim([0.0, 1.0])
-    ax.set_ylim([0.0, 1.0])
-
-    ax.set_xlabel('Threshold')
-    ax.set_ylabel('Percentage below threshold')
-    ax.legend(loc='lower right')
+    ax = plotters.plot_ks_statistic(y_true, probas, title=title, ax=ax)
 
     return ax
 
