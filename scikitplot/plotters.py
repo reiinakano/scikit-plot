@@ -11,6 +11,7 @@ from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
 from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import average_precision_score
+from sklearn.model_selection import learning_curve
 from scipy import interp
 import itertools
 from scikitplot.helpers import binary_ks_curve
@@ -414,4 +415,84 @@ def plot_feature_importances(clf, title='Feature Importance', feature_names=None
     ax.set_xticks(range(max_num_features))
     ax.set_xticklabels(feature_names[:max_num_features])
     ax.set_xlim([-1, max_num_features])
+    return ax
+
+
+def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=None, n_jobs=1,
+                        ax=None):
+    """Generates a plot of the train and test learning curves for a given classifier.
+
+    Args:
+        clf: Classifier instance that implements ``fit`` and ``predict`` methods.
+
+        X (array-like, shape (n_samples, n_features)):
+            Training vector, where n_samples is the number of samples and
+            n_features is the number of features.
+
+        y (array-like, shape (n_samples) or (n_samples, n_features)):
+            Target relative to X for classification or regression;
+            None for unsupervised learning.
+
+        title (string, optional): Title of the generated plot. Defaults to "Learning Curve"
+
+        cv (int, cross-validation generator, iterable, optional): Determines the
+            cross-validation strategy to be used for splitting.
+
+            Possible inputs for cv are:
+              - None, to use the default 3-fold cross-validation,
+              - integer, to specify the number of folds.
+              - An object to be used as a cross-validation generator.
+              - An iterable yielding train/test splits.
+
+            For integer/None inputs, if ``y`` is binary or multiclass,
+            :class:`StratifiedKFold` used. If the estimator is not a classifier
+            or if ``y`` is neither binary nor multiclass, :class:`KFold` is used.
+
+        train_sizes (iterable, optional): Determines the training sizes used to plot the
+            learning curve. If None, ``np.linspace(.1, 1.0, 5)`` is used.
+
+        n_jobs (int, optional): Number of jobs to run in parallel. Defaults to 1.
+
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+            the learning curve. If None, the plot is drawn on a new set of axes.
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+
+    Example:
+        >>> rf = classifier_factory(RandomForestClassifier())
+        >>> rf.plot_learning_curve(X, y)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
+
+        .. image:: _static/examples/plot_learning_curve.png
+           :align: center
+           :alt: Learning Curve
+    """
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+
+    if train_sizes is None:
+        train_sizes = np.linspace(.1, 1.0, 5)
+
+    ax.set_title(title)
+    ax.set_xlabel("Training examples")
+    ax.set_ylabel("Score")
+    train_sizes, train_scores, test_scores = learning_curve(
+        clf, X, y, cv=cv, n_jobs=n_jobs, train_sizes=train_sizes)
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+    ax.grid()
+    ax.fill_between(train_sizes, train_scores_mean - train_scores_std,
+                    train_scores_mean + train_scores_std, alpha=0.1, color="r")
+    ax.fill_between(train_sizes, test_scores_mean - test_scores_std,
+                    test_scores_mean + test_scores_std, alpha=0.1, color="g")
+    ax.plot(train_sizes, train_scores_mean, 'o-', color="r",
+            label="Training score")
+    ax.plot(train_sizes, test_scores_mean, 'o-', color="g",
+            label="Cross-validation score")
+    ax.legend(loc="best")
+
     return ax

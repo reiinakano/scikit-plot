@@ -10,3 +10,9 @@ X, y = load_data(return_X_y=True)
 rf = classifier_factory(RandomForestClassifier())
 rf.plot_learning_curve(X, y)
 plt.show()
+
+# Using the more flexible functions API
+from scikitplot import plotters
+rf = RandomForestClassifier()
+plotters.plot_learning_curve(rf, X, y)
+plt.show()
