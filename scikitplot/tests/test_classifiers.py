@@ -265,13 +265,13 @@ class TestPlotKSStatistic(unittest.TestCase):
         X, y = load_data(return_X_y=True)
         self.assertRaises(ValueError, clf.plot_ks_statistic, X, y)
 
-    def test_do_split(self):
+    def test_do_cv(self):
         np.random.seed(0)
         clf = LogisticRegression()
         scikitplot.classifier_factory(clf)
         ax = clf.plot_ks_statistic(self.X, self.y)
         self.assertRaises(AttributeError, clf.plot_ks_statistic, self.X, self.y,
-                          do_split=False)
+                          do_cv=False)
 
     def test_ax(self):
         np.random.seed(0)
