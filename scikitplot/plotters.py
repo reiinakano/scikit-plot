@@ -6,6 +6,10 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.metrics import confusion_matrix
+from sklearn.preprocessing import label_binarize
+from sklearn.metrics import roc_curve
+from sklearn.metrics import auc
+from scipy import interp
 import itertools
 
 
@@ -36,6 +40,7 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None):
         >>> rf = rf.fit(X_train, y_train)
         >>> y_pred = rf.predict(X_test)
         >>> plot_confusion_matrix(y_test, y_pred, normalize=True)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
         >>> plt.show()
 
         .. image:: _static/examples/plot_confusion_matrix.png
@@ -76,4 +81,108 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None):
     ax.set_ylabel('True label')
     ax.set_xlabel('Predicted label')
 
+    return ax
+
+
+def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
+    """Generates the ROC curves for a set of ground truth labels and classifier probability predictions.
+
+    Args:
+        y_true (array-like, shape (n_samples)):
+            Ground truth (correct) target values.
+
+        y_probas (array-like, shape (n_samples, n_classes)):
+            Prediction probabilities for each class returned by a classifier.
+
+        title (string, optional): Title of the generated plot. Defaults to "ROC Curves".
+
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+            the learning curve. If None, the plot is drawn on a new set of axes.
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+
+    Example:
+        >>> rf = RandomForestClassifier()
+        >>> rf = rf.fit(X_train, y_train)
+        >>> y_probas = rf.predict_proba(X_test)
+        >>> plot_roc_curve(y_test, y_probas)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
+
+        .. image:: _static/examples/plot_roc_curve.png
+           :align: center
+           :alt: ROC Curves
+    """
+
+    classes = np.unique(y_true)
+    probas = y_probas
+
+    # Compute ROC curve and ROC area for each class
+    fpr = dict()
+    tpr = dict()
+    roc_auc = dict()
+    for i in range(len(classes)):
+        fpr[i], tpr[i], _ = roc_curve(y_true, probas[:, i], pos_label=classes[i])
+        roc_auc[i] = auc(fpr[i], tpr[i])
+
+    # Compute micro-average ROC curve and ROC area
+    micro_key = 'micro'
+    i = 0
+    while micro_key in fpr:
+        i += 1
+        micro_key += str(i)
+
+    y_true = label_binarize(y_true, classes=classes)
+    if len(classes) == 2:
+        y_true = np.hstack((1 - y_true, y_true))
+
+    fpr[micro_key], tpr[micro_key], _ = roc_curve(y_true.ravel(), probas.ravel())
+    roc_auc[micro_key] = auc(fpr[micro_key], tpr[micro_key])
+
+    # Compute macro-average ROC curve and ROC area
+
+    # First aggregate all false positive rates
+    all_fpr = np.unique(np.concatenate([fpr[i] for i in range(len(classes))]))
+
+    # Then interpolate all ROC curves at this points
+    mean_tpr = np.zeros_like(all_fpr)
+    for i in range(len(classes)):
+        mean_tpr += interp(all_fpr, fpr[i], tpr[i])
+
+    # Finally average it and compute AUC
+    mean_tpr /= len(classes)
+
+    macro_key = 'macro'
+    i = 0
+    while macro_key in fpr:
+        i += 1
+        macro_key += str(i)
+    fpr[macro_key] = all_fpr
+    tpr[macro_key] = mean_tpr
+    roc_auc[macro_key] = auc(fpr[macro_key], tpr[macro_key])
+
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+
+    ax.set_title(title)
+
+    for i in range(len(classes)):
+        ax.plot(fpr[i], tpr[i], lw=2,
+                label='ROC curve of class {0} (area = {1:0.2f})'
+                ''.format(classes[i], roc_auc[i]))
+
+    ax.plot(fpr[micro_key], tpr[micro_key],
+            label='micro-average ROC curve (area = {0:0.2f})'.format(roc_auc[micro_key]),
+            color='deeppink', linestyle=':', linewidth=4)
+    ax.plot(fpr[macro_key], tpr[macro_key],
+            label='macro-average ROC curve (area = {0:0.2f})'.format(roc_auc[macro_key]),
+            color='navy', linestyle=':', linewidth=4)
+
+    ax.plot([0, 1], [0, 1], 'k--', lw=2)
+    ax.set_xlim([0.0, 1.0])
+    ax.set_ylim([0.0, 1.05])
+    ax.set_xlabel('False Positive Rate')
+    ax.set_ylabel('True Positive Rate')
+    ax.legend(loc='lower right')
     return ax
