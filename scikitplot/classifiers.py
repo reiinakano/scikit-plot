@@ -114,6 +114,7 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
            :align: center
            :alt: Confusion matrix
     """
+    y = np.array(y)
 
     if not do_cv:
         y_pred = clf.predict(X)
@@ -203,6 +204,8 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
            :align: center
            :alt: ROC Curves
     """
+    y = np.array(y)
+
     if not hasattr(clf, 'predict_proba'):
         raise TypeError('"predict_proba" method not in classifier. Cannot calculate ROC Curve.')
 
@@ -293,6 +296,8 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_cv=True, cv=None,
            :align: center
            :alt: KS Statistic
     """
+    y = np.array(y)
+
     if not hasattr(clf, 'predict_proba'):
         raise TypeError('"predict_proba" method not in classifier. Cannot calculate ROC Curve.')
 
@@ -383,6 +388,8 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv
            :align: center
            :alt: Precision Recall Curve
     """
+    y = np.array(y)
+
     if not hasattr(clf, 'predict_proba'):
         raise TypeError('"predict_proba" method not in classifier. '
                         'Cannot calculate Precision-Recall Curve.')
