@@ -102,6 +102,10 @@ You can find detailed documentation [here](http://scikit-plot.readthedocs.io/en/
 
 Examples are found in the [examples folder of this repo](examples/).
 
+## Contributing to Scikit-plot
+
+Reporting a bug? Suggesting a feature? Want to add your own plot to the library? Visit our [contributor guidelines](CONTRIBUTING.md).
+
 ## Citing Scikit-plot
 
 Are you using Scikit-plot in an academic paper? You should be! Reviewers love eye candy.
