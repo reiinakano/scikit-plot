@@ -4,6 +4,7 @@
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg)]()
 [![Build Status](https://travis-ci.org/reiinakano/scikit-plot.svg?branch=master)](https://travis-ci.org/reiinakano/scikit-plot)
 [![PyPI](https://img.shields.io/pypi/pyversions/scikit-plot.svg)]()
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.293191.svg)](https://doi.org/10.5281/zenodo.293191)
 
 ### Scikit-learn with plotting.
 
@@ -100,5 +101,23 @@ Explore the full features of Scikit-plot.
 You can find detailed documentation [here](http://scikit-plot.readthedocs.io/en/latest/).
 
 Examples are found in the [examples folder of this repo](examples/).
+
+## Citing Scikit-plot
+
+Are you using Scikit-plot in an academic paper? You should be! Reviewers love eye candy.
+
+If so, please consider citing Scikit-plot with DOI [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.293191.svg)](https://doi.org/10.5281/zenodo.293191)
+
+#### APA
+
+> Reiichiro Nakano. (2017). reiinakano/scikit-plot: v0.2.1 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.293191
+
+#### IEEE
+
+> [1]Reiichiro Nakano, “reiinakano/scikit-plot: v0.2.1”. Zenodo, 19-Feb-2017.
+
+#### ACM
+
+> [1]Reiichiro Nakano 2017. reiinakano/scikit-plot: v0.2.1. Zenodo.
 
 Happy plotting!
