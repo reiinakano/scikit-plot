@@ -20,6 +20,7 @@ from sklearn.base import clone
 from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples
 from scipy.spatial.distance import cdist, pdist
+import math
 
 
 def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None):
@@ -668,5 +669,66 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None):
     ax.grid(True)
     ax.set_xlabel('Number of clusters')
     ax.set_ylabel('Percent variance explained')
+
+    return ax
+
+
+def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
+                                target_explained_variance=0.75, ax=None):
+    """Plots PCA components' explained variance ratios. (new in v0.2.2)
+
+    Args:
+        clf: PCA instance that has the ``explained_variance_ratio_`` attribute.
+
+        title (string, optional): Title of the generated plot. Defaults to "PCA Component
+            Explained Variances"
+
+        target_explained_variance (float, optional): Looks for the minimum number of
+            principal components that satisfies this value and emphasizes it on the plot.
+            Defaults to 0.75.4
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+            the learning curve. If None, the plot is drawn on a new set of axes.
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+
+    Example:
+        >>> import scikitplot.plotters as skplt
+        >>> pca = PCA(random_state=1)
+        >>> pca.fit(X)
+        >>> skplt.plot_pca_component_variance(pca)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
+
+        .. image:: _static/examples/plot_pca_component_variance.png
+           :align: center
+           :alt: Elbow Curve
+    """
+    if not hasattr(clf, 'explained_variance_ratio_'):
+        raise TypeError('"clf" does not have explained_variance_ratio_ '
+                        'attribute. Has the PCA been fitted?')
+
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+
+    ax.set_title(title)
+
+    cumulative_sum_ratios = np.cumsum(clf.explained_variance_ratio_)
+
+    # Magic code for figuring out closest value to target_explained_variance
+    idx = np.searchsorted(cumulative_sum_ratios, target_explained_variance)
+
+    ax.plot(range(len(clf.explained_variance_ratio_) + 1),
+            np.concatenate(([0], np.cumsum(clf.explained_variance_ratio_))), '*-')
+    ax.grid(True)
+    ax.set_xlabel('First n principal components')
+    ax.set_ylabel('Explained variance ratio of first n components')
+    ax.set_ylim([-0.02, 1.02])
+    if idx < len(cumulative_sum_ratios):
+        ax.plot(idx+1, cumulative_sum_ratios[idx], 'ro', label='{0:0.3f} Explained variance ratio for '
+                         'first {1} components'.format(cumulative_sum_ratios[idx], idx+1), markersize=4, markeredgewidth=4)
+        ax.axhline(cumulative_sum_ratios[idx],
+                   linestyle=':', lw=3, color='black')
+    ax.legend(loc="best")
 
     return ax
