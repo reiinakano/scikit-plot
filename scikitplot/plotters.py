@@ -20,7 +20,6 @@ from sklearn.base import clone
 from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples
 from scipy.spatial.distance import cdist, pdist
-import math
 
 
 def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None):
@@ -725,8 +724,10 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
     ax.set_ylabel('Explained variance ratio of first n components')
     ax.set_ylim([-0.02, 1.02])
     if idx < len(cumulative_sum_ratios):
-        ax.plot(idx+1, cumulative_sum_ratios[idx], 'ro', label='{0:0.3f} Explained variance ratio for '
-                         'first {1} components'.format(cumulative_sum_ratios[idx], idx+1), markersize=4, markeredgewidth=4)
+        ax.plot(idx+1, cumulative_sum_ratios[idx], 'ro',
+                label='{0:0.3f} Explained variance ratio for '
+                'first {1} components'.format(cumulative_sum_ratios[idx], idx+1),
+                markersize=4, markeredgewidth=4)
         ax.axhline(cumulative_sum_ratios[idx],
                    linestyle=':', lw=3, color='black')
     ax.legend(loc="best")

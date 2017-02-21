@@ -6,7 +6,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scikitplot import plotters
 from sklearn.model_selection import StratifiedKFold
-from sklearn.model_selection import train_test_split
 from sklearn.base import clone
 from scikitplot.plotters import plot_feature_importances
 from scikitplot.plotters import plot_learning_curve
