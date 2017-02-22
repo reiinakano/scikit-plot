@@ -733,3 +733,31 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
     ax.legend(loc="best")
 
     return ax
+
+
+def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None):
+    """Plots the 2-dimensional projection of PCA on a given dataset.
+
+    Args:
+        clf: PCA instance that can transform given data set into 2 dimensions.
+
+        X (array-like, shape (n_samples, n_features)):
+            Feature set to project, where n_samples is the number of samples and
+            n_features is the number of features.
+
+        y (array-like, shape (n_samples) or (n_samples, n_features)):
+            Target relative to X for labeling.
+
+        title (string, optional): Title of the generated plot. Defaults to "PCA Component
+            Explained Variances"
+
+        target_explained_variance (float, optional): Looks for the minimum number of
+            principal components that satisfies this value and emphasizes it on the plot.
+            Defaults to 0.75
+
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
+            the learning curve. If None, the plot is drawn on a new set of axes.
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+    """
