@@ -701,7 +701,7 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
 
         .. image:: _static/examples/plot_pca_component_variance.png
            :align: center
-           :alt: Elbow Curve
+           :alt: PCA Component variances
     """
     if not hasattr(clf, 'explained_variance_ratio_'):
         raise TypeError('"clf" does not have explained_variance_ratio_ '
@@ -739,7 +739,7 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None):
     """Plots the 2-dimensional projection of PCA on a given dataset.
 
     Args:
-        clf: PCA instance that can transform given data set into 2 dimensions.
+        clf: PCA instance that can ``transform`` given data set into 2 dimensions.
 
         X (array-like, shape (n_samples, n_features)):
             Feature set to project, where n_samples is the number of samples and
@@ -748,16 +748,39 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None):
         y (array-like, shape (n_samples) or (n_samples, n_features)):
             Target relative to X for labeling.
 
-        title (string, optional): Title of the generated plot. Defaults to "PCA Component
-            Explained Variances"
-
-        target_explained_variance (float, optional): Looks for the minimum number of
-            principal components that satisfies this value and emphasizes it on the plot.
-            Defaults to 0.75
+        title (string, optional): Title of the generated plot. Defaults to "PCA 2-D
+            Projection"
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
+
+    Example:
+        >>> import scikitplot.plotters as skplt
+        >>> pca = PCA(random_state=1)
+        >>> pca.fit(X)
+        >>> skplt.plot_pca_2d_projection(pca, X, y)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
+
+        .. image:: _static/examples/plot_pca_2d_projection.png
+           :align: center
+           :alt: PCA 2D Projection
     """
+    transformed_X = clf.transform(X)
+    if ax is None:
+        fig, ax = plt.subplots(1, 1)
+
+    ax.set_title(title)
+    classes = np.unique(np.array(y))
+
+    for label in classes:
+        ax.scatter(transformed_X[y == label, 0], transformed_X[y == label, 1],
+                   alpha=0.8, lw=2, label=label)
+    ax.legend(loc='best', shadow=False, scatterpoints=1)
+    ax.set_xlabel('First Principal Component')
+    ax.set_ylabel('Second Principal Component')
+
+    return ax
