@@ -43,5 +43,27 @@ class TestPlotPCAComponentVariance(unittest.TestCase):
         assert ax is out_ax
 
 
+class TestPlotPCA2DProjection(unittest.TestCase):
+
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = PCA()
+        clf.fit(self.X)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = skplt.plot_pca_2d_projection(clf, self.X, self.y)
+        assert ax is not out_ax
+        out_ax =skplt.plot_pca_2d_projection(clf, self.X, self.y, ax=ax)
+        assert ax is out_ax
+
+
 if __name__ == '__main__':
     unittest.main()
