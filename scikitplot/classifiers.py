@@ -54,7 +54,7 @@ def classifier_factory(clf):
 
 
 def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv=None,
-                          shuffle=True, random_state=None, ax=None):
+                          shuffle=True, random_state=None, ax=None, figsize=6):
     """Generates the confusion matrix for a given classifier and dataset.
 
     Args:
@@ -100,6 +100,8 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
 
+        figsize (int, optional): Rectangular figure size of the plot. Defaults to 6.
+
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
@@ -142,7 +144,7 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
         y_true = np.concatenate(trues_list)
 
     ax = plotters.plot_confusion_matrix(y_true=y_true, y_pred=y_pred,
-                                        title=title, normalize=normalize, ax=ax)
+                                        title=title, normalize=normalize, ax=ax, figsize=figsize)
 
     return ax
 
