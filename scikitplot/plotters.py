@@ -22,7 +22,7 @@ from sklearn.metrics import silhouette_samples
 from scipy.spatial.distance import cdist, pdist
 
 
-def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, figsize=6):
+def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, figsize=6, title_fontsize="large", text_fontsize="medium"):
     """Generates confusion matrix plot for a given set of ground truth labels and classifier predictions.
 
     Args:
@@ -43,6 +43,12 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
 
         figsize (int, optional): Rectangular figure size of the plot. Defaults to 6.
 
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes. 
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes. 
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
+            
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
@@ -70,31 +76,30 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
         cm = np.around(cm, decimals=2)
 
     if title:
-        ax.set_title(title, fontsize=figsize*2.5)
+        ax.set_title(title, fontsize=title_fontsize)
     elif normalize:
-        ax.set_title('Normalized Confusion Matrix', fontsize=figsize*2.5)
+        ax.set_title('Normalized Confusion Matrix', fontsize=title_fontsize)
     else:
-        ax.set_title('Confusion Matrix', fontsize=figsize*2.5)
+        ax.set_title('Confusion Matrix', fontsize=title_fontsize)
 
     image = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
     plt.colorbar(mappable=image)
     tick_marks = np.arange(len(classes))
     ax.set_xticks(tick_marks)
-    ax.set_xticklabels(classes, fontsize=figsize*2)
+    ax.set_xticklabels(classes, fontsize=text_fontsize)
     ax.set_yticks(tick_marks)
-    ax.set_yticklabels(classes, fontsize=figsize*2)
+    ax.set_yticklabels(classes, fontsize=text_fontsize)
 
     thresh = cm.max() / 2.
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
         ax.text(j, i, cm[i, j],
                 horizontalalignment="center",
                 verticalalignment="center",
-                fontsize=figsize*2,
-                bbox={'facecolor':'silver', 'alpha':0.8, 'pad':figsize},
-                color="black")
+                fontsize=text_fontsize,
+                color="white" if cm[i, j] > thresh else "black")
 
-    ax.set_ylabel('True label', fontsize=figsize*2)
-    ax.set_xlabel('Predicted label', fontsize=figsize*2)
+    ax.set_ylabel('True label', fontsize=text_fontsize)
+    ax.set_xlabel('Predicted label', fontsize=text_fontsize)
 
     return ax
 
