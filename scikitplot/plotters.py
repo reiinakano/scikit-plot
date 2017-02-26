@@ -22,7 +22,8 @@ from sklearn.metrics import silhouette_samples
 from scipy.spatial.distance import cdist, pdist
 
 
-def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, figsize=6, title_fontsize="large", text_fontsize="medium"):
+def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, figsize=None, 
+                          title_fontsize="large", text_fontsize="medium"):
     """Generates confusion matrix plot for a given set of ground truth labels and classifier predictions.
 
     Args:
@@ -41,7 +42,8 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
 
-        figsize (int, optional): Rectangular figure size of the plot. Defaults to 6.
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6). 
+            Defaults to ``None``.
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes. 
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -66,7 +68,7 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
            :alt: Confusion matrix
     """
     if ax is None:
-        fig, ax = plt.subplots(1, 1, figsize=(figsize,figsize))
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     cm = confusion_matrix(y_true, y_pred)
     classes = np.unique(y_true)
