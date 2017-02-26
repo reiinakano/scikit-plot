@@ -575,7 +575,8 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
     return ax
 
 
-def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', copy=True, ax=None):
+def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', copy=True, ax=None,
+                    figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Plots silhouette analysis of clusters using fit_predict.
 
     Args:
@@ -597,6 +598,15 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -624,15 +634,15 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
     sample_silhouette_values = silhouette_samples(X, cluster_labels, metric=metric)
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
     ax.set_xlim([-0.1, 1])
 
     ax.set_ylim([0, len(X) + (n_clusters + 1) * 10 + 10])
 
-    ax.set_xlabel('Silhouette coefficient values')
-    ax.set_ylabel('Cluster label')
+    ax.set_xlabel('Silhouette coefficient values', fontsize=text_fontsize)
+    ax.set_ylabel('Cluster label', fontsize=text_fontsize)
 
     y_lower = 10
 
@@ -650,7 +660,7 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
                          0, ith_cluster_silhouette_values,
                          facecolor=color, edgecolor=color, alpha=0.7)
 
-        ax.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i))
+        ax.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i), fontsize=text_fontsize)
 
         y_lower = y_upper + 10
 
@@ -660,7 +670,8 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
     ax.set_yticks([])  # Clear the y-axis labels / ticks
     ax.set_xticks(np.arange(-0.1, 1.0, 0.2))
 
-    ax.legend(loc='best')
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc='best', fontsize=text_fontsize)
 
     return ax
 
