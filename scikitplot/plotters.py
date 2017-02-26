@@ -105,7 +105,9 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
 
     return ax
 
-def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
+
+def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
+                   title_fontsize="large", text_fontsize="medium"):
     """Generates the ROC curves for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -119,6 +121,15 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -184,9 +195,9 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
     roc_auc[macro_key] = auc(fpr[macro_key], tpr[macro_key])
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
 
     for i in range(len(classes)):
         ax.plot(fpr[i], tpr[i], lw=2,
@@ -203,9 +214,10 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
     ax.plot([0, 1], [0, 1], 'k--', lw=2)
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
-    ax.set_xlabel('False Positive Rate')
-    ax.set_ylabel('True Positive Rate')
-    ax.legend(loc='lower right')
+    ax.set_xlabel('False Positive Rate', fontsize=text_fontsize)
+    ax.set_ylabel('True Positive Rate', fontsize=text_fontsize)
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc='lower right', fontsize=text_fontsize)
     return ax
 
 
