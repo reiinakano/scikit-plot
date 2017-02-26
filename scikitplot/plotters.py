@@ -761,7 +761,8 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None,
 
 
 def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
-                                target_explained_variance=0.75, ax=None):
+                                target_explained_variance=0.75, ax=None, figsize=None,
+                                title_fontsize="large", text_fontsize="medium"):
     """Plots PCA components' explained variance ratios. (new in v0.2.2)
 
     Args:
@@ -773,8 +774,18 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
         target_explained_variance (float, optional): Looks for the minimum number of
             principal components that satisfies this value and emphasizes it on the plot.
             Defaults to 0.75.4
+
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -796,9 +807,9 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
                         'attribute. Has the PCA been fitted?')
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
 
     cumulative_sum_ratios = np.cumsum(clf.explained_variance_ratio_)
 
@@ -808,8 +819,8 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
     ax.plot(range(len(clf.explained_variance_ratio_) + 1),
             np.concatenate(([0], np.cumsum(clf.explained_variance_ratio_))), '*-')
     ax.grid(True)
-    ax.set_xlabel('First n principal components')
-    ax.set_ylabel('Explained variance ratio of first n components')
+    ax.set_xlabel('First n principal components', fontsize=text_fontsize)
+    ax.set_ylabel('Explained variance ratio of first n components', fontsize=text_fontsize)
     ax.set_ylim([-0.02, 1.02])
     if idx < len(cumulative_sum_ratios):
         ax.plot(idx+1, cumulative_sum_ratios[idx], 'ro',
@@ -818,7 +829,8 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
                 markersize=4, markeredgewidth=4)
         ax.axhline(cumulative_sum_ratios[idx],
                    linestyle=':', lw=3, color='black')
-    ax.legend(loc="best")
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc="best", fontsize=text_fontsize)
 
     return ax
 
