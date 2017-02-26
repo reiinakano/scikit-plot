@@ -105,7 +105,9 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
 
     return ax
 
-def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
+
+def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
+                   title_fontsize="large", text_fontsize="medium"):
     """Generates the ROC curves for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -119,6 +121,15 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -184,9 +195,9 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
     roc_auc[macro_key] = auc(fpr[macro_key], tpr[macro_key])
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
 
     for i in range(len(classes)):
         ax.plot(fpr[i], tpr[i], lw=2,
@@ -203,13 +214,15 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
     ax.plot([0, 1], [0, 1], 'k--', lw=2)
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
-    ax.set_xlabel('False Positive Rate')
-    ax.set_ylabel('True Positive Rate')
-    ax.legend(loc='lower right')
+    ax.set_xlabel('False Positive Rate', fontsize=text_fontsize)
+    ax.set_ylabel('True Positive Rate', fontsize=text_fontsize)
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc='lower right', fontsize=text_fontsize)
     return ax
 
 
-def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None):
+def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None, figsize=None,
+                      title_fontsize="large", text_fontsize="medium"):
     """Generates the KS Statistic plot for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -223,6 +236,15 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None):
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -251,9 +273,9 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None):
         max_distance_at, classes = binary_ks_curve(y_true, probas[:, 1].ravel())
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
 
     ax.plot(thresholds, pct1, lw=3, label='Class {}'.format(classes[0]))
     ax.plot(thresholds, pct2, lw=3, label='Class {}'.format(classes[1]))
@@ -265,14 +287,16 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None):
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.0])
 
-    ax.set_xlabel('Threshold')
-    ax.set_ylabel('Percentage below threshold')
-    ax.legend(loc='lower right')
+    ax.set_xlabel('Threshold', fontsize=text_fontsize)
+    ax.set_ylabel('Percentage below threshold', fontsize=text_fontsize)
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc='lower right', fontsize=text_fontsize)
 
     return ax
 
 
-def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve', ax=None):
+def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve', ax=None,
+                                figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates the Precision Recall Curve for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -284,6 +308,15 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -331,9 +364,9 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
     average_precision[micro_key] = average_precision_score(y_true, probas, average='micro')
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
     for i in range(len(classes)):
         ax.plot(recall[i], precision[i], lw=2,
                 label='Precision-recall curve of class {0} '
@@ -346,12 +379,14 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel('Recall')
     ax.set_ylabel('Precision')
-    ax.legend(loc='best')
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc='best', fontsize=text_fontsize)
     return ax
 
 
 def plot_feature_importances(clf, title='Feature Importance', feature_names=None,
-                             max_num_features=20, order='descending', ax=None):
+                             max_num_features=20, order='descending', ax=None,
+                             figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates a plot of a classifier's feature importances.
 
     Args:
@@ -370,6 +405,15 @@ def plot_feature_importances(clf, title='Feature Importance', feature_names=None
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -415,7 +459,7 @@ def plot_feature_importances(clf, title='Feature Importance', feature_names=None
         raise ValueError('Invalid argument {} for "order"'.format(order))
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     if feature_names is None:
         feature_names = indices
@@ -424,7 +468,7 @@ def plot_feature_importances(clf, title='Feature Importance', feature_names=None
 
     max_num_features = min(max_num_features, len(importances))
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
 
     if std is not None:
         ax.bar(range(max_num_features), importances[indices][:max_num_features], color='r',
@@ -436,11 +480,12 @@ def plot_feature_importances(clf, title='Feature Importance', feature_names=None
     ax.set_xticks(range(max_num_features))
     ax.set_xticklabels(feature_names[:max_num_features])
     ax.set_xlim([-1, max_num_features])
+    ax.tick_params(labelsize=text_fontsize)
     return ax
 
 
 def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=None, n_jobs=1,
-                        ax=None):
+                        ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates a plot of the train and test learning curves for a given classifier.
 
     Args:
@@ -477,6 +522,15 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
 
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
+
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
@@ -492,14 +546,14 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
            :alt: Learning Curve
     """
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     if train_sizes is None:
         train_sizes = np.linspace(.1, 1.0, 5)
 
-    ax.set_title(title)
-    ax.set_xlabel("Training examples")
-    ax.set_ylabel("Score")
+    ax.set_title(title, fontsize=title_fontsize)
+    ax.set_xlabel("Training examples", fontsize=text_fontsize)
+    ax.set_ylabel("Score", fontsize=text_fontsize)
     train_sizes, train_scores, test_scores = learning_curve(
         clf, X, y, cv=cv, n_jobs=n_jobs, train_sizes=train_sizes)
     train_scores_mean = np.mean(train_scores, axis=1)
@@ -515,12 +569,14 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
             label="Training score")
     ax.plot(train_sizes, test_scores_mean, 'o-', color="g",
             label="Cross-validation score")
-    ax.legend(loc="best")
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc="best", fontsize=text_fontsize)
 
     return ax
 
 
-def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', copy=True, ax=None):
+def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', copy=True, ax=None,
+                    figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Plots silhouette analysis of clusters using fit_predict.
 
     Args:
@@ -542,6 +598,15 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -569,15 +634,15 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
     sample_silhouette_values = silhouette_samples(X, cluster_labels, metric=metric)
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
     ax.set_xlim([-0.1, 1])
 
     ax.set_ylim([0, len(X) + (n_clusters + 1) * 10 + 10])
 
-    ax.set_xlabel('Silhouette coefficient values')
-    ax.set_ylabel('Cluster label')
+    ax.set_xlabel('Silhouette coefficient values', fontsize=text_fontsize)
+    ax.set_ylabel('Cluster label', fontsize=text_fontsize)
 
     y_lower = 10
 
@@ -595,7 +660,7 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
                          0, ith_cluster_silhouette_values,
                          facecolor=color, edgecolor=color, alpha=0.7)
 
-        ax.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i))
+        ax.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i), fontsize=text_fontsize)
 
         y_lower = y_upper + 10
 
@@ -605,12 +670,14 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
     ax.set_yticks([])  # Clear the y-axis labels / ticks
     ax.set_xticks(np.arange(-0.1, 1.0, 0.2))
 
-    ax.legend(loc='best')
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc='best', fontsize=text_fontsize)
 
     return ax
 
 
-def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None):
+def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None,
+                     figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Plots elbow curve of different values of K for KMeans clustering.
 
     Args:
@@ -631,6 +698,15 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None):
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -672,19 +748,21 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None):
     bss = tss - wcss
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
     ax.plot(cluster_ranges, bss/tss*100, 'b*-')
     ax.grid(True)
-    ax.set_xlabel('Number of clusters')
-    ax.set_ylabel('Percent variance explained')
+    ax.set_xlabel('Number of clusters', fontsize=text_fontsize)
+    ax.set_ylabel('Percent variance explained', fontsize=text_fontsize)
+    ax.tick_params(labelsize=text_fontsize)
 
     return ax
 
 
 def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
-                                target_explained_variance=0.75, ax=None):
+                                target_explained_variance=0.75, ax=None, figsize=None,
+                                title_fontsize="large", text_fontsize="medium"):
     """Plots PCA components' explained variance ratios. (new in v0.2.2)
 
     Args:
@@ -696,8 +774,18 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
         target_explained_variance (float, optional): Looks for the minimum number of
             principal components that satisfies this value and emphasizes it on the plot.
             Defaults to 0.75.4
+
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -719,9 +807,9 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
                         'attribute. Has the PCA been fitted?')
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
 
     cumulative_sum_ratios = np.cumsum(clf.explained_variance_ratio_)
 
@@ -731,8 +819,8 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
     ax.plot(range(len(clf.explained_variance_ratio_) + 1),
             np.concatenate(([0], np.cumsum(clf.explained_variance_ratio_))), '*-')
     ax.grid(True)
-    ax.set_xlabel('First n principal components')
-    ax.set_ylabel('Explained variance ratio of first n components')
+    ax.set_xlabel('First n principal components', fontsize=text_fontsize)
+    ax.set_ylabel('Explained variance ratio of first n components', fontsize=text_fontsize)
     ax.set_ylim([-0.02, 1.02])
     if idx < len(cumulative_sum_ratios):
         ax.plot(idx+1, cumulative_sum_ratios[idx], 'ro',
@@ -741,12 +829,14 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
                 markersize=4, markeredgewidth=4)
         ax.axhline(cumulative_sum_ratios[idx],
                    linestyle=':', lw=3, color='black')
-    ax.legend(loc="best")
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc="best", fontsize=text_fontsize)
 
     return ax
 
 
-def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None):
+def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None, figsize=None,
+                                title_fontsize="large", text_fontsize="medium"):
     """Plots the 2-dimensional projection of PCA on a given dataset.
 
     Args:
@@ -765,6 +855,15 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None):
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
 
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
+
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
@@ -782,16 +881,17 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None):
     """
     transformed_X = clf.transform(X)
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
     classes = np.unique(np.array(y))
 
     for label in classes:
         ax.scatter(transformed_X[y == label, 0], transformed_X[y == label, 1],
                    alpha=0.8, lw=2, label=label)
-    ax.legend(loc='best', shadow=False, scatterpoints=1)
-    ax.set_xlabel('First Principal Component')
-    ax.set_ylabel('Second Principal Component')
+    ax.legend(loc='best', shadow=False, scatterpoints=1, fontsize=text_fontsize)
+    ax.set_xlabel('First Principal Component', fontsize=text_fontsize)
+    ax.set_ylabel('Second Principal Component', fontsize=text_fontsize)
+    ax.tick_params(labelsize=text_fontsize)
 
     return ax
