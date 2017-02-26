@@ -105,7 +105,7 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
 
     return ax
 
-def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
+def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, curves=['micro','macro','each_class']):
     """Generates the ROC curves for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -139,49 +139,52 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
     classes = np.unique(y_true)
     probas = y_probas
 
-    # Compute ROC curve and ROC area for each class
-    fpr = dict()
-    tpr = dict()
-    roc_auc = dict()
-    for i in range(len(classes)):
-        fpr[i], tpr[i], _ = roc_curve(y_true, probas[:, i], pos_label=classes[i])
-        roc_auc[i] = auc(fpr[i], tpr[i])
+    if('each_class' in curves):
+      # Compute ROC curve and ROC area for each class
+      fpr = dict()
+      tpr = dict()
+      roc_auc = dict()
+      for i in range(len(classes)):
+          fpr[i], tpr[i], _ = roc_curve(y_true, probas[:, i], pos_label=classes[i])
+          roc_auc[i] = auc(fpr[i], tpr[i])
 
-    # Compute micro-average ROC curve and ROC area
-    micro_key = 'micro'
-    i = 0
-    while micro_key in fpr:
-        i += 1
-        micro_key += str(i)
+    if('micro' in curves):
+      # Compute micro-average ROC curve and ROC area
+      micro_key = 'micro'
+      i = 0
+      while micro_key in fpr:
+          i += 1
+          micro_key += str(i)
 
-    y_true = label_binarize(y_true, classes=classes)
-    if len(classes) == 2:
-        y_true = np.hstack((1 - y_true, y_true))
+      y_true = label_binarize(y_true, classes=classes)
+      if len(classes) == 2:
+          y_true = np.hstack((1 - y_true, y_true))
 
-    fpr[micro_key], tpr[micro_key], _ = roc_curve(y_true.ravel(), probas.ravel())
-    roc_auc[micro_key] = auc(fpr[micro_key], tpr[micro_key])
+      fpr[micro_key], tpr[micro_key], _ = roc_curve(y_true.ravel(), probas.ravel())
+      roc_auc[micro_key] = auc(fpr[micro_key], tpr[micro_key])
 
-    # Compute macro-average ROC curve and ROC area
+    if('macro' in curves):
+      # Compute macro-average ROC curve and ROC area
 
-    # First aggregate all false positive rates
-    all_fpr = np.unique(np.concatenate([fpr[i] for i in range(len(classes))]))
+      # First aggregate all false positive rates
+      all_fpr = np.unique(np.concatenate([fpr[i] for i in range(len(classes))]))
 
-    # Then interpolate all ROC curves at this points
-    mean_tpr = np.zeros_like(all_fpr)
-    for i in range(len(classes)):
-        mean_tpr += interp(all_fpr, fpr[i], tpr[i])
+      # Then interpolate all ROC curves at this points
+      mean_tpr = np.zeros_like(all_fpr)
+      for i in range(len(classes)):
+          mean_tpr += interp(all_fpr, fpr[i], tpr[i])
 
-    # Finally average it and compute AUC
-    mean_tpr /= len(classes)
+      # Finally average it and compute AUC
+      mean_tpr /= len(classes)
 
-    macro_key = 'macro'
-    i = 0
-    while macro_key in fpr:
-        i += 1
-        macro_key += str(i)
-    fpr[macro_key] = all_fpr
-    tpr[macro_key] = mean_tpr
-    roc_auc[macro_key] = auc(fpr[macro_key], tpr[macro_key])
+      macro_key = 'macro'
+      i = 0
+      while macro_key in fpr:
+          i += 1
+          macro_key += str(i)
+      fpr[macro_key] = all_fpr
+      tpr[macro_key] = mean_tpr
+      roc_auc[macro_key] = auc(fpr[macro_key], tpr[macro_key])
 
     if ax is None:
         fig, ax = plt.subplots(1, 1)
@@ -192,13 +195,16 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
         ax.plot(fpr[i], tpr[i], lw=2,
                 label='ROC curve of class {0} (area = {1:0.2f})'
                 ''.format(classes[i], roc_auc[i]))
-
-    ax.plot(fpr[micro_key], tpr[micro_key],
-            label='micro-average ROC curve (area = {0:0.2f})'.format(roc_auc[micro_key]),
-            color='deeppink', linestyle=':', linewidth=4)
-    ax.plot(fpr[macro_key], tpr[macro_key],
-            label='macro-average ROC curve (area = {0:0.2f})'.format(roc_auc[macro_key]),
-            color='navy', linestyle=':', linewidth=4)
+        
+    if('micro' in curves):
+      ax.plot(fpr[micro_key], tpr[micro_key],
+              label='micro-average ROC curve (area = {0:0.2f})'.format(roc_auc[micro_key]),
+              color='deeppink', linestyle=':', linewidth=4)
+      
+    if('macro' in curves):
+      ax.plot(fpr[macro_key], tpr[macro_key],
+              label='macro-average ROC curve (area = {0:0.2f})'.format(roc_auc[macro_key]),
+              color='navy', linestyle=':', linewidth=4)
 
     ax.plot([0, 1], [0, 1], 'k--', lw=2)
     ax.set_xlim([0.0, 1.0])
