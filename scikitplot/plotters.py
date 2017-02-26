@@ -835,7 +835,8 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
     return ax
 
 
-def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None):
+def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None, figsize=None,
+                                title_fontsize="large", text_fontsize="medium"):
     """Plots the 2-dimensional projection of PCA on a given dataset.
 
     Args:
@@ -854,6 +855,15 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None):
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
 
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
+
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
@@ -871,16 +881,17 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None):
     """
     transformed_X = clf.transform(X)
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
     classes = np.unique(np.array(y))
 
     for label in classes:
         ax.scatter(transformed_X[y == label, 0], transformed_X[y == label, 1],
                    alpha=0.8, lw=2, label=label)
-    ax.legend(loc='best', shadow=False, scatterpoints=1)
-    ax.set_xlabel('First Principal Component')
-    ax.set_ylabel('Second Principal Component')
+    ax.legend(loc='best', shadow=False, scatterpoints=1, fontsize=text_fontsize)
+    ax.set_xlabel('First Principal Component', fontsize=text_fontsize)
+    ax.set_ylabel('Second Principal Component', fontsize=text_fontsize)
+    ax.tick_params(labelsize=text_fontsize)
 
     return ax
