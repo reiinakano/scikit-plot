@@ -22,7 +22,8 @@ from sklearn.metrics import silhouette_samples
 from scipy.spatial.distance import cdist, pdist
 
 
-def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None):
+def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, figsize=None, 
+                          title_fontsize="large", text_fontsize="medium"):
     """Generates confusion matrix plot for a given set of ground truth labels and classifier predictions.
 
     Args:
@@ -41,6 +42,15 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None):
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
 
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6). 
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes. 
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes. 
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
+            
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
@@ -58,7 +68,7 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None):
            :alt: Confusion matrix
     """
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     cm = confusion_matrix(y_true, y_pred)
     classes = np.unique(y_true)
@@ -68,31 +78,32 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None):
         cm = np.around(cm, decimals=2)
 
     if title:
-        ax.set_title(title)
+        ax.set_title(title, fontsize=title_fontsize)
     elif normalize:
-        ax.set_title('Normalized Confusion Matrix')
+        ax.set_title('Normalized Confusion Matrix', fontsize=title_fontsize)
     else:
-        ax.set_title('Confusion Matrix')
+        ax.set_title('Confusion Matrix', fontsize=title_fontsize)
 
     image = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
     plt.colorbar(mappable=image)
     tick_marks = np.arange(len(classes))
     ax.set_xticks(tick_marks)
-    ax.set_xticklabels(classes)
+    ax.set_xticklabels(classes, fontsize=text_fontsize)
     ax.set_yticks(tick_marks)
-    ax.set_yticklabels(classes)
+    ax.set_yticklabels(classes, fontsize=text_fontsize)
 
     thresh = cm.max() / 2.
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
         ax.text(j, i, cm[i, j],
                 horizontalalignment="center",
+                verticalalignment="center",
+                fontsize=text_fontsize,
                 color="white" if cm[i, j] > thresh else "black")
 
-    ax.set_ylabel('True label')
-    ax.set_xlabel('Predicted label')
+    ax.set_ylabel('True label', fontsize=text_fontsize)
+    ax.set_xlabel('Predicted label', fontsize=text_fontsize)
 
     return ax
-
 
 def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None):
     """Generates the ROC curves for a set of ground truth labels and classifier probability predictions.
