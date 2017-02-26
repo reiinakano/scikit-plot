@@ -141,17 +141,18 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, curves=['micro
     """
     classes = np.unique(y_true)
     probas = y_probas
+    
+    fpr = dict()
+    tpr = dict()
+    roc_auc = dict()
 
-    if('each_class' in curves):
+    if 'each_class' in curves:
       # Compute ROC curve and ROC area for each class
-      fpr = dict()
-      tpr = dict()
-      roc_auc = dict()
       for i in range(len(classes)):
           fpr[i], tpr[i], _ = roc_curve(y_true, probas[:, i], pos_label=classes[i])
           roc_auc[i] = auc(fpr[i], tpr[i])
 
-    if('micro' in curves):
+    if 'micro' in curves:
       # Compute micro-average ROC curve and ROC area
       micro_key = 'micro'
       i = 0
@@ -166,7 +167,7 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, curves=['micro
       fpr[micro_key], tpr[micro_key], _ = roc_curve(y_true.ravel(), probas.ravel())
       roc_auc[micro_key] = auc(fpr[micro_key], tpr[micro_key])
 
-    if('macro' in curves):
+    if 'macro' in curves:
       # Compute macro-average ROC curve and ROC area
 
       # First aggregate all false positive rates
