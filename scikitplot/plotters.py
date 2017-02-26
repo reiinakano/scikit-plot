@@ -295,7 +295,8 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None, figs
     return ax
 
 
-def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve', ax=None):
+def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve', ax=None,
+                                figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates the Precision Recall Curve for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -307,6 +308,15 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -354,9 +364,9 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
     average_precision[micro_key] = average_precision_score(y_true, probas, average='micro')
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
     for i in range(len(classes)):
         ax.plot(recall[i], precision[i], lw=2,
                 label='Precision-recall curve of class {0} '
@@ -369,7 +379,8 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel('Recall')
     ax.set_ylabel('Precision')
-    ax.legend(loc='best')
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc='best', fontsize=text_fontsize)
     return ax
 
 

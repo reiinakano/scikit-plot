@@ -367,7 +367,8 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_cv=True, cv=None,
 
 
 def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv=True,
-                                cv=None, shuffle=True, random_state=None, ax=None):
+                                cv=None, shuffle=True, random_state=None, ax=None,
+                                figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates the Precision-Recall curve for a given classifier and dataset.
 
     Args:
@@ -408,6 +409,15 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -455,5 +465,7 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv
         y_true = np.concatenate(trues_list)
 
     # Compute Precision-Recall curve and area for each class
-    ax = plotters.plot_precision_recall_curve(y_true, probas, title=title, ax=ax)
+    ax = plotters.plot_precision_recall_curve(y_true, probas, title=title, ax=ax,
+                                              figsize=figsize, title_fontsize=title_fontsize,
+                                              text_fontsize=text_fontsize)
     return ax
