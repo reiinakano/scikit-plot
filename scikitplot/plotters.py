@@ -105,13 +105,8 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
 
     return ax
 
-<<<<<<< HEAD
-def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, curves=['micro','macro','each_class']):
-=======
-
 def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
-                   title_fontsize="large", text_fontsize="medium"):
->>>>>>> refs/remotes/reiinakano/master
+                   title_fontsize="large", text_fontsize="medium", curves=['micro','macro','each_class']):
     """Generates the ROC curves for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -126,9 +121,6 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
             
-        curves (array-like):
-            A listing of which curves should be plotted on the resulting plot (micro, macro, each_class).
-
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
 
@@ -137,6 +129,9 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
 
         text_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
+			
+		curves (array-like):
+			A listing of which curves should be plotted on the resulting plot (micro, macro, each_class).
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
