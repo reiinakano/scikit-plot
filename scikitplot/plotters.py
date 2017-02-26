@@ -385,7 +385,8 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
 
 
 def plot_feature_importances(clf, title='Feature Importance', feature_names=None,
-                             max_num_features=20, order='descending', ax=None):
+                             max_num_features=20, order='descending', ax=None,
+                             figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates a plot of a classifier's feature importances.
 
     Args:
@@ -404,6 +405,15 @@ def plot_feature_importances(clf, title='Feature Importance', feature_names=None
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -449,7 +459,7 @@ def plot_feature_importances(clf, title='Feature Importance', feature_names=None
         raise ValueError('Invalid argument {} for "order"'.format(order))
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     if feature_names is None:
         feature_names = indices
@@ -458,7 +468,7 @@ def plot_feature_importances(clf, title='Feature Importance', feature_names=None
 
     max_num_features = min(max_num_features, len(importances))
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
 
     if std is not None:
         ax.bar(range(max_num_features), importances[indices][:max_num_features], color='r',
@@ -470,6 +480,7 @@ def plot_feature_importances(clf, title='Feature Importance', feature_names=None
     ax.set_xticks(range(max_num_features))
     ax.set_xticklabels(feature_names[:max_num_features])
     ax.set_xlim([-1, max_num_features])
+    ax.tick_params(labelsize=text_fontsize)
     return ax
 
 
