@@ -221,7 +221,8 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
     return ax
 
 
-def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None):
+def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None, figsize=None,
+                      title_fontsize="large", text_fontsize="medium"):
     """Generates the KS Statistic plot for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -235,6 +236,15 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None):
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -263,9 +273,9 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None):
         max_distance_at, classes = binary_ks_curve(y_true, probas[:, 1].ravel())
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
 
     ax.plot(thresholds, pct1, lw=3, label='Class {}'.format(classes[0]))
     ax.plot(thresholds, pct2, lw=3, label='Class {}'.format(classes[1]))
@@ -277,9 +287,10 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None):
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.0])
 
-    ax.set_xlabel('Threshold')
-    ax.set_ylabel('Percentage below threshold')
-    ax.legend(loc='lower right')
+    ax.set_xlabel('Threshold', fontsize=text_fontsize)
+    ax.set_ylabel('Percentage below threshold', fontsize=text_fontsize)
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc='lower right', fontsize=text_fontsize)
 
     return ax
 

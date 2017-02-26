@@ -264,7 +264,8 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
 
 
 def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_cv=True, cv=None,
-                   shuffle=True, random_state=None, ax=None):
+                      shuffle=True, random_state=None, ax=None, figsize=None,
+                      title_fontsize="large", text_fontsize="medium"):
     """Generates the KS Statistic plot for a given classifier and dataset.
 
     Args:
@@ -305,6 +306,15 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_cv=True, cv=None,
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -350,7 +360,8 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_cv=True, cv=None,
         probas = np.concatenate(preds_list, axis=0)
         y_true = np.concatenate(trues_list)
 
-    ax = plotters.plot_ks_statistic(y_true, probas, title=title, ax=ax)
+    ax = plotters.plot_ks_statistic(y_true, probas, title=title, ax=ax, figsize=figsize,
+                                    title_fontsize=title_fontsize, text_fontsize=text_fontsize)
 
     return ax
 
