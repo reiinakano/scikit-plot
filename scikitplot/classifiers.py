@@ -160,7 +160,8 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
 
 
 def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
-                   shuffle=True, random_state=None, ax=None, curves=['micro','macro','each_class']):
+                   shuffle=True, random_state=None, curves=['micro', 'macro', 'each_class'], 
+                   ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates the ROC curves for a given classifier and dataset.
 
     Args:
@@ -198,12 +199,22 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
 
         random_state (int :class:`RandomState`): Pseudo-random number generator state used
             for random sampling.
+            
+        curves (array-like): A listing of which curves should be plotted on the 
+            resulting plot. Defaults to `["micro", "macro", "each_class"]`
+            i.e. "micro" for micro-averaged curve, "macro" for macro-averaged curve
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
 
-        curves (array-like):
-            A listing of which curves should be plotted on the resulting plot (micro, macro, each_class).
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -250,12 +261,15 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
         y_true = np.concatenate(trues_list)
 
     # Compute ROC curve and ROC area for each class
-    ax = plotters.plot_roc_curve(y_true=y_true, y_probas=probas, title=title, ax=ax, curves=curves)
+    ax = plotters.plot_roc_curve(y_true=y_true, y_probas=probas, title=title, curves=curves, 
+                                 ax=ax, figsize=figsize, title_fontsize=title_fontsize,
+                                 text_fontsize=text_fontsize)
     return ax
 
 
 def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_cv=True, cv=None,
-                   shuffle=True, random_state=None, ax=None):
+                      shuffle=True, random_state=None, ax=None, figsize=None,
+                      title_fontsize="large", text_fontsize="medium"):
     """Generates the KS Statistic plot for a given classifier and dataset.
 
     Args:
@@ -296,6 +310,15 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_cv=True, cv=None,
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -341,13 +364,15 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_cv=True, cv=None,
         probas = np.concatenate(preds_list, axis=0)
         y_true = np.concatenate(trues_list)
 
-    ax = plotters.plot_ks_statistic(y_true, probas, title=title, ax=ax)
+    ax = plotters.plot_ks_statistic(y_true, probas, title=title, ax=ax, figsize=figsize,
+                                    title_fontsize=title_fontsize, text_fontsize=text_fontsize)
 
     return ax
 
 
 def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv=True,
-                                cv=None, shuffle=True, random_state=None, ax=None):
+                                cv=None, shuffle=True, random_state=None, ax=None,
+                                figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates the Precision-Recall curve for a given classifier and dataset.
 
     Args:
@@ -388,6 +413,15 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -435,5 +469,7 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv
         y_true = np.concatenate(trues_list)
 
     # Compute Precision-Recall curve and area for each class
-    ax = plotters.plot_precision_recall_curve(y_true, probas, title=title, ax=ax)
+    ax = plotters.plot_precision_recall_curve(y_true, probas, title=title, ax=ax,
+                                              figsize=figsize, title_fontsize=title_fontsize,
+                                              text_fontsize=text_fontsize)
     return ax
