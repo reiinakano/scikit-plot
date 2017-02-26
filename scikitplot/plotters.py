@@ -837,7 +837,7 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
 
 def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None, figsize=None,
                                 title_fontsize="large", text_fontsize="medium"):
-    """Plots the 2-dimensional projection of PCA on a given dataset.
+    """Plots the 2-dimensional projection of PCA on a given dataset. (new in v0.2.2)
 
     Args:
         clf: PCA instance that can ``transform`` given data set into 2 dimensions.
