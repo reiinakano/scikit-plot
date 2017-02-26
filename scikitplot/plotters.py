@@ -676,7 +676,8 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
     return ax
 
 
-def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None):
+def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None,
+                     figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Plots elbow curve of different values of K for KMeans clustering.
 
     Args:
@@ -697,6 +698,15 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None):
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
+            Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -738,13 +748,14 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None):
     bss = tss - wcss
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title)
+    ax.set_title(title, fontsize=title_fontsize)
     ax.plot(cluster_ranges, bss/tss*100, 'b*-')
     ax.grid(True)
-    ax.set_xlabel('Number of clusters')
-    ax.set_ylabel('Percent variance explained')
+    ax.set_xlabel('Number of clusters', fontsize=text_fontsize)
+    ax.set_ylabel('Percent variance explained', fontsize=text_fontsize)
+    ax.tick_params(labelsize=text_fontsize)
 
     return ax
 
