@@ -119,6 +119,9 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, curves=['micro
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+            
+        curves (array-like):
+            A listing of which curves should be plotted on the resulting plot (micro, macro, each_class).
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
