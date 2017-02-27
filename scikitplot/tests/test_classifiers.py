@@ -251,7 +251,7 @@ class TestPlotROCCurve(unittest.TestCase):
         assert ax is out_ax
 			
     def test_curve_diffs(self):
-		np.random.seed(0)
+        np.random.seed(0)
 		clf = LogisticRegression()
 		scikitplot.classifier_factory(clf)
 		ax_macro = clf.plot_roc_curve(self.X, self.y, curves='macro')
