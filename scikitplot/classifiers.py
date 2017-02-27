@@ -160,14 +160,8 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
 
 
 def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
-<<<<<<< HEAD
                    shuffle=True, random_state=None, curves=['micro', 'macro', 'each_class'], 
                    ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
-=======
-                   shuffle=True, random_state=None, ax=None, figsize=None,
-                   title_fontsize="large", text_fontsize="medium", curves=['micro','macro','each_class']):
-
->>>>>>> refs/remotes/origin/roc_custom
     """Generates the ROC curves for a given classifier and dataset.
 
     Args:
@@ -212,14 +206,6 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
-<<<<<<< HEAD
-
-=======
-			
-        curves (array-like):
-            A listing of which curves should be plotted on the resulting plot (micro, macro, each_class).
-			
->>>>>>> refs/remotes/origin/roc_custom
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
 
@@ -274,13 +260,10 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
         y_true = np.concatenate(trues_list)
 
     # Compute ROC curve and ROC area for each class
-<<<<<<< HEAD
     ax = plotters.plot_roc_curve(y_true=y_true, y_probas=probas, title=title, curves=curves, 
                                  ax=ax, figsize=figsize, title_fontsize=title_fontsize,
                                  text_fontsize=text_fontsize)
-=======
-    ax = plotters.plot_roc_curve(y_true=y_true, y_probas=probas, title=title, ax=ax, figsize=figsize, title_fontsize=title_fontsize, text_fontsize=text_fontsize, curves=curves)
->>>>>>> refs/remotes/origin/roc_custom
+
     return ax
 
 
