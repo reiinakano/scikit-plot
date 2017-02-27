@@ -105,8 +105,8 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
 
     return ax
 
-def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
-                   title_fontsize="large", text_fontsize="medium", curves=['micro','macro','each_class']):
+def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=['micro','macro','each_class'], 
+		   ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates the ROC curves for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -117,6 +117,10 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
             Prediction probabilities for each class returned by a classifier.
 
         title (string, optional): Title of the generated plot. Defaults to "ROC Curves".
+	
+	curves (array-like): A listing of which curves should be plotted on the 
++           resulting plot. Defaults to `["micro", "macro", "each_class"]`
++           i.e. "micro" for micro-averaged curve, "macro" for macro-averaged curve
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
@@ -129,9 +133,6 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
 
         text_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
-			
-		curves (array-like):
-			A listing of which curves should be plotted on the resulting plot (micro, macro, each_class).
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -150,8 +151,8 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
            :alt: ROC Curves
     """
 	
-    if ('micro' not in curves) & ('macro' not in curves) & ('each_class' not in curves):
-	    raise ValueError('Invalid argument for curves as it only takes micro, macro, or each class')
+    if 'micro' not in curves and 'macro' not in curves and 'each_class' not in curves:
+	    raise ValueError('Invalid argument for curves as it only takes "micro", "macro", or "each_class"')
 	
     classes = np.unique(y_true)
     probas = y_probas
