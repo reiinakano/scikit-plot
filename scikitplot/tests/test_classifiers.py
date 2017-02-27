@@ -249,8 +249,17 @@ class TestPlotROCCurve(unittest.TestCase):
         assert ax is not out_ax
         out_ax = clf.plot_roc_curve(self.X, self.y, ax=ax)
         assert ax is out_ax
-
-
+			
+    def test_curve_diffs(self):
+		np.random.seed(0)
+		clf = LogisticRegression()
+		scikitplot.classifier_factory(clf)
+		ax_macro = clf.plot_roc_curve(self.X, self.y, curves="macro")
+		ax_micro = clf.plot_roc_curve(self.X, self.y, curves="micro")
+		ax_class = clf.plot_roc_curve(self.X, self.y, curves="each_class")
+		self.assertNotEqual(ax_macro, ax_micro, ax_class)
+		
+		
 class TestPlotKSStatistic(unittest.TestCase):
     def setUp(self):
         np.random.seed(0)
