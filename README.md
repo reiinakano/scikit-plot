@@ -98,7 +98,7 @@ at the root folder.
 
 Explore the full features of Scikit-plot.
 
-You can find detailed documentation [here](http://scikit-plot.readthedocs.io/en/latest/).
+You can find detailed documentation [here](http://scikit-plot.readthedocs.io).
 
 Examples are found in the [examples folder of this repo](examples/).
 
