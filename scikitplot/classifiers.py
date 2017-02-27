@@ -206,6 +206,7 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
+            
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
 
