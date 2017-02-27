@@ -105,9 +105,8 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
 
     return ax
 
-
 def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
-                   title_fontsize="large", text_fontsize="medium"):
+                   title_fontsize="large", text_fontsize="medium", curves=['micro','macro','each_class']):
     """Generates the ROC curves for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -121,7 +120,7 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
-
+            
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
 
@@ -130,6 +129,9 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
 
         text_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
+			
+		curves (array-like):
+			A listing of which curves should be plotted on the resulting plot (micro, macro, each_class).
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
@@ -147,10 +149,13 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
            :align: center
            :alt: ROC Curves
     """
+	
+    if ('micro' not in curves) & ('macro' not in curves) & ('each_class' not in curves):
+	    raise ValueError('Invalid argument for curves as it only takes micro, macro, or each class')
+	
     classes = np.unique(y_true)
     probas = y_probas
-
-    # Compute ROC curve and ROC area for each class
+    
     fpr = dict()
     tpr = dict()
     roc_auc = dict()
@@ -199,17 +204,21 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
 
     ax.set_title(title, fontsize=title_fontsize)
 
-    for i in range(len(classes)):
-        ax.plot(fpr[i], tpr[i], lw=2,
-                label='ROC curve of class {0} (area = {1:0.2f})'
-                ''.format(classes[i], roc_auc[i]))
-
-    ax.plot(fpr[micro_key], tpr[micro_key],
-            label='micro-average ROC curve (area = {0:0.2f})'.format(roc_auc[micro_key]),
-            color='deeppink', linestyle=':', linewidth=4)
-    ax.plot(fpr[macro_key], tpr[macro_key],
-            label='macro-average ROC curve (area = {0:0.2f})'.format(roc_auc[macro_key]),
-            color='navy', linestyle=':', linewidth=4)
+    if('each_class' in curves):
+      for i in range(len(classes)):
+          ax.plot(fpr[i], tpr[i], lw=2,
+                  label='ROC curve of class {0} (area = {1:0.2f})'
+                  ''.format(classes[i], roc_auc[i]))
+        
+    if('micro' in curves):
+      ax.plot(fpr[micro_key], tpr[micro_key],
+              label='micro-average ROC curve (area = {0:0.2f})'.format(roc_auc[micro_key]),
+              color='deeppink', linestyle=':', linewidth=4)
+      
+    if('macro' in curves):
+      ax.plot(fpr[macro_key], tpr[macro_key],
+              label='macro-average ROC curve (area = {0:0.2f})'.format(roc_auc[macro_key]),
+              color='navy', linestyle=':', linewidth=4)
 
     ax.plot([0, 1], [0, 1], 'k--', lw=2)
     ax.set_xlim([0.0, 1.0])
