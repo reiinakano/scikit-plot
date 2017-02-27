@@ -254,11 +254,17 @@ class TestPlotROCCurve(unittest.TestCase):
 		np.random.seed(0)
 		clf = LogisticRegression()
 		scikitplot.classifier_factory(clf)
-		ax_macro = clf.plot_roc_curve(self.X, self.y, curves="macro")
-		ax_micro = clf.plot_roc_curve(self.X, self.y, curves="micro")
-		ax_class = clf.plot_roc_curve(self.X, self.y, curves="each_class")
+		ax_macro = clf.plot_roc_curve(self.X, self.y, curves='macro')
+		ax_micro = clf.plot_roc_curve(self.X, self.y, curves='micro')
+		ax_class = clf.plot_roc_curve(self.X, self.y, curves='each_class')
 		self.assertNotEqual(ax_macro, ax_micro, ax_class)
-		
+	
+    def test_invalid_curve_arg(self):
+		np.random.seed(0)
+		clf = LogisticRegression()
+		scikitplot.classifier_factory(clf)
+		self.assertRaises(ValueError, clf.plot_roc_curve, self.X, self.y,
+                          curves='zzz')
 		
 class TestPlotKSStatistic(unittest.TestCase):
     def setUp(self):

@@ -149,6 +149,10 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', ax=None, figsize=None,
            :align: center
            :alt: ROC Curves
     """
+	
+    if ('micro' not in curves) & ('macro' not in curves) & ('each_class' not in curves):
+	    raise ValueError('Invalid argument for curves as it only takes micro, macro, or each class')
+	
     classes = np.unique(y_true)
     probas = y_probas
     
