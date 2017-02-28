@@ -306,7 +306,8 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None, figs
     return ax
 
 
-def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve', ax=None,
+def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve',
+                                curves=('micro', 'each_class'), ax=None,
                                 figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates the Precision Recall Curve for a set of ground truth labels and classifier probability predictions.
 
@@ -316,6 +317,10 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
 
         y_probas (array-like, shape (n_samples, n_classes)):
             Prediction probabilities for each class returned by a classifier.
+
+        curves (array-like): A listing of which curves should be plotted on the
+            resulting plot. Defaults to `("micro", "each_class")`
+            i.e. "micro" for micro-averaged curve
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
@@ -348,6 +353,9 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
     classes = np.unique(y_true)
     probas = y_probas
 
+    if 'micro' not in curves and 'each_class' not in curves:
+        raise ValueError('Invalid argument for curves as it only takes "micro" or "each_class"')
+
     # Compute Precision-Recall curve and area for each class
     precision = dict()
     recall = dict()
@@ -378,13 +386,18 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
         fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     ax.set_title(title, fontsize=title_fontsize)
-    for i in range(len(classes)):
-        ax.plot(recall[i], precision[i], lw=2,
-                label='Precision-recall curve of class {0} '
-                      '(area = {1:0.3f})'.format(classes[i], average_precision[i]))
-    ax.plot(recall[micro_key], precision[micro_key], lw=2, color='gold',
-            label='micro-average Precision-recall curve '
-                  '(area = {0:0.3f})'.format(average_precision[micro_key]))
+
+    if 'each_class' in curves:
+        for i in range(len(classes)):
+            ax.plot(recall[i], precision[i], lw=2,
+                    label='Precision-recall curve of class {0} '
+                          '(area = {1:0.3f})'.format(classes[i], average_precision[i]))
+
+    if 'micro' in curves:
+        ax.plot(recall[micro_key], precision[micro_key],
+                label='micro-average Precision-recall curve '
+                      '(area = {0:0.3f})'.format(average_precision[micro_key]),
+                color='navy', linestyle=':', linewidth=4)
 
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
