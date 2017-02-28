@@ -105,8 +105,9 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
 
     return ax
 
-def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=['micro','macro','each_class'], 
-		   ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
+
+def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=['micro', 'macro', 'each_class'],
+                   ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates the ROC curves for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -117,10 +118,10 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=['micro','macro'
             Prediction probabilities for each class returned by a classifier.
 
         title (string, optional): Title of the generated plot. Defaults to "ROC Curves".
-	
-	curves (array-like): A listing of which curves should be plotted on the 
-+           resulting plot. Defaults to `["micro", "macro", "each_class"]`
-+           i.e. "micro" for micro-averaged curve, "macro" for macro-averaged curve
+
+        curves (array-like): A listing of which curves should be plotted on the
+            resulting plot. Defaults to `["micro", "macro", "each_class"]`
+            i.e. "micro" for micro-averaged curve, "macro" for macro-averaged curve
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
@@ -150,10 +151,10 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=['micro','macro'
            :align: center
            :alt: ROC Curves
     """
-	
+
     if 'micro' not in curves and 'macro' not in curves and 'each_class' not in curves:
-	    raise ValueError('Invalid argument for curves as it only takes "micro", "macro", or "each_class"')
-	
+        raise ValueError('Invalid argument for curves as it only takes "micro", "macro", or "each_class"')
+
     classes = np.unique(y_true)
     probas = y_probas
     

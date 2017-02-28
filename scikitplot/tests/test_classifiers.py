@@ -266,6 +266,7 @@ class TestPlotROCCurve(unittest.TestCase):
         self.assertRaises(ValueError, clf.plot_roc_curve, self.X, self.y,
                           curves='zzz')
 
+
 class TestPlotKSStatistic(unittest.TestCase):
     def setUp(self):
         np.random.seed(0)
