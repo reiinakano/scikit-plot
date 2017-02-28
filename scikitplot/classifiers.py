@@ -160,7 +160,7 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
 
 
 def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
-                   shuffle=True, random_state=None, curves=['micro', 'macro', 'each_class'], 
+                   shuffle=True, random_state=None, curves=('micro', 'macro', 'each_class'),
                    ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates the ROC curves for a given classifier and dataset.
 
@@ -201,7 +201,7 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
             for random sampling.
             
         curves (array-like): A listing of which curves should be plotted on the 
-            resulting plot. Defaults to `["micro", "macro", "each_class"]`
+            resulting plot. Defaults to `("micro", "macro", "each_class")`
             i.e. "micro" for micro-averaged curve, "macro" for macro-averaged curve
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
@@ -372,8 +372,8 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_cv=True, cv=None,
 
 
 def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv=True,
-                                cv=None, shuffle=True, random_state=None, ax=None,
-                                figsize=None, title_fontsize="large", text_fontsize="medium"):
+                                cv=None, shuffle=True, random_state=None, curves=('micro', 'each_class'),
+                                ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates the Precision-Recall curve for a given classifier and dataset.
 
     Args:
@@ -411,6 +411,10 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv
 
         random_state (int :class:`RandomState`): Pseudo-random number generator state used
             for random sampling.
+
+        curves (array-like): A listing of which curves should be plotted on the
+            resulting plot. Defaults to `("micro", "each_class")`
+            i.e. "micro" for micro-averaged curve
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
@@ -470,7 +474,7 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv
         y_true = np.concatenate(trues_list)
 
     # Compute Precision-Recall curve and area for each class
-    ax = plotters.plot_precision_recall_curve(y_true, probas, title=title, ax=ax,
+    ax = plotters.plot_precision_recall_curve(y_true, probas, title=title, curves=curves, ax=ax,
                                               figsize=figsize, title_fontsize=title_fontsize,
                                               text_fontsize=text_fontsize)
     return ax

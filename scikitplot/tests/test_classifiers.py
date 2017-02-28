@@ -266,6 +266,7 @@ class TestPlotROCCurve(unittest.TestCase):
         self.assertRaises(ValueError, clf.plot_roc_curve, self.X, self.y,
                           curves='zzz')
 
+
 class TestPlotKSStatistic(unittest.TestCase):
     def setUp(self):
         np.random.seed(0)
@@ -380,6 +381,21 @@ class TestPlotPrecisionRecall(unittest.TestCase):
         assert ax is not out_ax
         out_ax = clf.plot_precision_recall_curve(self.X, self.y, ax=ax)
         assert ax is out_ax
+
+    def test_curve_diffs(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax_micro = clf.plot_precision_recall_curve(self.X, self.y, curves='micro')
+        ax_class = clf.plot_precision_recall_curve(self.X, self.y, curves='each_class')
+        self.assertNotEqual(ax_micro, ax_class)
+
+    def test_invalid_curve_arg(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        self.assertRaises(ValueError, clf.plot_precision_recall_curve, self.X, self.y,
+                          curves='zzz')
 
 
 class TestFeatureImportances(unittest.TestCase):
