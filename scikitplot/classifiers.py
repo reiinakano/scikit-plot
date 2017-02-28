@@ -160,7 +160,7 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
 
 
 def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
-                   shuffle=True, random_state=None, curves=['micro', 'macro', 'each_class'],
+                   shuffle=True, random_state=None, curves=('micro', 'macro', 'each_class'),
                    ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates the ROC curves for a given classifier and dataset.
 
@@ -201,7 +201,7 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
             for random sampling.
             
         curves (array-like): A listing of which curves should be plotted on the 
-            resulting plot. Defaults to `["micro", "macro", "each_class"]`
+            resulting plot. Defaults to `("micro", "macro", "each_class")`
             i.e. "micro" for micro-averaged curve, "macro" for macro-averaged curve
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot

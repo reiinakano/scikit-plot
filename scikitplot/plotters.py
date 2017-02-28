@@ -106,7 +106,7 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
     return ax
 
 
-def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=['micro', 'macro', 'each_class'],
+def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=('micro', 'macro', 'each_class'),
                    ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates the ROC curves for a set of ground truth labels and classifier probability predictions.
 
@@ -120,7 +120,7 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=['micro', 'macro
         title (string, optional): Title of the generated plot. Defaults to "ROC Curves".
 
         curves (array-like): A listing of which curves should be plotted on the
-            resulting plot. Defaults to `["micro", "macro", "each_class"]`
+            resulting plot. Defaults to `("micro", "macro", "each_class")`
             i.e. "micro" for micro-averaged curve, "macro" for macro-averaged curve
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
