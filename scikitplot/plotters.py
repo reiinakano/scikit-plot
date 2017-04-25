@@ -19,7 +19,6 @@ from scikitplot.helpers import binary_ks_curve
 from sklearn.base import clone
 from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples
-from scipy.spatial.distance import cdist, pdist
 
 
 def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, figsize=None, 
