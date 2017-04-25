@@ -19,7 +19,6 @@ from scikitplot.helpers import binary_ks_curve
 from sklearn.base import clone
 from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples
-from scipy.spatial.distance import cdist, pdist
 
 
 def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, figsize=None, 
@@ -705,8 +704,8 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None,
     """Plots elbow curve of different values of K for KMeans clustering.
 
     Args:
-        clf: Clusterer instance that implements ``fit`` and ``fit_predict`` methods and an
-            ``n_clusters`` parameter.
+        clf: Clusterer instance that implements ``fit`` and ``fit_predict`` methods and a
+            ``score`` parameter.
 
         X (array-like, shape (n_samples, n_features)):
             Data to cluster, where n_samples is the number of samples and
@@ -759,26 +758,16 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, ax=None,
     for i in cluster_ranges:
         current_clf = clone(clf)
         setattr(current_clf, "n_clusters", i)
-        clfs.append(current_clf.fit(X))
-
-    centroids = [k.cluster_centers_ for k in clfs]
-
-    D_k = [cdist(X, cent, 'euclidean') for cent in centroids]
-    dist = [np.min(D, axis=1) for D in D_k]
-    # avgWithinSS = [np.sum(d)/X.shape[0] for d in dist]
-
-    wcss = [np.sum(d**2) for d in dist]
-    tss = np.sum(pdist(X)**2)/X.shape[0]
-    bss = tss - wcss
+        clfs.append(current_clf.fit(X).score(X))
 
     if ax is None:
         fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     ax.set_title(title, fontsize=title_fontsize)
-    ax.plot(cluster_ranges, bss/tss*100, 'b*-')
+    ax.plot(cluster_ranges, np.absolute(clfs), 'b*-')
     ax.grid(True)
     ax.set_xlabel('Number of clusters', fontsize=text_fontsize)
-    ax.set_ylabel('Percent variance explained', fontsize=text_fontsize)
+    ax.set_ylabel('Sum of Squared Errors', fontsize=text_fontsize)
     ax.tick_params(labelsize=text_fontsize)
 
     return ax
