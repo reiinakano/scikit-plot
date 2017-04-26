@@ -101,6 +101,7 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
 
     ax.set_ylabel('True label', fontsize=text_fontsize)
     ax.set_xlabel('Predicted label', fontsize=text_fontsize)
+    ax.grid('off')
 
     return ax
 
