@@ -12,6 +12,7 @@ from sklearn.metrics import roc_curve
 from sklearn.metrics import auc
 from sklearn.metrics import precision_recall_curve
 from sklearn.metrics import average_precision_score
+from sklearn.utils.multiclass import unique_labels
 from sklearn.model_selection import learning_curve
 from scipy import interp
 import itertools
@@ -21,8 +22,8 @@ from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples
 
 
-def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, figsize=None, 
-                          title_fontsize="large", text_fontsize="medium"):
+def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=False, ax=None,
+                          figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates confusion matrix plot for a given set of ground truth labels and classifier predictions.
 
     Args:
@@ -31,6 +32,11 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
 
         y_pred (array-like, shape (n_samples)):
             Estimated targets as returned by a classifier.
+
+        labels (array-like, shape (n_classes), optional): List of labels to
+            index the matrix. This may be used to reorder or select a subset of labels.
+            If none is given, those that appear at least once in ``y_true`` or
+            ``y_pred`` are used in sorted order. (new in v0.2.5)
 
         title (string, optional): Title of the generated plot. Defaults to "Confusion Matrix" if
             `normalize` is True. Else, defaults to "Normalized Confusion Matrix.
@@ -69,8 +75,11 @@ def plot_confusion_matrix(y_true, y_pred, title=None, normalize=False, ax=None, 
     if ax is None:
         fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    cm = confusion_matrix(y_true, y_pred)
-    classes = np.unique(y_true)
+    cm = confusion_matrix(y_true, y_pred, labels=labels)
+    if labels is None:
+        classes = unique_labels(y_true, y_pred)
+    else:
+        classes = np.asarray(labels)
 
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
