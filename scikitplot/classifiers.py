@@ -53,7 +53,7 @@ def classifier_factory(clf):
     return clf
 
 
-def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv=None,
+def plot_confusion_matrix(clf, X, y, labels=None, title=None, normalize=False, do_cv=True, cv=None,
                           shuffle=True, random_state=None, ax=None, figsize=None, 
                           title_fontsize="large", text_fontsize="medium"):
     """Generates the confusion matrix for a given classifier and dataset.
@@ -67,6 +67,11 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
 
         y (array-like, shape (n_samples) or (n_samples, n_features)):
             Target relative to X for classification.
+
+        labels (array-like, shape (n_classes), optional): List of labels to
+            index the matrix. This may be used to reorder or select a subset of labels.
+            If none is given, those that appear at least once in ``y`` are used in sorted order.
+            (new in v0.2.5)
 
         title (string, optional): Title of the generated plot. Defaults to "Confusion Matrix" if
             `normalize` is True. Else, defaults to "Normalized Confusion Matrix.
@@ -152,7 +157,7 @@ def plot_confusion_matrix(clf, X, y, title=None, normalize=False, do_cv=True, cv
         y_pred = np.concatenate(preds_list)
         y_true = np.concatenate(trues_list)
 
-    ax = plotters.plot_confusion_matrix(y_true=y_true, y_pred=y_pred,
+    ax = plotters.plot_confusion_matrix(y_true=y_true, y_pred=y_pred, labels=labels,
                                         title=title, normalize=normalize, ax=ax, figsize=figsize, 
                                         title_fontsize=title_fontsize, text_fontsize=text_fontsize)
 
