@@ -9,6 +9,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.exceptions import NotFittedError
 import numpy as np
 import matplotlib.pyplot as plt
+import scikitplot.plotters as skplt
 
 
 def convert_labels_into_string(y_true):
@@ -201,6 +202,9 @@ class TestPlotConfusionMatrix(unittest.TestCase):
         out_ax = clf.plot_confusion_matrix(self.X, self.y, ax=ax)
         assert ax is out_ax
 
+    def test_array_like(self):
+        ax = skplt.plot_confusion_matrix([0, 1], [1, 0])
+
 
 class TestPlotROCCurve(unittest.TestCase):
     def setUp(self):
@@ -272,6 +276,9 @@ class TestPlotROCCurve(unittest.TestCase):
         self.assertRaises(ValueError, clf.plot_roc_curve, self.X, self.y,
                           curves='zzz')
 
+    def test_array_like(self):
+        ax = skplt.plot_roc_curve([0, 1], [[0.8, 0.2], [0.2, 0.8]])
+
 
 class TestPlotKSStatistic(unittest.TestCase):
     def setUp(self):
@@ -332,6 +339,9 @@ class TestPlotKSStatistic(unittest.TestCase):
         assert ax is not out_ax
         out_ax = clf.plot_ks_statistic(self.X, self.y, ax=ax)
         assert ax is out_ax
+
+    def test_array_like(self):
+        ax = skplt.plot_ks_statistic([0, 1], [[0.8, 0.2], [0.2, 0.8]])
 
 
 class TestPlotPrecisionRecall(unittest.TestCase):
@@ -402,6 +412,9 @@ class TestPlotPrecisionRecall(unittest.TestCase):
         scikitplot.classifier_factory(clf)
         self.assertRaises(ValueError, clf.plot_precision_recall_curve, self.X, self.y,
                           curves='zzz')
+
+    def test_array_like(self):
+        ax = skplt.plot_precision_recall_curve([0, 1], [[0.8, 0.2], [0.2, 0.8]])
 
 
 class TestFeatureImportances(unittest.TestCase):

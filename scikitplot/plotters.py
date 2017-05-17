@@ -160,6 +160,8 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=('micro', 'macro
            :align: center
            :alt: ROC Curves
     """
+    y_true = np.array(y_true)
+    y_probas = np.array(y_probas)
 
     if 'micro' not in curves and 'macro' not in curves and 'each_class' not in curves:
         raise ValueError('Invalid argument for curves as it only takes "micro", "macro", or "each_class"')
@@ -282,6 +284,9 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None, figs
            :align: center
            :alt: KS Statistic
     """
+    y_true = np.array(y_true)
+    y_probas = np.array(y_probas)
+
     classes = np.unique(y_true)
     if len(classes) != 2:
         raise ValueError('Cannot calculate KS statistic for data with '
@@ -359,6 +364,9 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
            :align: center
            :alt: Precision Recall Curve
     """
+    y_true = np.array(y_true)
+    y_probas = np.array(y_probas)
+
     classes = np.unique(y_true)
     probas = y_probas
 
