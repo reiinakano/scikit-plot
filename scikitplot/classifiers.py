@@ -121,7 +121,7 @@ def plot_confusion_matrix(clf, X, y, labels=None, title=None, normalize=False, d
 
     Example:
         >>> rf = classifier_factory(RandomForestClassifier())
-        >>> rf.plot_learning_curve(X, y, normalize=True)
+        >>> rf.plot_confusion_matrix(X, y, normalize=True)
         <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
         >>> plt.show()
 
