@@ -6,8 +6,6 @@ import codecs
 import os
 import sys
 
-import scikitplot
-
 here = os.path.abspath(os.path.dirname(__file__))
 
 
@@ -37,7 +35,7 @@ class PyTest(TestCommand):
 
 setup(
     name='scikit-plot',
-    version=scikitplot.__version__,
+    version='0.2.7',
     url='https://github.com/reiinakano/scikit-plot',
     license='MIT License',
     author='Reiichiro Nakano',
