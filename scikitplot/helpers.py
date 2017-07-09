@@ -42,7 +42,7 @@ def binary_ks_curve(y_true, y_probas):
                          '{} category/ies'.format(len(lb.classes_)))
     idx = encoded_labels == 0
     data1 = np.sort(y_probas[idx])
-    data2 = np.sort(y_probas[-idx])
+    data2 = np.sort(y_probas[np.logical_not(idx)])
 
     ctr1, ctr2 = 0, 0
     thresholds, pct1, pct2 = [], [], []
