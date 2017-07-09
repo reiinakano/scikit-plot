@@ -429,7 +429,7 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
 
 
 def plot_feature_importances(clf, title='Feature Importance', feature_names=None,
-                             max_num_features=20, order='descending', ax=None,
+                             max_num_features=20, order='descending', x_tick_rotation=0, ax=None,
                              figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates a plot of a classifier's feature importances.
 
@@ -446,6 +446,9 @@ def plot_feature_importances(clf, title='Feature Importance', feature_names=None
 
         order ('ascending', 'descending', or None, optional): Determines the order in which the
             feature importances are plotted. Defaults to 'descending'.
+
+        x_tick_rotation (int, optional): Rotates x-axis tick labels by the specified angle. This is
+            useful in cases where there are numerous categories and the labels overlap each other.
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
@@ -522,7 +525,7 @@ def plot_feature_importances(clf, title='Feature Importance', feature_names=None
                color='r', align='center')
 
     ax.set_xticks(range(max_num_features))
-    ax.set_xticklabels(feature_names[:max_num_features])
+    ax.set_xticklabels(feature_names[:max_num_features], rotation=x_tick_rotation)
     ax.set_xlim([-1, max_num_features])
     ax.tick_params(labelsize=text_fontsize)
     return ax
