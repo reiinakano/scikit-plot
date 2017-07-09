@@ -53,8 +53,8 @@ def classifier_factory(clf):
     return clf
 
 
-def plot_confusion_matrix(clf, X, y, labels=None, title=None, normalize=False, do_cv=True, cv=None,
-                          shuffle=True, random_state=None, ax=None, figsize=None, 
+def plot_confusion_matrix(clf, X, y, labels=None, title=None, normalize=False, x_tick_rotation=0,
+                          do_cv=True, cv=None, shuffle=True, random_state=None, ax=None, figsize=None,
                           title_fontsize="large", text_fontsize="medium"):
     """Generates the confusion matrix for a given classifier and dataset.
 
@@ -78,6 +78,9 @@ def plot_confusion_matrix(clf, X, y, labels=None, title=None, normalize=False, d
 
         normalize (bool, optional): If True, normalizes the confusion matrix before plotting.
             Defaults to False.
+
+        x_tick_rotation (int, optional): Rotates x-axis tick labels by the specified angle. This is
+            useful in cases where there are numerous categories and the labels overlap each other.
 
         do_cv (bool, optional): If True, the classifier is cross-validated on the dataset using the
             cross-validation strategy in `cv` to generate the confusion matrix. If False, the
@@ -158,7 +161,8 @@ def plot_confusion_matrix(clf, X, y, labels=None, title=None, normalize=False, d
         y_true = np.concatenate(trues_list)
 
     ax = plotters.plot_confusion_matrix(y_true=y_true, y_pred=y_pred, labels=labels,
-                                        title=title, normalize=normalize, ax=ax, figsize=figsize, 
+                                        title=title, normalize=normalize,
+                                        x_tick_rotation=x_tick_rotation, ax=ax, figsize=figsize,
                                         title_fontsize=title_fontsize, text_fontsize=text_fontsize)
 
     return ax

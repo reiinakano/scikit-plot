@@ -22,8 +22,8 @@ from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples
 
 
-def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=False, ax=None,
-                          figsize=None, title_fontsize="large", text_fontsize="medium"):
+def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=False, x_tick_rotation=0,
+                          ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates confusion matrix plot for a given set of ground truth labels and classifier predictions.
 
     Args:
@@ -43,6 +43,9 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=Fal
 
         normalize (bool, optional): If True, normalizes the confusion matrix before plotting.
             Defaults to False.
+
+        x_tick_rotation (int, optional): Rotates x-axis tick labels by the specified angle. This is
+            useful in cases where there are numerous categories and the labels overlap each other.
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to plot
             the learning curve. If None, the plot is drawn on a new set of axes.
@@ -96,7 +99,7 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=Fal
     plt.colorbar(mappable=image)
     tick_marks = np.arange(len(classes))
     ax.set_xticks(tick_marks)
-    ax.set_xticklabels(classes, fontsize=text_fontsize)
+    ax.set_xticklabels(classes, fontsize=text_fontsize, rotation=x_tick_rotation)
     ax.set_yticks(tick_marks)
     ax.set_yticklabels(classes, fontsize=text_fontsize)
 
