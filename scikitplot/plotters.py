@@ -22,8 +22,8 @@ from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples
 
 
-def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=False, x_tick_rotation=0,
-                          ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
+def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=False, hide_zeros=False,
+                          x_tick_rotation=0, ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates confusion matrix plot for a given set of ground truth labels and classifier predictions.
 
     Args:
@@ -42,6 +42,9 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=Fal
             `normalize` is True. Else, defaults to "Normalized Confusion Matrix.
 
         normalize (bool, optional): If True, normalizes the confusion matrix before plotting.
+            Defaults to False.
+
+        hide_zeros (bool, optional): If True, does not plot cells containing a value of zero.
             Defaults to False.
 
         x_tick_rotation (int, optional): Rotates x-axis tick labels by the specified angle. This is
@@ -105,11 +108,12 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=Fal
 
     thresh = cm.max() / 2.
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
-        ax.text(j, i, cm[i, j],
-                horizontalalignment="center",
-                verticalalignment="center",
-                fontsize=text_fontsize,
-                color="white" if cm[i, j] > thresh else "black")
+        if not (hide_zeros and cm[i, j] == 0):
+            ax.text(j, i, cm[i, j],
+                    horizontalalignment="center",
+                    verticalalignment="center",
+                    fontsize=text_fontsize,
+                    color="white" if cm[i, j] > thresh else "black")
 
     ax.set_ylabel('True label', fontsize=text_fontsize)
     ax.set_xlabel('Predicted label', fontsize=text_fontsize)
