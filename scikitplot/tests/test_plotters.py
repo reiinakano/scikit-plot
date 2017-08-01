@@ -65,5 +65,98 @@ class TestPlotPCA2DProjection(unittest.TestCase):
         assert ax is out_ax
 
 
+class TestValidateLabels(unittest.TestCase):
+
+    def test_valid_equal(self):
+        known_labels = ["A", "B", "C"]
+        passed_labels = ["A", "B", "C"]
+        arg_name = "true_labels"
+
+        actual = skplt.validate_labels(known_labels, passed_labels, arg_name)
+        self.assertEqual(actual, None)
+
+    def test_valid_subset(self):
+        known_labels = ["A", "B", "C"]
+        passed_labels = ["A", "B"]
+        arg_name = "true_labels"
+
+        actual = skplt.validate_labels(known_labels, passed_labels, arg_name)
+        self.assertEqual(actual, None)
+
+    def test_invalid_one_duplicate(self):
+        known_labels = ["A", "B", "C"]
+        passed_labels = ["A", "B", "B"]
+        arg_name = "true_labels"
+
+        with self.assertRaises(ValueError) as context:
+            skplt.validate_labels(known_labels, passed_labels, arg_name)
+
+        msg = "The following duplicate labels were passed into true_labels: B"
+        self.assertEqual(msg, str(context.exception))
+
+    def test_invalid_two_duplicates(self):
+        known_labels = ["A", "B", "C"]
+        passed_labels = ["A", "B", "A", "B"]
+        arg_name = "true_labels"
+
+        with self.assertRaises(ValueError) as context:
+            skplt.validate_labels(known_labels, passed_labels, arg_name)
+
+        msg = "The following duplicate labels were passed into true_labels: A, B"
+        self.assertEqual(msg, str(context.exception))
+
+    def test_invalid_one_missing(self):
+        known_labels = ["A", "B", "C"]
+        passed_labels = ["A", "B", "D"]
+        arg_name = "true_labels"
+
+        with self.assertRaises(ValueError) as context:
+            skplt.validate_labels(known_labels, passed_labels, arg_name)
+
+        msg = "The following labels were passed into true_labels, but were not found in labels: D"
+        self.assertEqual(msg, str(context.exception))
+
+    def test_invalid_two_missing(self):
+        known_labels = ["A", "B", "C"]
+        passed_labels = ["A", "E", "B", "D"]
+        arg_name = "true_labels"
+
+        with self.assertRaises(ValueError) as context:
+            skplt.validate_labels(known_labels, passed_labels, arg_name)
+
+        msg = "The following labels were passed into true_labels, but were not found in labels: E, D"
+        self.assertEqual(msg, str(context.exception))
+
+    def test_numerical_labels(self):
+        known_labels = [0, 1, 2]
+        passed_labels = [0, 2]
+        arg_name = "true_labels"
+
+        actual = skplt.validate_labels(known_labels, passed_labels, arg_name)
+        self.assertEqual(actual, None)
+
+    def test_invalid_duplicate_numerical_labels(self):
+        known_labels = [0, 1, 2]
+        passed_labels = [0, 2, 2]
+        arg_name = "true_labels"
+
+        with self.assertRaises(ValueError) as context:
+            skplt.validate_labels(known_labels, passed_labels, arg_name)
+
+        msg = "The following duplicate labels were passed into true_labels: 2"
+        self.assertEqual(msg, str(context.exception))
+
+    def test_invalid_missing_numerical_labels(self):
+        known_labels = [0, 1, 2]
+        passed_labels = [0, 2, 3]
+        arg_name = "true_labels"
+
+        with self.assertRaises(ValueError) as context:
+            skplt.validate_labels(known_labels, passed_labels, arg_name)
+
+        msg = "The following labels were passed into true_labels, but were not found in labels: 3"
+        self.assertEqual(msg, str(context.exception))
+
+
 if __name__ == '__main__':
     unittest.main()

@@ -22,8 +22,56 @@ from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples
 
 
-def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=False, hide_zeros=False,
-                          x_tick_rotation=0, ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
+def validate_labels(known_classes, passed_labels, argument_name):
+    """Validates the labels passed into the true_labels or pred_labels
+    arguments in the plot_confusion_matrix function.
+
+    Raises a ValueError exception if any of the passed labels are not in the
+    set of known classes or if there are duplicate labels. Otherwise returns
+    None.
+
+    Args:
+        known_classes (array-like):
+            The classes that are known to appear in the data.
+        passed_labels (array-like):
+            The labels that were passed in through the argument.
+        argument_name (str):
+            The name of the argument being validated.
+
+    Example:
+        >>> known_classes = ["A", "B", "C"]
+        >>> passed_labels = ["A", "B"]
+        >>> validate_labels(known_classes, passed_labels, "true_labels")
+    """
+    known_classes = np.array(known_classes)
+    passed_labels = np.array(passed_labels)
+
+    unique_labels, unique_indexes = np.unique(passed_labels, return_index=True)
+
+    if len(passed_labels) != len(unique_labels):
+        indexes = np.arange(0, len(passed_labels))
+        duplicate_indexes = indexes[~np.in1d(indexes, unique_indexes)]
+        duplicate_labels = [str(x) for x in passed_labels[duplicate_indexes]]
+
+        msg = "The following duplicate labels were passed into {0}: {1}" \
+                .format(argument_name, ", ".join(duplicate_labels))
+        raise ValueError(msg)
+
+    passed_labels_absent = ~np.in1d(passed_labels, known_classes)
+
+    if np.any(passed_labels_absent):
+        absent_labels = [str(x) for x in passed_labels[passed_labels_absent]]
+
+        msg = "The following labels were passed into {0}, but were not found in labels: {1}" \
+                .format(argument_name, ", ".join(absent_labels))
+        raise ValueError(msg)
+
+    return
+
+
+def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None, pred_labels=None, title=None,
+                          normalize=False, hide_zeros=False, x_tick_rotation=0, ax=None, figsize=None,
+                          title_fontsize="large", text_fontsize="medium"):
     """Generates confusion matrix plot for a given set of ground truth labels and classifier predictions.
 
     Args:
@@ -37,6 +85,12 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=Fal
             index the matrix. This may be used to reorder or select a subset of labels.
             If none is given, those that appear at least once in ``y_true`` or
             ``y_pred`` are used in sorted order. (new in v0.2.5)
+
+        true_labels (array-like, optional): The true labels to display.
+            If none is given, then all of the labels are used.
+
+        pred_labels (array-like, optional): The predicted labels to display.
+            If none is given, then all of the labels are used.
 
         title (string, optional): Title of the generated plot. Defaults to "Confusion Matrix" if
             `normalize` is True. Else, defaults to "Normalized Confusion Matrix.
@@ -92,6 +146,26 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=Fal
         cm = np.around(cm, decimals=2)
         cm[np.isnan(cm)] = 0.0
 
+    if true_labels is None:
+        true_classes = classes
+    else:
+        validate_labels(classes, true_labels, "true_labels")
+
+        true_label_indexes = np.in1d(classes, true_labels)
+
+        true_classes = classes[true_label_indexes]
+        cm = cm[true_label_indexes]
+
+    if pred_labels is None:
+        pred_classes = classes
+    else:
+        validate_labels(classes, pred_labels, "pred_labels")
+
+        pred_label_indexes = np.in1d(classes, pred_labels)
+
+        pred_classes = classes[pred_label_indexes]
+        cm = cm[:, pred_label_indexes]
+
     if title:
         ax.set_title(title, fontsize=title_fontsize)
     elif normalize:
@@ -101,11 +175,12 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=Fal
 
     image = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
     plt.colorbar(mappable=image)
-    tick_marks = np.arange(len(classes))
-    ax.set_xticks(tick_marks)
-    ax.set_xticklabels(classes, fontsize=text_fontsize, rotation=x_tick_rotation)
-    ax.set_yticks(tick_marks)
-    ax.set_yticklabels(classes, fontsize=text_fontsize)
+    x_tick_marks = np.arange(len(pred_classes))
+    y_tick_marks = np.arange(len(true_classes))
+    ax.set_xticks(x_tick_marks)
+    ax.set_xticklabels(pred_classes, fontsize=text_fontsize, rotation=x_tick_rotation)
+    ax.set_yticks(y_tick_marks)
+    ax.set_yticklabels(true_classes, fontsize=text_fontsize)
 
     thresh = cm.max() / 2.
     for i, j in itertools.product(range(cm.shape[0]), range(cm.shape[1])):
