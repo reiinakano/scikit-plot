@@ -90,6 +90,7 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, title=None, normalize=Fal
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
         cm = np.around(cm, decimals=2)
+        cm[np.isnan(cm)] = 0.0
 
     if title:
         ax.set_title(title, fontsize=title_fontsize)
