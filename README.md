@@ -94,6 +94,11 @@ python setup.py install
 ```
 at the root folder.
 
+If using conda, you can install Scikit-plot by running:
+```bash
+conda install -c conda-forge scikit-plot
+```
+
 ## Documentation and Examples
 
 Explore the full features of Scikit-plot.
