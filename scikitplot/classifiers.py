@@ -53,9 +53,10 @@ def classifier_factory(clf):
     return clf
 
 
-def plot_confusion_matrix(clf, X, y, labels=None, title=None, normalize=False, hide_zeros=False,
-                          x_tick_rotation=0, do_cv=True, cv=None, shuffle=True, random_state=None,
-                          ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
+def plot_confusion_matrix(clf, X, y, labels=None, true_labels=None, pred_labels=None,
+                          title=None, normalize=False, hide_zeros=False, x_tick_rotation=0,
+                          do_cv=True, cv=None, shuffle=True, random_state=None, ax=None,
+                          figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates the confusion matrix for a given classifier and dataset.
 
     Args:
@@ -72,6 +73,12 @@ def plot_confusion_matrix(clf, X, y, labels=None, title=None, normalize=False, h
             index the matrix. This may be used to reorder or select a subset of labels.
             If none is given, those that appear at least once in ``y`` are used in sorted order.
             (new in v0.2.5)
+
+        true_labels (array-like, optional): The true labels to display.
+            If none is given, then all of the labels are used.
+
+        pred_labels (array-like, optional): The predicted labels to display.
+            If none is given, then all of the labels are used.
 
         title (string, optional): Title of the generated plot. Defaults to "Confusion Matrix" if
             `normalize` is True. Else, defaults to "Normalized Confusion Matrix.
@@ -164,6 +171,7 @@ def plot_confusion_matrix(clf, X, y, labels=None, title=None, normalize=False, h
         y_true = np.concatenate(trues_list)
 
     ax = plotters.plot_confusion_matrix(y_true=y_true, y_pred=y_pred, labels=labels,
+                                        true_labels=true_labels, pred_labels=pred_labels,
                                         title=title, normalize=normalize, hide_zeros=hide_zeros,
                                         x_tick_rotation=x_tick_rotation, ax=ax, figsize=figsize,
                                         title_fontsize=title_fontsize, text_fontsize=text_fontsize)
