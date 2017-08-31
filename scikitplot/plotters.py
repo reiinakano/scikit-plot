@@ -612,7 +612,8 @@ def plot_feature_importances(clf, title='Feature Importance', feature_names=None
 
 
 def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=None, n_jobs=1,
-                        ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
+                        ax=None, figsize=None, title_fontsize="large", text_fontsize="medium",
+                        scoring=None):
     """Generates a plot of the train and test learning curves for a given classifier.
 
     Args:
@@ -657,7 +658,11 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
 
         text_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "medium".
-
+            
+        scoring (string, callable or None, optional): default: None
+            A string (see scikit-learn model evaluation documentation) or a scorer 
+            callable object / function with signature scorer(estimator, X, y).
+            
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was drawn.
 
@@ -682,7 +687,8 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
     ax.set_xlabel("Training examples", fontsize=text_fontsize)
     ax.set_ylabel("Score", fontsize=text_fontsize)
     train_sizes, train_scores, test_scores = learning_curve(
-        clf, X, y, cv=cv, n_jobs=n_jobs, train_sizes=train_sizes)
+        clf, X, y, cv=cv, n_jobs=n_jobs, train_sizes=train_sizes,
+        scoring=scoring)
     train_scores_mean = np.mean(train_scores, axis=1)
     train_scores_std = np.std(train_scores, axis=1)
     test_scores_mean = np.mean(test_scores, axis=1)
