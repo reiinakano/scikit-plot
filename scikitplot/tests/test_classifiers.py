@@ -417,6 +417,13 @@ class TestPlotPrecisionRecall(unittest.TestCase):
         ax_class = clf.plot_precision_recall_curve(self.X, self.y, curves='each_class')
         self.assertNotEqual(ax_micro, ax_class)
 
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_precision_recall_curve(self.X, self.y, cmap='spectral')
+        ax = clf.plot_precision_recall_curve(self.X, self.y, cmap=plt.cm.spectral)
+
     def test_invalid_curve_arg(self):
         np.random.seed(0)
         clf = LogisticRegression()

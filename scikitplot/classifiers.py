@@ -393,7 +393,8 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_cv=True, cv=None,
 
 def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv=True,
                                 cv=None, shuffle=True, random_state=None, curves=('micro', 'each_class'),
-                                ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
+                                ax=None, figsize=None, cmap='spectral', title_fontsize="large",
+                                text_fontsize="medium"):
     """Generates the Precision-Recall curve for a given classifier and dataset.
 
     Args:
@@ -441,6 +442,10 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv
 
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -495,6 +500,6 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv
 
     # Compute Precision-Recall curve and area for each class
     ax = plotters.plot_precision_recall_curve(y_true, probas, title=title, curves=curves, ax=ax,
-                                              figsize=figsize, title_fontsize=title_fontsize,
+                                              figsize=figsize, cmap=cmap, title_fontsize=title_fontsize,
                                               text_fontsize=text_fontsize)
     return ax

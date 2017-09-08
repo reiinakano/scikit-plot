@@ -405,7 +405,8 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None, figs
 
 def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve',
                                 curves=('micro', 'each_class'), ax=None,
-                                figsize=None, title_fontsize="large", text_fontsize="medium"):
+                                figsize=None, cmap='spectral', title_fontsize="large",
+                                text_fontsize="medium"):
     """Generates the Precision Recall Curve for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -424,6 +425,10 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
 
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -489,7 +494,7 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
 
     if 'each_class' in curves:
         for i in range(len(classes)):
-            color = plt.cm.get_cmap('spectral')(float(i) / len(classes))
+            color = plt.cm.get_cmap(cmap)(float(i) / len(classes))
             ax.plot(recall[i], precision[i], lw=2,
                     label='Precision-recall curve of class {0} '
                           '(area = {1:0.3f})'.format(classes[i], average_precision[i]),
