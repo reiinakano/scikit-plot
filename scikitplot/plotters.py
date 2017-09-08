@@ -955,7 +955,7 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
 
 
 def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None, figsize=None,
-                                title_fontsize="large", text_fontsize="medium"):
+                           cmap='Spectral', title_fontsize="large", text_fontsize="medium"):
     """Plots the 2-dimensional projection of PCA on a given dataset. (new in v0.2.2)
 
     Args:
@@ -976,6 +976,9 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None, figsi
 
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection.
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -1005,7 +1008,7 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None, figsi
     ax.set_title(title, fontsize=title_fontsize)
     classes = np.unique(np.array(y))
 
-    colors = plt.cm.Spectral(np.linspace(0, 1, len(classes)))
+    colors = plt.cm.get_cmap(cmap)(np.linspace(0, 1, len(classes)))
 
     for label, color in zip(classes, colors):
         ax.scatter(transformed_X[y == label, 0], transformed_X[y == label, 1],
