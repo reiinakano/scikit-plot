@@ -74,6 +74,13 @@ class TestPlotSilhouette(unittest.TestCase):
         ax = clf.plot_silhouette(self.X, copy=False)
         assert hasattr(clf, "cluster_centers_")
 
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = KMeans()
+        scikitplot.clustering_factory(clf)
+        ax = clf.plot_silhouette(self.X, cmap='Spectral')
+        ax = clf.plot_silhouette(self.X, cmap=plt.cm.Spectral)
+
     def test_ax(self):
         np.random.seed(0)
         clf = KMeans()

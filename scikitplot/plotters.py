@@ -704,8 +704,9 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
     return ax
 
 
-def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', copy=True, ax=None,
-                    figsize=None, title_fontsize="large", text_fontsize="medium"):
+def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean',
+                    copy=True, ax=None, figsize=None, cmap='spectral',
+                    title_fontsize="large", text_fontsize="medium"):
     """Plots silhouette analysis of clusters using fit_predict.
 
     Args:
@@ -730,6 +731,10 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
 
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -783,7 +788,7 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
         size_cluster_i = ith_cluster_silhouette_values.shape[0]
         y_upper = y_lower + size_cluster_i
 
-        color = plt.cm.spectral(float(i) / n_clusters)
+        color = plt.cm.get_cmap(cmap)(float(i) / n_clusters)
 
         ax.fill_betweenx(np.arange(y_lower, y_upper),
                          0, ith_cluster_silhouette_values,
@@ -978,7 +983,8 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None, figsi
             Defaults to ``None``.
 
         cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
-            used for plotting the projection.
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
