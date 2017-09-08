@@ -271,6 +271,13 @@ class TestPlotROCCurve(unittest.TestCase):
         out_ax = clf.plot_roc_curve(self.X, self.y, ax=ax)
         assert ax is out_ax
 
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_roc_curve(self.X, self.y, cmap='spectral')
+        ax = clf.plot_roc_curve(self.X, self.y, cmap=plt.cm.spectral)
+
     def test_curve_diffs(self):
         np.random.seed(0)
         clf = LogisticRegression()

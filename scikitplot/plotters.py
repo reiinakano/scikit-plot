@@ -199,7 +199,8 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None, pred_la
 
 
 def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=('micro', 'macro', 'each_class'),
-                   ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
+                   ax=None, figsize=None, cmap='spectral', title_fontsize="large",
+                   text_fontsize="medium"):
     """Generates the ROC curves for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -220,6 +221,10 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=('micro', 'macro
 
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -302,7 +307,8 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=('micro', 'macro
 
     if 'each_class' in curves:
         for i in range(len(classes)):
-            ax.plot(fpr[i], tpr[i], lw=2,
+            color = plt.cm.get_cmap(cmap)(float(i) / len(classes))
+            ax.plot(fpr[i], tpr[i], lw=2, color=color,
                     label='ROC curve of class {0} (area = {1:0.2f})'
                     ''.format(classes[i], roc_auc[i]))
         
