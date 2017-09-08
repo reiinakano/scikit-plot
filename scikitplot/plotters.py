@@ -70,8 +70,8 @@ def validate_labels(known_classes, passed_labels, argument_name):
 
 
 def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None, pred_labels=None, title=None,
-                          normalize=False, hide_zeros=False, x_tick_rotation=0, ax=None, cmap='Blues',
-                          figsize=None, title_fontsize="large", text_fontsize="medium"):
+                          normalize=False, hide_zeros=False, x_tick_rotation=0, ax=None, figsize=None,
+                          cmap='Blues', title_fontsize="large", text_fontsize="medium"):
     """Generates confusion matrix plot for a given set of ground truth labels and classifier predictions.
 
     Args:
