@@ -489,9 +489,11 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
 
     if 'each_class' in curves:
         for i in range(len(classes)):
+            color = plt.cm.get_cmap('spectral')(float(i) / len(classes))
             ax.plot(recall[i], precision[i], lw=2,
                     label='Precision-recall curve of class {0} '
-                          '(area = {1:0.3f})'.format(classes[i], average_precision[i]))
+                          '(area = {1:0.3f})'.format(classes[i], average_precision[i]),
+                    color=color)
 
     if 'micro' in curves:
         ax.plot(recall[micro_key], precision[micro_key],
