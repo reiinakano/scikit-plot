@@ -173,7 +173,7 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None, pred_la
     else:
         ax.set_title('Confusion Matrix', fontsize=title_fontsize)
 
-    image = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    image = ax.imshow(cm, interpolation='nearest', cmap=cm.Blues)
     plt.colorbar(mappable=image)
     x_tick_marks = np.arange(len(pred_classes))
     y_tick_marks = np.arange(len(true_classes))
@@ -1003,9 +1003,11 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None, figsi
     ax.set_title(title, fontsize=title_fontsize)
     classes = np.unique(np.array(y))
 
-    for label in classes:
+    colors = cm.Spectral(np.linspace(0, 1, len(classes)))
+
+    for label, color in zip(classes, colors):
         ax.scatter(transformed_X[y == label, 0], transformed_X[y == label, 1],
-                   alpha=0.8, lw=2, label=label)
+                   alpha=0.8, lw=2, label=label, color=color)
     ax.legend(loc='best', shadow=False, scatterpoints=1, fontsize=text_fontsize)
     ax.set_xlabel('First Principal Component', fontsize=text_fontsize)
     ax.set_ylabel('Second Principal Component', fontsize=text_fontsize)
