@@ -70,8 +70,8 @@ def validate_labels(known_classes, passed_labels, argument_name):
 
 
 def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None, pred_labels=None, title=None,
-                          normalize=False, hide_zeros=False, x_tick_rotation=0, ax=None, figsize=None,
-                          title_fontsize="large", text_fontsize="medium"):
+                          normalize=False, hide_zeros=False, x_tick_rotation=0, ax=None, cmap='Blues',
+                          figsize=None, title_fontsize="large", text_fontsize="medium"):
     """Generates confusion matrix plot for a given set of ground truth labels and classifier predictions.
 
     Args:
@@ -109,6 +109,10 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None, pred_la
 
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6). 
             Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes. 
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -173,7 +177,7 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None, pred_la
     else:
         ax.set_title('Confusion Matrix', fontsize=title_fontsize)
 
-    image = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    image = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.get_cmap(cmap))
     plt.colorbar(mappable=image)
     x_tick_marks = np.arange(len(pred_classes))
     y_tick_marks = np.arange(len(true_classes))

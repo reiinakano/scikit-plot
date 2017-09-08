@@ -56,7 +56,8 @@ def classifier_factory(clf):
 def plot_confusion_matrix(clf, X, y, labels=None, true_labels=None, pred_labels=None,
                           title=None, normalize=False, hide_zeros=False, x_tick_rotation=0,
                           do_cv=True, cv=None, shuffle=True, random_state=None, ax=None,
-                          figsize=None, title_fontsize="large", text_fontsize="medium"):
+                          figsize=None, cmap='Blues', title_fontsize="large",
+                          text_fontsize="medium"):
     """Generates the confusion matrix for a given classifier and dataset.
 
     Args:
@@ -122,6 +123,10 @@ def plot_confusion_matrix(clf, X, y, labels=None, true_labels=None, pred_labels=
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6). 
             Defaults to ``None``.
 
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
+
         title_fontsize (string or int, optional): Matplotlib-style fontsizes. 
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
 
@@ -174,7 +179,8 @@ def plot_confusion_matrix(clf, X, y, labels=None, true_labels=None, pred_labels=
                                         true_labels=true_labels, pred_labels=pred_labels,
                                         title=title, normalize=normalize, hide_zeros=hide_zeros,
                                         x_tick_rotation=x_tick_rotation, ax=ax, figsize=figsize,
-                                        title_fontsize=title_fontsize, text_fontsize=text_fontsize)
+                                        cmap=cmap, title_fontsize=title_fontsize,
+                                        text_fontsize=text_fontsize)
 
     return ax
 

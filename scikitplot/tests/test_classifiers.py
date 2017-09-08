@@ -189,6 +189,13 @@ class TestPlotConfusionMatrix(unittest.TestCase):
         ax = clf.plot_confusion_matrix(self.X, self.y, true_labels=true_labels,
                 pred_labels=pred_labels)
 
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_confusion_matrix(self.X, self.y, cmap='spectral')
+        ax = clf.plot_confusion_matrix(self.X, self.y, cmap=plt.cm.spectral)
+
     def test_do_cv(self):
         np.random.seed(0)
         clf = LogisticRegression()
