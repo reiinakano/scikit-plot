@@ -56,7 +56,8 @@ def classifier_factory(clf):
 def plot_confusion_matrix(clf, X, y, labels=None, true_labels=None, pred_labels=None,
                           title=None, normalize=False, hide_zeros=False, x_tick_rotation=0,
                           do_cv=True, cv=None, shuffle=True, random_state=None, ax=None,
-                          figsize=None, title_fontsize="large", text_fontsize="medium"):
+                          figsize=None, cmap='Blues', title_fontsize="large",
+                          text_fontsize="medium"):
     """Generates the confusion matrix for a given classifier and dataset.
 
     Args:
@@ -122,6 +123,10 @@ def plot_confusion_matrix(clf, X, y, labels=None, true_labels=None, pred_labels=
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6). 
             Defaults to ``None``.
 
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
+
         title_fontsize (string or int, optional): Matplotlib-style fontsizes. 
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
 
@@ -174,14 +179,16 @@ def plot_confusion_matrix(clf, X, y, labels=None, true_labels=None, pred_labels=
                                         true_labels=true_labels, pred_labels=pred_labels,
                                         title=title, normalize=normalize, hide_zeros=hide_zeros,
                                         x_tick_rotation=x_tick_rotation, ax=ax, figsize=figsize,
-                                        title_fontsize=title_fontsize, text_fontsize=text_fontsize)
+                                        cmap=cmap, title_fontsize=title_fontsize,
+                                        text_fontsize=text_fontsize)
 
     return ax
 
 
 def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
                    shuffle=True, random_state=None, curves=('micro', 'macro', 'each_class'),
-                   ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
+                   ax=None, figsize=None, cmap='spectral', title_fontsize="large",
+                   text_fontsize="medium"):
     """Generates the ROC curves for a given classifier and dataset.
 
     Args:
@@ -229,6 +236,10 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
             
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -282,7 +293,7 @@ def plot_roc_curve(clf, X, y, title='ROC Curves', do_cv=True, cv=None,
 
     # Compute ROC curve and ROC area for each class
     ax = plotters.plot_roc_curve(y_true=y_true, y_probas=probas, title=title, curves=curves, 
-                                 ax=ax, figsize=figsize, title_fontsize=title_fontsize,
+                                 ax=ax, figsize=figsize, cmap=cmap, title_fontsize=title_fontsize,
                                  text_fontsize=text_fontsize)
 
     return ax
@@ -393,7 +404,8 @@ def plot_ks_statistic(clf, X, y, title='KS Statistic Plot', do_cv=True, cv=None,
 
 def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv=True,
                                 cv=None, shuffle=True, random_state=None, curves=('micro', 'each_class'),
-                                ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
+                                ax=None, figsize=None, cmap='spectral', title_fontsize="large",
+                                text_fontsize="medium"):
     """Generates the Precision-Recall curve for a given classifier and dataset.
 
     Args:
@@ -441,6 +453,10 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv
 
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -495,6 +511,6 @@ def plot_precision_recall_curve(clf, X, y, title='Precision-Recall Curve', do_cv
 
     # Compute Precision-Recall curve and area for each class
     ax = plotters.plot_precision_recall_curve(y_true, probas, title=title, curves=curves, ax=ax,
-                                              figsize=figsize, title_fontsize=title_fontsize,
+                                              figsize=figsize, cmap=cmap, title_fontsize=title_fontsize,
                                               text_fontsize=text_fontsize)
     return ax

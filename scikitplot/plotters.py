@@ -71,7 +71,7 @@ def validate_labels(known_classes, passed_labels, argument_name):
 
 def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None, pred_labels=None, title=None,
                           normalize=False, hide_zeros=False, x_tick_rotation=0, ax=None, figsize=None,
-                          title_fontsize="large", text_fontsize="medium"):
+                          cmap='Blues', title_fontsize="large", text_fontsize="medium"):
     """Generates confusion matrix plot for a given set of ground truth labels and classifier predictions.
 
     Args:
@@ -109,6 +109,10 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None, pred_la
 
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6). 
             Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes. 
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -173,7 +177,7 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None, pred_la
     else:
         ax.set_title('Confusion Matrix', fontsize=title_fontsize)
 
-    image = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    image = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.get_cmap(cmap))
     plt.colorbar(mappable=image)
     x_tick_marks = np.arange(len(pred_classes))
     y_tick_marks = np.arange(len(true_classes))
@@ -199,7 +203,8 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None, pred_la
 
 
 def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=('micro', 'macro', 'each_class'),
-                   ax=None, figsize=None, title_fontsize="large", text_fontsize="medium"):
+                   ax=None, figsize=None, cmap='spectral', title_fontsize="large",
+                   text_fontsize="medium"):
     """Generates the ROC curves for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -220,6 +225,10 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=('micro', 'macro
 
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -302,7 +311,8 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves', curves=('micro', 'macro
 
     if 'each_class' in curves:
         for i in range(len(classes)):
-            ax.plot(fpr[i], tpr[i], lw=2,
+            color = plt.cm.get_cmap(cmap)(float(i) / len(classes))
+            ax.plot(fpr[i], tpr[i], lw=2, color=color,
                     label='ROC curve of class {0} (area = {1:0.2f})'
                     ''.format(classes[i], roc_auc[i]))
         
@@ -405,7 +415,8 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot', ax=None, figs
 
 def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve',
                                 curves=('micro', 'each_class'), ax=None,
-                                figsize=None, title_fontsize="large", text_fontsize="medium"):
+                                figsize=None, cmap='spectral', title_fontsize="large",
+                                text_fontsize="medium"):
     """Generates the Precision Recall Curve for a set of ground truth labels and classifier probability predictions.
 
     Args:
@@ -424,6 +435,10 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
 
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -489,9 +504,11 @@ def plot_precision_recall_curve(y_true, y_probas, title='Precision-Recall Curve'
 
     if 'each_class' in curves:
         for i in range(len(classes)):
+            color = plt.cm.get_cmap(cmap)(float(i) / len(classes))
             ax.plot(recall[i], precision[i], lw=2,
                     label='Precision-recall curve of class {0} '
-                          '(area = {1:0.3f})'.format(classes[i], average_precision[i]))
+                          '(area = {1:0.3f})'.format(classes[i], average_precision[i]),
+                    color=color)
 
     if 'micro' in curves:
         ax.plot(recall[micro_key], precision[micro_key],
@@ -702,8 +719,9 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None, train_sizes=
     return ax
 
 
-def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', copy=True, ax=None,
-                    figsize=None, title_fontsize="large", text_fontsize="medium"):
+def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean',
+                    copy=True, ax=None, figsize=None, cmap='spectral',
+                    title_fontsize="large", text_fontsize="medium"):
     """Plots silhouette analysis of clusters using fit_predict.
 
     Args:
@@ -728,6 +746,10 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
 
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -781,7 +803,7 @@ def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean', cop
         size_cluster_i = ith_cluster_silhouette_values.shape[0]
         y_upper = y_lower + size_cluster_i
 
-        color = cm.spectral(float(i) / n_clusters)
+        color = plt.cm.get_cmap(cmap)(float(i) / n_clusters)
 
         ax.fill_betweenx(np.arange(y_lower, y_upper),
                          0, ith_cluster_silhouette_values,
@@ -953,7 +975,7 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
 
 
 def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None, figsize=None,
-                                title_fontsize="large", text_fontsize="medium"):
+                           cmap='Spectral', title_fontsize="large", text_fontsize="medium"):
     """Plots the 2-dimensional projection of PCA on a given dataset. (new in v0.2.2)
 
     Args:
@@ -974,6 +996,10 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None, figsi
 
         figsize (2-tuple, optional): Tuple denoting figure size of the plot e.g. (6, 6).
             Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional): Colormap
+            used for plotting the projection. View Matplotlib Colormap documentation for
+            available options. https://matplotlib.org/users/colormaps.html
 
         title_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to "large".
@@ -1003,9 +1029,11 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None, figsi
     ax.set_title(title, fontsize=title_fontsize)
     classes = np.unique(np.array(y))
 
-    for label in classes:
+    colors = plt.cm.get_cmap(cmap)(np.linspace(0, 1, len(classes)))
+
+    for label, color in zip(classes, colors):
         ax.scatter(transformed_X[y == label, 0], transformed_X[y == label, 1],
-                   alpha=0.8, lw=2, label=label)
+                   alpha=0.8, lw=2, label=label, color=color)
     ax.legend(loc='best', shadow=False, scatterpoints=1, fontsize=text_fontsize)
     ax.set_xlabel('First Principal Component', fontsize=text_fontsize)
     ax.set_ylabel('Second Principal Component', fontsize=text_fontsize)

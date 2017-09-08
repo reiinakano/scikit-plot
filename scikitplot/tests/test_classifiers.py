@@ -189,6 +189,13 @@ class TestPlotConfusionMatrix(unittest.TestCase):
         ax = clf.plot_confusion_matrix(self.X, self.y, true_labels=true_labels,
                 pred_labels=pred_labels)
 
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_confusion_matrix(self.X, self.y, cmap='spectral')
+        ax = clf.plot_confusion_matrix(self.X, self.y, cmap=plt.cm.spectral)
+
     def test_do_cv(self):
         np.random.seed(0)
         clf = LogisticRegression()
@@ -270,6 +277,13 @@ class TestPlotROCCurve(unittest.TestCase):
         assert ax is not out_ax
         out_ax = clf.plot_roc_curve(self.X, self.y, ax=ax)
         assert ax is out_ax
+
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_roc_curve(self.X, self.y, cmap='spectral')
+        ax = clf.plot_roc_curve(self.X, self.y, cmap=plt.cm.spectral)
 
     def test_curve_diffs(self):
         np.random.seed(0)
@@ -416,6 +430,13 @@ class TestPlotPrecisionRecall(unittest.TestCase):
         ax_micro = clf.plot_precision_recall_curve(self.X, self.y, curves='micro')
         ax_class = clf.plot_precision_recall_curve(self.X, self.y, curves='each_class')
         self.assertNotEqual(ax_micro, ax_class)
+
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        scikitplot.classifier_factory(clf)
+        ax = clf.plot_precision_recall_curve(self.X, self.y, cmap='spectral')
+        ax = clf.plot_precision_recall_curve(self.X, self.y, cmap=plt.cm.spectral)
 
     def test_invalid_curve_arg(self):
         np.random.seed(0)

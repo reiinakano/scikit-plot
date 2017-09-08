@@ -39,7 +39,7 @@ class TestPlotPCAComponentVariance(unittest.TestCase):
         fig, ax = plt.subplots(1, 1)
         out_ax = skplt.plot_pca_component_variance(clf)
         assert ax is not out_ax
-        out_ax =skplt.plot_pca_component_variance(clf, ax=ax)
+        out_ax = skplt.plot_pca_component_variance(clf, ax=ax)
         assert ax is out_ax
 
 
@@ -63,6 +63,14 @@ class TestPlotPCA2DProjection(unittest.TestCase):
         assert ax is not out_ax
         out_ax =skplt.plot_pca_2d_projection(clf, self.X, self.y, ax=ax)
         assert ax is out_ax
+
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = PCA()
+        clf.fit(self.X)
+        fig, ax = plt.subplots(1, 1)
+        ax = skplt.plot_pca_2d_projection(clf, self.X, self.y, cmap='Spectral')
+        ax = skplt.plot_pca_2d_projection(clf, self.X, self.y, cmap=plt.cm.Spectral)
 
 
 class TestValidateLabels(unittest.TestCase):
