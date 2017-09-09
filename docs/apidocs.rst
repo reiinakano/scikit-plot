@@ -16,7 +16,7 @@ Classifier Plots
 .. autofunction:: scikitplot.classifier_factory
 
 .. automodule:: scikitplot.classifiers
-   :members: plot_learning_curve, plot_confusion_matrix, plot_roc_curve, plot_ks_statistic, plot_precision_recall_curve, plot_feature_importances
+   :members: plot_learning_curve, plot_confusion_matrix_with_cv, plot_roc_curve_with_cv, plot_ks_statistic_with_cv, plot_precision_recall_curve_with_cv, plot_feature_importances
 
 Clustering Plots
 ----------------
