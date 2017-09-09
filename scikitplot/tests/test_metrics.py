@@ -12,6 +12,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from scikitplot.metrics import plot_confusion_matrix
+from scikitplot.metrics import plot_roc_curve
 
 
 def convert_labels_into_string(y_true):
@@ -84,3 +85,61 @@ class TestPlotConfusionMatrix(unittest.TestCase):
 
     def test_array_like(self):
         plot_confusion_matrix([0, 1], [1, 0])
+
+
+class TestPlotROCCurve(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        plot_roc_curve(convert_labels_into_string(self.y), probas)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = plot_roc_curve(self.y, probas)
+        assert ax is not out_ax
+        out_ax = plot_roc_curve(self.y, probas, ax=ax)
+        assert ax is out_ax
+
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        plot_roc_curve(self.y, probas, cmap='spectral')
+        plot_roc_curve(self.y, probas, cmap=plt.cm.spectral)
+
+    def test_curve_diffs(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        ax_macro = plot_roc_curve(self.y, probas, curves='macro')
+        ax_micro = plot_roc_curve(self.y, probas, curves='micro')
+        ax_class = plot_roc_curve(self.y, probas, curves='each_class')
+        self.assertNotEqual(ax_macro, ax_micro, ax_class)
+
+    def test_invalid_curve_arg(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        self.assertRaises(ValueError, plot_roc_curve, self.y, probas,
+                          curves='zzz')
+
+    def test_array_like(self):
+        plot_roc_curve([0, 1], [[0.8, 0.2], [0.2, 0.8]])
