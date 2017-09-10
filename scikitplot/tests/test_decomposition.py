@@ -8,6 +8,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 from scikitplot.decomposition import plot_pca_component_variance
+from scikitplot.decomposition import plot_pca_2d_projection
 
 
 class TestPlotPCAComponentVariance(unittest.TestCase):
@@ -44,3 +45,32 @@ class TestPlotPCAComponentVariance(unittest.TestCase):
         assert ax is not out_ax
         out_ax = plot_pca_component_variance(clf, ax=ax)
         assert ax is out_ax
+
+
+class TestPlotPCA2DProjection(unittest.TestCase):
+
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = PCA()
+        clf.fit(self.X)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = plot_pca_2d_projection(clf, self.X, self.y)
+        assert ax is not out_ax
+        out_ax =plot_pca_2d_projection(clf, self.X, self.y, ax=ax)
+        assert ax is out_ax
+
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = PCA()
+        clf.fit(self.X)
+        plot_pca_2d_projection(clf, self.X, self.y, cmap='Spectral')
+        plot_pca_2d_projection(clf, self.X, self.y, cmap=plt.cm.Spectral)

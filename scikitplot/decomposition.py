@@ -8,29 +8,8 @@ documented per function.
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
-import warnings
-import itertools
-
 import matplotlib.pyplot as plt
-
 import numpy as np
-
-from sklearn.metrics import confusion_matrix
-from sklearn.preprocessing import label_binarize
-from sklearn.metrics import roc_curve
-from sklearn.metrics import auc
-from sklearn.metrics import precision_recall_curve
-from sklearn.metrics import average_precision_score
-from sklearn.utils.multiclass import unique_labels
-from sklearn.model_selection import learning_curve
-from sklearn.base import clone
-from sklearn.metrics import silhouette_score
-from sklearn.metrics import silhouette_samples
-from sklearn.utils import deprecated
-
-from scipy import interp
-
-from scikitplot.helpers import binary_ks_curve, validate_labels
 
 
 def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
@@ -111,5 +90,80 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
                    linestyle=':', lw=3, color='black')
     ax.tick_params(labelsize=text_fontsize)
     ax.legend(loc="best", fontsize=text_fontsize)
+
+    return ax
+
+
+def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None,
+                           figsize=None, cmap='Spectral',
+                           title_fontsize="large", text_fontsize="medium"):
+    """Plots the 2-dimensional projection of PCA on a given dataset.
+
+    Args:
+        clf: Fitted PCA instance that can ``transform`` given data set into 2
+            dimensions.
+
+        X (array-like, shape (n_samples, n_features)):
+            Feature set to project, where n_samples is the number of samples
+            and n_features is the number of features.
+
+        y (array-like, shape (n_samples) or (n_samples, n_features)):
+            Target relative to X for labeling.
+
+        title (string, optional): Title of the generated plot. Defaults to
+            "PCA 2-D Projection"
+
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
+            plot the curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot
+            e.g. (6, 6). Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional):
+            Colormap used for plotting the projection. View Matplotlib Colormap
+            documentation for available options.
+            https://matplotlib.org/users/colormaps.html
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to
+            "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to
+            "medium".
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
+            drawn.
+
+    Example:
+        >>> import scikitplot as skplt
+        >>> pca = PCA(random_state=1)
+        >>> pca.fit(X)
+        >>> skplt.decomposition.plot_pca_2d_projection(pca, X, y)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
+
+        .. image:: _static/examples/plot_pca_2d_projection.png
+           :align: center
+           :alt: PCA 2D Projection
+    """
+    transformed_X = clf.transform(X)
+    if ax is None:
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
+
+    ax.set_title(title, fontsize=title_fontsize)
+    classes = np.unique(np.array(y))
+
+    colors = plt.cm.get_cmap(cmap)(np.linspace(0, 1, len(classes)))
+
+    for label, color in zip(classes, colors):
+        ax.scatter(transformed_X[y == label, 0], transformed_X[y == label, 1],
+                   alpha=0.8, lw=2, label=label, color=color)
+    ax.legend(loc='best', shadow=False, scatterpoints=1,
+              fontsize=text_fontsize)
+    ax.set_xlabel('First Principal Component', fontsize=text_fontsize)
+    ax.set_ylabel('Second Principal Component', fontsize=text_fontsize)
+    ax.tick_params(labelsize=text_fontsize)
 
     return ax
