@@ -43,7 +43,8 @@ setup(
     install_requires=[
         'matplotlib>=1.3.1',
         'scikit-learn>=0.18',
-        'scipy>=0.9'
+        'scipy>=0.9',
+        'joblib>=0.10'
     ],
     cmdclass={'test': PyTest},
     author_email='reiichiro.s.nakano@gmail.com',
