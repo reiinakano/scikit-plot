@@ -1,0 +1,298 @@
+from __future__ import absolute_import
+import unittest
+
+from sklearn.datasets import load_iris as load_data
+from sklearn.datasets import load_breast_cancer
+from sklearn.linear_model import LogisticRegression
+from sklearn.cluster import KMeans
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+from scikitplot.metrics import plot_confusion_matrix
+from scikitplot.metrics import plot_roc_curve
+from scikitplot.metrics import plot_ks_statistic
+from scikitplot.metrics import plot_precision_recall_curve
+from scikitplot.metrics import plot_silhouette
+
+
+def convert_labels_into_string(y_true):
+    return ["A" if x == 0 else x for x in y_true]
+
+
+class TestPlotConfusionMatrix(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, convert_labels_into_string(self.y))
+        preds = clf.predict(self.X)
+        plot_confusion_matrix(convert_labels_into_string(self.y), preds)
+
+    def test_normalize(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        preds = clf.predict(self.X)
+        plot_confusion_matrix(self.y, preds, normalize=True)
+        plot_confusion_matrix(self.y, preds, normalize=False)
+
+    def test_labels(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        preds = clf.predict(self.X)
+        plot_confusion_matrix(self.y, preds, labels=[0, 1, 2])
+
+    def test_true_pred_labels(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        preds = clf.predict(self.X)
+
+        true_labels = [0, 1]
+        pred_labels = [0, 2]
+
+        plot_confusion_matrix(self.y, preds,
+                              true_labels=true_labels,
+                              pred_labels=pred_labels)
+
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        preds = clf.predict(self.X)
+        plot_confusion_matrix(self.y, preds, cmap='spectral')
+        plot_confusion_matrix(self.y, preds, cmap=plt.cm.spectral)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        preds = clf.predict(self.X)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = plot_confusion_matrix(self.y, preds)
+        assert ax is not out_ax
+        out_ax = plot_confusion_matrix(self.y, preds, ax=ax)
+        assert ax is out_ax
+
+    def test_array_like(self):
+        plot_confusion_matrix([0, 'a'], ['a', 0])
+        plot_confusion_matrix([0, 1], [1, 0])
+        plot_confusion_matrix(['b', 'a'], ['a', 'b'])
+
+
+class TestPlotROCCurve(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, convert_labels_into_string(self.y))
+        probas = clf.predict_proba(self.X)
+        plot_roc_curve(convert_labels_into_string(self.y), probas)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = plot_roc_curve(self.y, probas)
+        assert ax is not out_ax
+        out_ax = plot_roc_curve(self.y, probas, ax=ax)
+        assert ax is out_ax
+
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        plot_roc_curve(self.y, probas, cmap='spectral')
+        plot_roc_curve(self.y, probas, cmap=plt.cm.spectral)
+
+    def test_curve_diffs(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        ax_macro = plot_roc_curve(self.y, probas, curves='macro')
+        ax_micro = plot_roc_curve(self.y, probas, curves='micro')
+        ax_class = plot_roc_curve(self.y, probas, curves='each_class')
+        self.assertNotEqual(ax_macro, ax_micro, ax_class)
+
+    def test_invalid_curve_arg(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        self.assertRaises(ValueError, plot_roc_curve, self.y, probas,
+                          curves='zzz')
+
+    def test_array_like(self):
+        plot_roc_curve([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
+        plot_roc_curve([0, 1], [[0.8, 0.2], [0.2, 0.8]])
+        plot_roc_curve(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
+
+
+class TestPlotKSStatistic(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_breast_cancer(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, convert_labels_into_string(self.y))
+        probas = clf.predict_proba(self.X)
+        plot_ks_statistic(convert_labels_into_string(self.y), probas)
+
+    def test_two_classes(self):
+        np.random.seed(0)
+        # Test this one on Iris (3 classes)
+        X, y = load_data(return_X_y=True)
+        clf = LogisticRegression()
+        clf.fit(X, y)
+        probas = clf.predict_proba(X)
+        self.assertRaises(ValueError, plot_ks_statistic, y, probas)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = plot_ks_statistic(self.y, probas)
+        assert ax is not out_ax
+        out_ax = plot_ks_statistic(self.y, probas, ax=ax)
+        assert ax is out_ax
+
+    def test_array_like(self):
+        plot_ks_statistic([0, 1], [[0.8, 0.2], [0.2, 0.8]])
+        plot_ks_statistic([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
+        plot_ks_statistic(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
+
+
+class TestPlotPrecisionRecall(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, convert_labels_into_string(self.y))
+        probas = clf.predict_proba(self.X)
+        plot_precision_recall_curve(convert_labels_into_string(self.y), probas)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = plot_precision_recall_curve(self.y, probas)
+        assert ax is not out_ax
+        out_ax = plot_precision_recall_curve(self.y, probas, ax=ax)
+        assert ax is out_ax
+
+    def test_curve_diffs(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        ax_micro = plot_precision_recall_curve(self.y, probas, curves='micro')
+        ax_class = plot_precision_recall_curve(self.y, probas,
+                                               curves='each_class')
+        self.assertNotEqual(ax_micro, ax_class)
+
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        plot_precision_recall_curve(self.y, probas, cmap='spectral')
+        plot_precision_recall_curve(self.y, probas, cmap=plt.cm.spectral)
+
+    def test_invalid_curve_arg(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        self.assertRaises(ValueError, plot_precision_recall_curve, self.y,
+                          probas, curves='zzz')
+
+    def test_array_like(self):
+        plot_precision_recall_curve([0, 1], [[0.8, 0.2], [0.2, 0.8]])
+        plot_precision_recall_curve([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
+        plot_precision_recall_curve(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
+
+
+class TestPlotSilhouette(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_plot_silhouette(self):
+        np.random.seed(0)
+        clf = KMeans()
+        cluster_labels = clf.fit_predict(self.X)
+        plot_silhouette(self.X, cluster_labels)
+
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = KMeans()
+        cluster_labels = clf.fit_predict(self.X)
+        plot_silhouette(self.X, convert_labels_into_string(cluster_labels))
+
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = KMeans()
+        cluster_labels = clf.fit_predict(self.X)
+        plot_silhouette(self.X, cluster_labels, cmap='Spectral')
+        plot_silhouette(self.X, cluster_labels, cmap=plt.cm.Spectral)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = KMeans()
+        cluster_labels = clf.fit_predict(self.X)
+        plot_silhouette(self.X, cluster_labels)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = plot_silhouette(self.X, cluster_labels)
+        assert ax is not out_ax
+        out_ax = plot_silhouette(self.X, cluster_labels, ax=ax)
+        assert ax is out_ax
+
+    def test_array_like(self):
+        plot_silhouette(self.X.tolist(), self.y.tolist())
+        plot_silhouette(self.X.tolist(), convert_labels_into_string(self.y))

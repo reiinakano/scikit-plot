@@ -68,7 +68,7 @@ class TestClassifierFactory(unittest.TestCase):
         with warnings.catch_warnings(record=True) as w:
             warnings.simplefilter('always')
             scikitplot.classifier_factory(partial_clf)
-            assert len(w) == 1
+            assert len(w) == 2
             assert issubclass(w[-1].category, UserWarning)
             assert " not in clf. Some plots may not be possible to generate." in str(w[-1].message)
 
@@ -87,8 +87,8 @@ class TestClassifierFactory(unittest.TestCase):
             warnings.simplefilter('always')
             scikitplot.classifier_factory(clf)
 
-            assert len(w) == 6
-            for warning in w:
+            assert len(w) == 7
+            for warning in w[1:]:
                 assert issubclass(warning.category, UserWarning)
                 assert ' method already in clf. ' \
                        'Overriding anyway. This may ' \

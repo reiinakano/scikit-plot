@@ -99,3 +99,50 @@ def binary_ks_curve(y_true, y_probas):
     ks_statistic, max_distance_at = np.max(differences), thresholds[np.argmax(differences)]
 
     return thresholds, pct1, pct2, ks_statistic, max_distance_at, lb.classes_
+
+
+def validate_labels(known_classes, passed_labels, argument_name):
+    """Validates the labels passed into the true_labels or pred_labels
+    arguments in the plot_confusion_matrix function.
+
+    Raises a ValueError exception if any of the passed labels are not in the
+    set of known classes or if there are duplicate labels. Otherwise returns
+    None.
+
+    Args:
+        known_classes (array-like):
+            The classes that are known to appear in the data.
+        passed_labels (array-like):
+            The labels that were passed in through the argument.
+        argument_name (str):
+            The name of the argument being validated.
+
+    Example:
+        >>> known_classes = ["A", "B", "C"]
+        >>> passed_labels = ["A", "B"]
+        >>> validate_labels(known_classes, passed_labels, "true_labels")
+    """
+    known_classes = np.array(known_classes)
+    passed_labels = np.array(passed_labels)
+
+    unique_labels, unique_indexes = np.unique(passed_labels, return_index=True)
+
+    if len(passed_labels) != len(unique_labels):
+        indexes = np.arange(0, len(passed_labels))
+        duplicate_indexes = indexes[~np.in1d(indexes, unique_indexes)]
+        duplicate_labels = [str(x) for x in passed_labels[duplicate_indexes]]
+
+        msg = "The following duplicate labels were passed into {0}: {1}" \
+                .format(argument_name, ", ".join(duplicate_labels))
+        raise ValueError(msg)
+
+    passed_labels_absent = ~np.in1d(passed_labels, known_classes)
+
+    if np.any(passed_labels_absent):
+        absent_labels = [str(x) for x in passed_labels[passed_labels_absent]]
+
+        msg = "The following labels were passed into {0}, but were not found in labels: {1}" \
+                .format(argument_name, ", ".join(absent_labels))
+        raise ValueError(msg)
+
+    return
