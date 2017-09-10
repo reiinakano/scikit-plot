@@ -1,7 +1,8 @@
 """
 The :mod:`scikitplot.cluster` module includes plots built specifically for
 scikit-learn clusterer instances e.g. KMeans. You can use your own clusterers,
-but these plots assume some form of
+but these plots assume specific properties shared by scikit-learn estimators.
+The specific requirements are documented per function.
 """
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
