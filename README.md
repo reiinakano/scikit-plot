@@ -27,15 +27,11 @@ Say we use Naive Bayes in multi-class classification and decide we want to visua
 Let's use scikit-plot with the sample digits dataset from scikit-learn.
 
 ```python
+# The usual train-test split mumbo-jumbo
 from sklearn.datasets import load_digits
 from sklearn.model_selection import train_test_split
 from sklearn.naive_bayes import GaussianNB
 
-# This is all you need to import for scikit-plot
-import matplotlib.pyplot as plt
-import scikitplot as skplt
-
-# The usual train-test split mumbo-jumbo
 X, y = load_digits(return_X_y=True)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
 nb = GaussianNB()
@@ -43,6 +39,8 @@ nb.fit(X_train, y_train)
 predicted_probas = nb.predict_proba(X_test)
 
 # The magic happens here
+import matplotlib.pyplot as plt
+import scikitplot as skplt
 skplt.metrics.plot_roc_curve(y_test, predicted_probas)
 plt.show()
 ```
@@ -50,13 +48,13 @@ plt.show()
 
 Pretty.
 
-And... That's it. That's literally it. Scikit-plot offers you a single convenient function to generate a detailed visualization. No unnecessary bells and whistles. And if you *do* need the bells and whistles, each plot is fully customizable. Just check out the documentation of the function to see what things you can change.
+And... That's it. Encaptured in that small example is the entire philosophy of Scikit-plot: **single line functions for detailed visualization**. You simply look at the plots available in the documentation, and call the function with the necessary arguments. No unnecessary bells and whistles. And when you *do* need the bells and whistles, each function offers a myriad of parameters for customizing various elements in your plots.
 
 Finally, compare and [view the non-scikit-plot way of plotting the multi-class ROC curve](http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html). Which one would you rather do?
 
 ## Maximum flexibility. Compatibility with non-scikit-learn objects.
 
-Although convenient, the Factory API may feel a little restrictive for more advanced users and users of external libraries. Thus, to offer more flexibility over your plotting, Scikit-plot also exposes a Functions API that, well, exposes functions.
+Although Scikit-plot is loosely based around scikit-learn objects, you don't actually need
 
 Here's a quick example to generate the precision-recall curves of a Keras classifier on a sample dataset.
 
