@@ -1,10 +1,8 @@
 from __future__ import absolute_import
 import unittest
 from sklearn.datasets import load_iris as load_data
-from sklearn.datasets import load_breast_cancer
 from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.exceptions import NotFittedError
 import numpy as np
 import matplotlib.pyplot as plt
 
@@ -13,7 +11,7 @@ from scikitplot.estimators import plot_learning_curve
 
 
 def convert_labels_into_string(y_true):
-    return ["A" if x==0 else x for x in y_true]
+    return ["A" if x == 0 else x for x in y_true]
 
 
 class TestFeatureImportances(unittest.TestCase):
