@@ -47,7 +47,7 @@ class TestClassifierFactory(unittest.TestCase):
             warnings.simplefilter('always')
             scikitplot.clustering_factory(clf)
 
-            assert len(w) == 3
+            assert len(w) >= 2
             for warning in w[1:]:
                 assert issubclass(warning.category, UserWarning)
                 assert ' method already in clf. ' \
