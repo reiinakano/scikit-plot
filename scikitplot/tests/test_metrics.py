@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 
 from scikitplot.metrics import plot_confusion_matrix
 from scikitplot.metrics import plot_roc_curve
+from scikitplot.metrics import plot_ks_statistic
 
 
 def convert_labels_into_string(y_true):
@@ -32,9 +33,9 @@ class TestPlotConfusionMatrix(unittest.TestCase):
     def test_string_classes(self):
         np.random.seed(0)
         clf = LogisticRegression()
-        clf.fit(self.X, self.y)
+        clf.fit(self.X, convert_labels_into_string(self.y))
         preds = clf.predict(self.X)
-        plot_confusion_matrix(self.y, preds)
+        plot_confusion_matrix(convert_labels_into_string(self.y), preds)
 
     def test_normalize(self):
         np.random.seed(0)
@@ -84,7 +85,9 @@ class TestPlotConfusionMatrix(unittest.TestCase):
         assert ax is out_ax
 
     def test_array_like(self):
+        plot_confusion_matrix([0, 'a'], ['a', 0])
         plot_confusion_matrix([0, 1], [1, 0])
+        plot_confusion_matrix(['b', 'a'], ['a', 'b'])
 
 
 class TestPlotROCCurve(unittest.TestCase):
@@ -100,7 +103,7 @@ class TestPlotROCCurve(unittest.TestCase):
     def test_string_classes(self):
         np.random.seed(0)
         clf = LogisticRegression()
-        clf.fit(self.X, self.y)
+        clf.fit(self.X, convert_labels_into_string(self.y))
         probas = clf.predict_proba(self.X)
         plot_roc_curve(convert_labels_into_string(self.y), probas)
 
@@ -142,4 +145,49 @@ class TestPlotROCCurve(unittest.TestCase):
                           curves='zzz')
 
     def test_array_like(self):
+        plot_roc_curve([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
         plot_roc_curve([0, 1], [[0.8, 0.2], [0.2, 0.8]])
+        plot_roc_curve(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
+
+
+class TestPlotKSStatistic(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_breast_cancer(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, convert_labels_into_string(self.y))
+        probas = clf.predict_proba(self.X)
+        plot_ks_statistic(convert_labels_into_string(self.y), probas)
+
+    def test_two_classes(self):
+        np.random.seed(0)
+        # Test this one on Iris (3 classes)
+        X, y = load_data(return_X_y=True)
+        clf = LogisticRegression()
+        clf.fit(X, y)
+        probas = clf.predict_proba(X)
+        self.assertRaises(ValueError, plot_ks_statistic, y, probas)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = plot_ks_statistic(self.y, probas)
+        assert ax is not out_ax
+        out_ax = plot_ks_statistic(self.y, probas, ax=ax)
+        assert ax is out_ax
+
+    def test_array_like(self):
+        plot_ks_statistic([0, 1], [[0.8, 0.2], [0.2, 0.8]])
+        plot_ks_statistic([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
+        plot_ks_statistic(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])

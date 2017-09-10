@@ -5,7 +5,6 @@ evaluation metrics e.g. confusion matrix, silhouette scores, etc.
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
-import warnings
 import itertools
 
 import matplotlib.pyplot as plt
@@ -23,7 +22,6 @@ from sklearn.model_selection import learning_curve
 from sklearn.base import clone
 from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples
-from sklearn.utils import deprecated
 
 from scipy import interp
 
@@ -105,6 +103,9 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None,
            :align: center
            :alt: Confusion matrix
     """
+    y_true = np.asarray(y_true)
+    y_pred = np.asarray(y_pred)
+
     if ax is None:
         fig, ax = plt.subplots(1, 1, figsize=figsize)
 
@@ -316,4 +317,89 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves',
     ax.set_ylabel('True Positive Rate', fontsize=text_fontsize)
     ax.tick_params(labelsize=text_fontsize)
     ax.legend(loc='lower right', fontsize=text_fontsize)
+    return ax
+
+
+def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot',
+                      ax=None, figsize=None, title_fontsize="large",
+                      text_fontsize="medium"):
+    """Generates the KS Statistic plot from labels and scores/probabilities
+
+    Args:
+        y_true (array-like, shape (n_samples)):
+            Ground truth (correct) target values.
+
+        y_probas (array-like, shape (n_samples, n_classes)):
+            Prediction probabilities for each class returned by a classifier.
+
+        title (string, optional): Title of the generated plot. Defaults to
+            "KS Statistic Plot".
+
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
+            plot the learning curve. If None, the plot is drawn on a new set of
+            axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot
+            e.g. (6, 6). Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to
+            "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to
+            "medium".
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
+            drawn.
+
+    Example:
+        >>> import scikitplot as skplt
+        >>> lr = LogisticRegression()
+        >>> lr = lr.fit(X_train, y_train)
+        >>> y_probas = lr.predict_proba(X_test)
+        >>> skplt.metrics.plot_ks_statistic(y_test, y_probas)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
+
+        .. image:: _static/examples/plot_ks_statistic.png
+           :align: center
+           :alt: KS Statistic
+    """
+    y_true = np.array(y_true)
+    y_probas = np.array(y_probas)
+
+    classes = np.unique(y_true)
+    if len(classes) != 2:
+        raise ValueError('Cannot calculate KS statistic for data with '
+                         '{} category/ies'.format(len(classes)))
+    probas = y_probas
+
+    # Compute KS Statistic curves
+    thresholds, pct1, pct2, ks_statistic, \
+        max_distance_at, classes = binary_ks_curve(y_true,
+                                                   probas[:, 1].ravel())
+
+    if ax is None:
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
+
+    ax.set_title(title, fontsize=title_fontsize)
+
+    ax.plot(thresholds, pct1, lw=3, label='Class {}'.format(classes[0]))
+    ax.plot(thresholds, pct2, lw=3, label='Class {}'.format(classes[1]))
+    idx = np.where(thresholds == max_distance_at)[0][0]
+    ax.axvline(max_distance_at, *sorted([pct1[idx], pct2[idx]]),
+               label='KS Statistic: {:.3f} at {:.3f}'.format(ks_statistic,
+                                                             max_distance_at),
+               linestyle=':', lw=3, color='black')
+
+    ax.set_xlim([0.0, 1.0])
+    ax.set_ylim([0.0, 1.0])
+
+    ax.set_xlabel('Threshold', fontsize=text_fontsize)
+    ax.set_ylabel('Percentage below threshold', fontsize=text_fontsize)
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc='lower right', fontsize=text_fontsize)
+
     return ax
