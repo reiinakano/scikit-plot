@@ -165,7 +165,7 @@ class TestPlotKSStatistic(unittest.TestCase):
         clf = LogisticRegression()
         clf.fit(self.X, convert_labels_into_string(self.y))
         probas = clf.predict_proba(self.X)
-        plot_ks_statistic(convert_labels_into_string(self.y), probas)
+        plot_ks_statistic(convwithert_labels_into_string(self.y), probas)
 
     def test_two_classes(self):
         np.random.seed(0)
