@@ -46,16 +46,10 @@ We'll proceed by creating an instance of a RandomForestClassifier object from Sc
     >>> from sklearn.ensemble import RandomForestClassifier
     >>> random_forest_clf = RandomForestClassifier(n_estimators=5, max_depth=5, random_state=1)
 
-The magic happens in the next two lines::
+Let's use :func:`sklearn.model_selection.cross_val_predict` to generate predicted labels on our dataset::
 
-    >>> from scikitplot import classifier_factory
-    >>> classifier_factory(random_forest_clf)
-    RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
-            max_depth=5, max_features='auto', max_leaf_nodes=None,
-            min_impurity_split=1e-07, min_samples_leaf=1,
-            min_samples_split=2, min_weight_fraction_leaf=0.0,
-            n_estimators=5, n_jobs=1, oob_score=False, random_state=1,
-            verbose=0, warm_start=False)
+    >>> from sklearn.model_selection import cross_val_predict
+    >>> predictions = cross_val_predict(random_forest_clf, X, y)
 
 In detail, here's what happened. :func:`~scikitplot.classifier_factory` is a function that modifies an instance of a scikit-learn classifier. When we passed ``random_forest_clf`` to :func:`~scikitplot.classifier_factory`, it **appended** new plotting methods to the instance, while leaving everything else alone. The original variables and methods of ``random_forest_clf`` are kept intact. In fact, if you take any of your existing scripts, pass your classifier instances to :func:`~scikitplot.classifier_factory` at the top and run them, you'll likely never notice a difference! (If something does break, though, we'd appreciate it if you open an issue at Scikit-plot's `Github repository <https://github.com/reiinakano/scikit-plot>`_.)
 
