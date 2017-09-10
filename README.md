@@ -6,7 +6,7 @@
 [![PyPI](https://img.shields.io/pypi/pyversions/scikit-plot.svg)]()
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.293191.svg)](https://doi.org/10.5281/zenodo.293191)
 
-### Scikit-learn with plotting.
+### Single line functions for detailed visualizations
 
 ### The quickest and easiest way to go from analysis...
 
@@ -48,32 +48,32 @@ plt.show()
 
 Pretty.
 
-And... That's it. Encaptured in that small example is the entire philosophy of Scikit-plot: **single line functions for detailed visualization**. You simply look at the plots available in the documentation, and call the function with the necessary arguments. No unnecessary bells and whistles. And when you *do* need the bells and whistles, each function offers a myriad of parameters for customizing various elements in your plots.
+And... That's it. Encaptured in that small example is the entire philosophy of Scikit-plot: **single line functions for detailed visualization**. You simply look at the plots available in the documentation, and call the function with the necessary arguments. Scikit-plot tries to stay out of your way as much as possible. No unnecessary bells and whistles. And when you *do* need the bells and whistles, each function offers a myriad of parameters for customizing various elements in your plots.
 
 Finally, compare and [view the non-scikit-plot way of plotting the multi-class ROC curve](http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html). Which one would you rather do?
 
 ## Maximum flexibility. Compatibility with non-scikit-learn objects.
 
-Although Scikit-plot is loosely based around scikit-learn objects, you don't actually need
+Although Scikit-plot is loosely based around the scikit-learn interface, you don't actually need Scikit-learn objects to use the available functions. As long as you provide the functions what they're asking for, they'll happily draw the plots for you.
 
 Here's a quick example to generate the precision-recall curves of a Keras classifier on a sample dataset.
 
 ```python
 # Import what's needed for the Functions API
 import matplotlib.pyplot as plt
-import scikitplot.plotters as skplt
+import scikitplot as skplt
 
 # This is a Keras classifier. We'll generate probabilities on the test set.
 keras_clf.fit(X_train, y_train, batch_size=64, nb_epoch=10, verbose=2)
 probas = keras_clf.predict_proba(X_test, batch_size=64)
 
 # Now plot.
-skplt.plot_precision_recall_curve(y_test, probas)
+skplt.metrics.plot_precision_recall_curve(y_test, probas)
 plt.show()
 ```
 ![p_r_curves](examples/p_r_curves.png)
 
-You can see clearly here that `skplt.plot_precision_recall_curve` needs only the ground truth y-values and the predicted probabilities to generate the plot. This lets you use *anything* you want as the classifier, from Keras NNs to NLTK Naive Bayes to that groundbreaking classifier algorithm you just wrote.
+You can see clearly here that `skplt.metrics.plot_precision_recall_curve` needs only the ground truth y-values and the predicted probabilities to generate the plot. This lets you use *anything* you want as the classifier, from Keras NNs to NLTK Naive Bayes to that groundbreaking classifier algorithm you just wrote.
 
 The possibilities are endless.
 
