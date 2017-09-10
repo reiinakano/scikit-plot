@@ -542,7 +542,7 @@ def plot_precision_recall_curve(y_true, y_probas,
 
 
 @deprecated('This will be removed in v0.4.0. Please use '
-            'scikitplot.classifiers.plot_feature_importances instead.')
+            'scikitplot.estimators.plot_feature_importances instead.')
 def plot_feature_importances(clf, title='Feature Importance',
                              feature_names=None, max_num_features=20,
                              order='descending', x_tick_rotation=0, ax=None,
@@ -662,7 +662,7 @@ def plot_feature_importances(clf, title='Feature Importance',
 
 
 @deprecated('This will be removed in v0.4.0. Please use '
-            'scikitplot.classifiers.plot_learning_curve instead.')
+            'scikitplot.estimators.plot_learning_curve instead.')
 def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None,
                         train_sizes=None, n_jobs=1, scoring=None,
                         ax=None, figsize=None, title_fontsize="large",
@@ -706,8 +706,9 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None,
             1.
             
         scoring (string, callable or None, optional): default: None
-            A string (see scikit-learn model evaluation documentation) or a scorer
-            callable object / function with signature scorer(estimator, X, y).
+            A string (see scikit-learn model evaluation documentation) or a
+            scorerbcallable object / function with signature
+            scorer(estimator, X, y).
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
             plot the curve. If None, the plot is drawn on a new set of axes.
