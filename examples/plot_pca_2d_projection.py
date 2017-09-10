@@ -1,11 +1,14 @@
-"""An example showing the plot_pca_2d_projection method used by a scikit-learn PCA object"""
+"""
+An example showing the plot_pca_2d_projection
+method used by a scikit-learn PCA object
+"""
 from sklearn.decomposition import PCA
 from sklearn.datasets import load_digits as load_data
-import scikitplot.plotters as skplt
+import scikitplot as skplt
 import matplotlib.pyplot as plt
 
 X, y = load_data(return_X_y=True)
 pca = PCA(random_state=1)
 pca.fit(X)
-skplt.plot_pca_2d_projection(pca, X, y)
+skplt.decomposition.plot_pca_2d_projection(pca, X, y)
 plt.show()
