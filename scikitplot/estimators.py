@@ -8,29 +8,10 @@ function.
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
-import warnings
-import itertools
-
 import matplotlib.pyplot as plt
-
 import numpy as np
 
-from sklearn.metrics import confusion_matrix
-from sklearn.preprocessing import label_binarize
-from sklearn.metrics import roc_curve
-from sklearn.metrics import auc
-from sklearn.metrics import precision_recall_curve
-from sklearn.metrics import average_precision_score
-from sklearn.utils.multiclass import unique_labels
 from sklearn.model_selection import learning_curve
-from sklearn.base import clone
-from sklearn.metrics import silhouette_score
-from sklearn.metrics import silhouette_samples
-from sklearn.utils import deprecated
-
-from scipy import interp
-
-from scikitplot.helpers import binary_ks_curve, validate_labels
 
 
 def plot_feature_importances(clf, title='Feature Importance',
@@ -148,4 +129,119 @@ def plot_feature_importances(clf, title='Feature Importance',
                        rotation=x_tick_rotation)
     ax.set_xlim([-1, max_num_features])
     ax.tick_params(labelsize=text_fontsize)
+    return ax
+
+
+def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None,
+                        shuffle=False, random_state=None,
+                        train_sizes=None, n_jobs=1, scoring=None,
+                        ax=None, figsize=None, title_fontsize="large",
+                        text_fontsize="medium"):
+    """Generates a plot of the train and test learning curves for a classifier.
+
+    Args:
+        clf: Classifier instance that implements ``fit`` and ``predict``
+            methods.
+
+        X (array-like, shape (n_samples, n_features)):
+            Training vector, where n_samples is the number of samples and
+            n_features is the number of features.
+
+        y (array-like, shape (n_samples) or (n_samples, n_features)):
+            Target relative to X for classification or regression;
+            None for unsupervised learning.
+
+        title (string, optional): Title of the generated plot. Defaults to
+            "Learning Curve"
+
+        cv (int, cross-validation generator, iterable, optional): Determines
+            the cross-validation strategy to be used for splitting.
+
+            Possible inputs for cv are:
+              - None, to use the default 3-fold cross-validation,
+              - integer, to specify the number of folds.
+              - An object to be used as a cross-validation generator.
+              - An iterable yielding train/test splits.
+
+            For integer/None inputs, if ``y`` is binary or multiclass,
+            :class:`StratifiedKFold` used. If the estimator is not a classifier
+            or if ``y`` is neither binary nor multiclass, :class:`KFold` is
+            used.
+
+        shuffle (bool, optional): Used when do_cv is set to True. Determines
+            whether to shuffle the training data before splitting using
+            cross-validation. Default set to True.
+
+        random_state (int :class:`RandomState`): Pseudo-random number generator
+            state used for random sampling.
+
+        train_sizes (iterable, optional): Determines the training sizes used to
+            plot the learning curve. If None, ``np.linspace(.1, 1.0, 5)`` is
+            used.
+
+        n_jobs (int, optional): Number of jobs to run in parallel. Defaults to
+            1.
+
+        scoring (string, callable or None, optional): default: None
+            A string (see scikit-learn model evaluation documentation) or a
+            scorerbcallable object / function with signature
+            scorer(estimator, X, y).
+
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
+            plot the curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot
+            e.g. (6, 6). Defaults to ``None``.
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to
+            "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to
+            "medium".
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
+            drawn.
+
+    Example:
+        >>> import scikitplot as skplt
+        >>> rf = RandomForestClassifier()
+        >>> skplt.estimators.plot_learning_curve(rf, X, y)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
+
+        .. image:: _static/examples/plot_learning_curve.png
+           :align: center
+           :alt: Learning Curve
+    """
+    if ax is None:
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
+
+    if train_sizes is None:
+        train_sizes = np.linspace(.1, 1.0, 5)
+
+    ax.set_title(title, fontsize=title_fontsize)
+    ax.set_xlabel("Training examples", fontsize=text_fontsize)
+    ax.set_ylabel("Score", fontsize=text_fontsize)
+    train_sizes, train_scores, test_scores = learning_curve(
+        clf, X, y, cv=cv, n_jobs=n_jobs, train_sizes=train_sizes,
+        scoring=scoring, shuffle=shuffle, random_state=random_state)
+    train_scores_mean = np.mean(train_scores, axis=1)
+    train_scores_std = np.std(train_scores, axis=1)
+    test_scores_mean = np.mean(test_scores, axis=1)
+    test_scores_std = np.std(test_scores, axis=1)
+    ax.grid()
+    ax.fill_between(train_sizes, train_scores_mean - train_scores_std,
+                    train_scores_mean + train_scores_std, alpha=0.1, color="r")
+    ax.fill_between(train_sizes, test_scores_mean - test_scores_std,
+                    test_scores_mean + test_scores_std, alpha=0.1, color="g")
+    ax.plot(train_sizes, train_scores_mean, 'o-', color="r",
+            label="Training score")
+    ax.plot(train_sizes, test_scores_mean, 'o-', color="g",
+            label="Cross-validation score")
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc="best", fontsize=text_fontsize)
+
     return ax
