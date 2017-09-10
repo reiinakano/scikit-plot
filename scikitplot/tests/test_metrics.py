@@ -1,6 +1,5 @@
 from __future__ import absolute_import
 import unittest
-import warnings
 
 from sklearn.datasets import load_iris as load_data
 from sklearn.datasets import load_breast_cancer
@@ -18,7 +17,7 @@ from scikitplot.metrics import plot_silhouette
 
 
 def convert_labels_into_string(y_true):
-    return ["A" if x==0 else x for x in y_true]
+    return ["A" if x == 0 else x for x in y_true]
 
 
 class TestPlotConfusionMatrix(unittest.TestCase):
@@ -62,9 +61,9 @@ class TestPlotConfusionMatrix(unittest.TestCase):
         true_labels = [0, 1]
         pred_labels = [0, 2]
 
-        ax = plot_confusion_matrix(self.y, preds,
-                                   true_labels=true_labels,
-                                   pred_labels=pred_labels)
+        plot_confusion_matrix(self.y, preds,
+                              true_labels=true_labels,
+                              pred_labels=pred_labels)
 
     def test_cmap(self):
         np.random.seed(0)
@@ -280,7 +279,7 @@ class TestPlotSilhouette(unittest.TestCase):
         np.random.seed(0)
         clf = KMeans()
         cluster_labels = clf.fit_predict(self.X)
-        plot_silhouette(self.X,cluster_labels, cmap='Spectral')
+        plot_silhouette(self.X, cluster_labels, cmap='Spectral')
         plot_silhouette(self.X, cluster_labels, cmap=plt.cm.Spectral)
 
     def test_ax(self):
