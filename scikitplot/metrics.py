@@ -403,3 +403,128 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot',
     ax.legend(loc='lower right', fontsize=text_fontsize)
 
     return ax
+
+
+def plot_precision_recall_curve(y_true, y_probas,
+                                title='Precision-Recall Curve',
+                                curves=('micro', 'each_class'), ax=None,
+                                figsize=None, cmap='spectral',
+                                title_fontsize="large",
+                                text_fontsize="medium"):
+    """Generates the Precision Recall Curve from labels and probabilities
+
+    Args:
+        y_true (array-like, shape (n_samples)):
+            Ground truth (correct) target values.
+
+        y_probas (array-like, shape (n_samples, n_classes)):
+            Prediction probabilities for each class returned by a classifier.
+
+        title (string, optional): Title of the generated plot. Defaults to
+            "Precision-Recall curve".
+
+        curves (array-like): A listing of which curves should be plotted on the
+            resulting plot. Defaults to `("micro", "each_class")`
+            i.e. "micro" for micro-averaged curve
+
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
+            plot the curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot
+            e.g. (6, 6). Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional):
+            Colormap used for plotting the projection. View Matplotlib Colormap
+            documentation for available options.
+            https://matplotlib.org/users/colormaps.html
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to
+            "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to
+            "medium".
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
+            drawn.
+
+    Example:
+        >>> import scikitplot as skplt
+        >>> nb = GaussianNB()
+        >>> nb.fit(X_train, y_train)
+        >>> y_probas = nb.predict_proba(X_test)
+        >>> skplt.metrics.plot_precision_recall_curve(y_test, y_probas)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
+
+        .. image:: _static/examples/plot_precision_recall_curve.png
+           :align: center
+           :alt: Precision Recall Curve
+    """
+    y_true = np.array(y_true)
+    y_probas = np.array(y_probas)
+
+    classes = np.unique(y_true)
+    probas = y_probas
+
+    if 'micro' not in curves and 'each_class' not in curves:
+        raise ValueError('Invalid argument for curves as it '
+                         'only takes "micro" or "each_class"')
+
+    # Compute Precision-Recall curve and area for each class
+    precision = dict()
+    recall = dict()
+    average_precision = dict()
+    for i in range(len(classes)):
+        precision[i], recall[i], _ = precision_recall_curve(
+            y_true, probas[:, i], pos_label=classes[i])
+
+    y_true = label_binarize(y_true, classes=classes)
+    if len(classes) == 2:
+        y_true = np.hstack((1 - y_true, y_true))
+
+    for i in range(len(classes)):
+        average_precision[i] = average_precision_score(y_true[:, i],
+                                                       probas[:, i])
+
+    # Compute micro-average ROC curve and ROC area
+    micro_key = 'micro'
+    i = 0
+    while micro_key in precision:
+        i += 1
+        micro_key += str(i)
+
+    precision[micro_key], recall[micro_key], _ = precision_recall_curve(
+        y_true.ravel(), probas.ravel())
+    average_precision[micro_key] = average_precision_score(y_true, probas,
+                                                           average='micro')
+
+    if ax is None:
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
+
+    ax.set_title(title, fontsize=title_fontsize)
+
+    if 'each_class' in curves:
+        for i in range(len(classes)):
+            color = plt.cm.get_cmap(cmap)(float(i) / len(classes))
+            ax.plot(recall[i], precision[i], lw=2,
+                    label='Precision-recall curve of class {0} '
+                          '(area = {1:0.3f})'.format(classes[i],
+                                                     average_precision[i]),
+                    color=color)
+
+    if 'micro' in curves:
+        ax.plot(recall[micro_key], precision[micro_key],
+                label='micro-average Precision-recall curve '
+                      '(area = {0:0.3f})'.format(average_precision[micro_key]),
+                color='navy', linestyle=':', linewidth=4)
+
+    ax.set_xlim([0.0, 1.0])
+    ax.set_ylim([0.0, 1.05])
+    ax.set_xlabel('Recall')
+    ax.set_ylabel('Precision')
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc='best', fontsize=text_fontsize)
+    return ax
