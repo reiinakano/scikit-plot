@@ -99,10 +99,13 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, n_jobs=1,
     ax.tick_params(labelsize=text_fontsize)
 
     if show_cluster_time:
+        ax2_color = 'green'
         ax2 = ax.twinx()
-        ax2.plot(cluster_ranges, times, ':', alpha=0.75)
-        ax2.set_ylabel('Clustering duration (seconds)', fontsize=text_fontsize)
-        ax2.tick_params(labelsize=text_fontsize)
+        ax2.plot(cluster_ranges, times, ':', alpha=0.75, color=ax2_color)
+        ax2.set_ylabel('Clustering duration (seconds)',
+                       color=ax2_color, alpha=0.75,
+                       fontsize=text_fontsize)
+        ax2.tick_params(colors=ax2_color, labelsize=text_fontsize)
 
     return ax
 
