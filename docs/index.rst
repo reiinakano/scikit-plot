@@ -11,13 +11,7 @@ Welcome to Scikit-plot's documentation!
    :name: mastertoc
 
    First Steps with Scikit-plot <Quickstart>
-   Factory API Reference <apidocs>
-   Functions API Reference <functionsapidocs>
-
-
-Indices and tables
-==================
-
-* :ref:`genindex`
-* :ref:`modindex`
-* :ref:`search`
+   Metrics Module <metrics>
+   Estimators Module <estimators>
+   Clusterer Module <cluster>
+   Decomposition Module <decomposition>
