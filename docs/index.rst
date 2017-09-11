@@ -9,7 +9,9 @@ Welcome to Scikit-plot's documentation!
 The quickest and easiest way to go from analysis...
 ---------------------------------------------------
 
-![roc_curves](examples/readme_collage.jpg)
+.. image:: _static/readme_collage.jpg
+   :align: center
+   :alt: All plots
 
 ...to this.
 -----------

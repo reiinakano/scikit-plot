@@ -10,7 +10,7 @@
 
 ### The quickest and easiest way to go from analysis...
 
-![roc_curves](examples/readme_collage.jpg)
+![roc_curves](docs/_static/readme_collage.jpg)
 
 ### ...to this.
 
