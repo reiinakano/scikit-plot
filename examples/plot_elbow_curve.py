@@ -1,4 +1,7 @@
-"""An example showing the plot_silhouette method used by a scikit-learn clusterer"""
+"""
+An example showing the plot_silhouette
+method used by a scikit-learn clusterer
+"""
 from __future__ import absolute_import
 import matplotlib.pyplot as plt
 import scikitplot as skplt
