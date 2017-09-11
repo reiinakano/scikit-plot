@@ -88,9 +88,11 @@ Here's a quick example to generate the precision-recall curves of a Keras classi
    :align: center
    :alt: Precision Recall Curves
 
-And again, that's it! As in the example above, all we needed to do was pass the ground truth labels and predicted probabilities to :func:`~scikitplot.plotters.plot_precision_recall_curve` to generate the precision-recall curves. This means you can use literally any classifier you want to generate the precision-recall curves, from Keras classifiers to NLTK Naive Bayes to XGBoost, as long as you pass in the predicted probabilities in the correct format.
+And again, that's it! As in the example above, all we needed to do was pass the ground truth labels and predicted probabilities to :func:`~scikitplot.metrics.plot_precision_recall_curve` to generate the precision-recall curves. This means you can use literally any classifier you want to generate the precision-recall curves, from Keras classifiers to NLTK Naive Bayes to XGBoost, as long as you pass in the predicted probabilities in the correct format.
 
-More Plots
-----------
+Now what?
+---------
 
-Want to know the other plots you can generate using Scikit-plot? Visit the :ref:`factoryapidocs` or the :ref:`functionsapidocs`.
+The recommended way to start using Scikit-plot is to just go through the documentation for the various modules and choose which plots you think would be useful for your work.
+
+Happy plotting!
