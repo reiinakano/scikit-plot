@@ -696,3 +696,23 @@ def plot_calibration_curve(y_true, probas_list, clf_names=None,
             Use e.g. "small", "medium", "large" or integer-values. Defaults to
             "medium".
     """
+    y_true = np.asarray(y_true)
+    if not isinstance(probas_list, list):
+        raise ValueError('`probas_list` does not contain a list.')
+
+    classes = np.unique(y_true)
+    if len(classes > 2):
+        raise ValueError('plot_calibration_curve only '
+                         'works for binary classification')
+
+    if clf_names is None:
+        clf_names = ['Classifier {}'.format(x+1)
+                     for x in range(len(probas_list))]
+
+    if len(clf_names) != len(probas_list):
+        raise ValueError('Length {} of `clf_names` does not match length {} of'
+                         ' `probas_list`'.format(len(clf_names),
+                                                 len(probas_list)))
+
+    for probas in probas_list:
+        pass
