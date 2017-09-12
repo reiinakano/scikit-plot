@@ -645,3 +645,54 @@ def plot_silhouette(X, cluster_labels, title='Silhouette Analysis',
     ax.legend(loc='best', fontsize=text_fontsize)
 
     return ax
+
+
+def plot_calibration_curve(y_true, probas_list, clf_names=None,
+                           title='Calibration plots (Reliability Curves)',
+                           ax=None, figsize=None, cmap='spectral',
+                           title_fontsize="large", text_fontsize="medium"):
+    """Plots calibration curves for a set of classifier probability estimates.
+
+    Plotting the calibration curves of a classifier is useful for determining
+    whether or not you can interpret their predicted probabilities directly as
+    as confidence level. For instance, a well-calibrated binary classifier
+    should classify the samples such that for samples to which it gave a score
+    of 0.8, around 80% should actually be from the positive class.
+
+    This function currently only works for binary classification.
+
+    Args:
+        y_true (array-like, shape (n_samples)):
+            Ground truth (correct) target values.
+
+        probas_list (list of array-like, shape (n_samples, 2)):
+            A list containing the outputs of binary classifiers'
+            :func:`predict_proba` method.
+
+        clf_names (list of str): A list of strings, where each string
+            refers to the name of the classifier that produced the
+            corresponding probability estimates in `probas_list`. If ``None``,
+            the names "Classifier 1", "Classifier 2", etc. will be used.
+
+        title (string, optional): Title of the generated plot. Defaults to
+            "Calibration plots (Reliabilirt Curves)"
+
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
+            plot the curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot
+            e.g. (6, 6). Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional):
+            Colormap used for plotting the projection. View Matplotlib Colormap
+            documentation for available options.
+            https://matplotlib.org/users/colormaps.html
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to
+            "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to
+            "medium".
+    """
