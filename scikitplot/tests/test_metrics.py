@@ -4,6 +4,8 @@ import unittest
 from sklearn.datasets import load_iris as load_data
 from sklearn.datasets import load_breast_cancer
 from sklearn.linear_model import LogisticRegression
+from sklearn.svm import LinearSVC
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.cluster import KMeans
 
 import numpy as np
@@ -14,6 +16,7 @@ from scikitplot.metrics import plot_roc_curve
 from scikitplot.metrics import plot_ks_statistic
 from scikitplot.metrics import plot_precision_recall_curve
 from scikitplot.metrics import plot_silhouette
+from scikitplot.metrics import plot_calibration_curve
 
 
 def convert_labels_into_string(y_true):
@@ -296,3 +299,81 @@ class TestPlotSilhouette(unittest.TestCase):
     def test_array_like(self):
         plot_silhouette(self.X.tolist(), self.y.tolist())
         plot_silhouette(self.X.tolist(), convert_labels_into_string(self.y))
+
+
+class TestPlotCalibrationCurve(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_breast_cancer(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+        self.lr = LogisticRegression()
+        self.rf = RandomForestClassifier(random_state=8)
+        self.svc = LinearSVC()
+        self.lr_probas = self.lr.fit(self.X, self.y).predict_proba(self.X)
+        self.rf_probas = self.rf.fit(self.X, self.y).predict_proba(self.X)
+        self.svc_scores = self.svc.fit(self.X, self.y).\
+            decision_function(self.X)
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_decision_function(self):
+        plot_calibration_curve(self.y, [self.lr_probas,
+                                        self.rf_probas,
+                                        self.svc_scores])
+
+    def test_plot_calibration(self):
+        plot_calibration_curve(self.y, [self.lr_probas, self.rf_probas])
+
+    def test_string_classes(self):
+        plot_calibration_curve(convert_labels_into_string(self.y),
+                               [self.lr_probas, self.rf_probas])
+
+    def test_cmap(self):
+        plot_calibration_curve(convert_labels_into_string(self.y),
+                               [self.lr_probas, self.rf_probas],
+                               cmap='Spectral')
+        plot_calibration_curve(convert_labels_into_string(self.y),
+                               [self.lr_probas, self.rf_probas],
+                               cmap=plt.cm.Spectral)
+
+    def test_ax(self):
+        plot_calibration_curve(self.y, [self.lr_probas, self.rf_probas])
+        fig, ax = plt.subplots(1, 1)
+        out_ax = plot_calibration_curve(self.y,
+                                        [self.lr_probas, self.rf_probas])
+        assert ax is not out_ax
+        out_ax = plot_calibration_curve(self.y,
+                                        [self.lr_probas, self.rf_probas],
+                                        ax=ax)
+        assert ax is out_ax
+
+    def test_array_like(self):
+        plot_calibration_curve(self.y, [self.lr_probas.tolist(),
+                                        self.rf_probas.tolist()])
+        plot_calibration_curve(convert_labels_into_string(self.y),
+                               [self.lr_probas.tolist(),
+                                self.rf_probas.tolist()])
+
+    def test_invalid_probas_list(self):
+        self.assertRaises(ValueError, plot_calibration_curve,
+                          self.y, 'notalist')
+
+    def test_not_binary(self):
+        wrong_y = self.y.copy()
+        wrong_y[-1] = 3
+        self.assertRaises(ValueError, plot_calibration_curve,
+                          wrong_y, [self.lr_probas, self.rf_probas])
+
+    def test_wrong_clf_names(self):
+        self.assertRaises(ValueError, plot_calibration_curve,
+                          self.y, [self.lr_probas, self.rf_probas],
+                          ['One'])
+
+    def test_wrong_probas_shape(self):
+        self.assertRaises(ValueError, plot_calibration_curve,
+                          self.y, [self.lr_probas.reshape(-1),
+                                   self.rf_probas])
+        self.assertRaises(ValueError, plot_calibration_curve,
+                          self.y, [np.random.randn(1, 5)])
