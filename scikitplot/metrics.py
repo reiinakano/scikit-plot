@@ -666,9 +666,9 @@ def plot_calibration_curve(y_true, probas_list, clf_names=None, n_bins=10,
         y_true (array-like, shape (n_samples)):
             Ground truth (correct) target values.
 
-        probas_list (list of array-like, shape (n_samples, 2)):
+        probas_list (list of array-like, shape (n_samples, 2) or (n_samples,)):
             A list containing the outputs of binary classifiers'
-            :func:`predict_proba` method.
+            :func:`predict_proba` method or :func:`decision_function` method.
 
         clf_names (list of str): A list of strings, where each string
             refers to the name of the classifier that produced the
@@ -723,11 +723,24 @@ def plot_calibration_curve(y_true, probas_list, clf_names=None, n_bins=10,
     ax.plot([0, 1], [0, 1], "k:", label="Perfectly calibrated")
 
     for i, probas in enumerate(probas_list):
+        probas = np.asarray(probas)
+        if probas.ndim == 2:
+            probas = probas[:, 1]
+        elif probas.ndim == 1:
+            pass
+        else:
+            raise ValueError('Index {} in probas_list has invalid '
+                             'shape {}'.format(i, probas.shape))
+
+        probas = (probas - probas.min()) / (probas.max() - probas.min())
+
         fraction_of_positives, mean_predicted_value = \
-            calibration_curve(y_true, probas[:, 1], n_bins=n_bins)
+            calibration_curve(y_true, probas, n_bins=n_bins)
+
+        color = plt.cm.get_cmap(cmap)(float(i) / len(probas_list))
 
         ax.plot(mean_predicted_value, fraction_of_positives, 's-',
-                label=clf_names[i])
+                label=clf_names[i], color=color)
 
     ax.set_title(title, fontsize=title_fontsize)
 
