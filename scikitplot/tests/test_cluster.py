@@ -52,3 +52,8 @@ class TestPlotElbow(unittest.TestCase):
         np.random.seed(0)
         clf = KMeans()
         plot_elbow_curve(clf, self.X, n_jobs=2)
+
+    def test_show_cluster_time(self):
+        np.random.seed(0)
+        clf = KMeans()
+        plot_elbow_curve(clf, self.X, show_cluster_time=False)

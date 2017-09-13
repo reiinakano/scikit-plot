@@ -7,6 +7,8 @@ The specific requirements are documented per function.
 from __future__ import absolute_import, division, print_function, \
     unicode_literals
 
+import time
+
 import matplotlib.pyplot as plt
 import numpy as np
 
@@ -16,8 +18,8 @@ from joblib import Parallel, delayed
 
 
 def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, n_jobs=1,
-                     ax=None, figsize=None, title_fontsize="large",
-                     text_fontsize="medium"):
+                     show_cluster_time=True, ax=None, figsize=None,
+                     title_fontsize="large", text_fontsize="medium"):
     """Plots elbow curve of different values of K for KMeans clustering.
 
     Args:
@@ -36,11 +38,11 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, n_jobs=1,
             n_clusters for which to plot the explained variances. Defaults to
             ``range(1, 12, 2)``.
 
-        copy (boolean, optional): Determines whether ``fit`` is used on
-            **clf** or on a copy of **clf**.
-
         n_jobs (int, optional): Number of jobs to run in parallel. Defaults to
             1.
+
+        show_cluster_time (bool, optional): Include plot of time it took to
+            cluster for a particular K.
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
             plot the curve. If None, the plot is drawn on a new set of axes.
@@ -63,7 +65,7 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, n_jobs=1,
     Example:
         >>> import scikitplot as skplt
         >>> kmeans = KMeans(random_state=1)
-        >>> skplt.cluster.plot_elbow_curve(kmeans, cluster_ranges=range(1, 11))
+        >>> skplt.cluster.plot_elbow_curve(kmeans, cluster_ranges=range(1, 30))
         <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
         >>> plt.show()
 
@@ -82,8 +84,9 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, n_jobs=1,
         raise TypeError('"n_clusters" attribute not in classifier. '
                         'Cannot plot elbow method.')
 
-    clfs = Parallel(n_jobs=n_jobs)(delayed(_clone_and_score_clusterer)
-                                   (clf, X, i) for i in cluster_ranges)
+    tuples = Parallel(n_jobs=n_jobs)(delayed(_clone_and_score_clusterer)
+                                     (clf, X, i) for i in cluster_ranges)
+    clfs, times = zip(*tuples)
 
     if ax is None:
         fig, ax = plt.subplots(1, 1, figsize=figsize)
@@ -94,6 +97,15 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, n_jobs=1,
     ax.set_xlabel('Number of clusters', fontsize=text_fontsize)
     ax.set_ylabel('Sum of Squared Errors', fontsize=text_fontsize)
     ax.tick_params(labelsize=text_fontsize)
+
+    if show_cluster_time:
+        ax2_color = 'green'
+        ax2 = ax.twinx()
+        ax2.plot(cluster_ranges, times, ':', alpha=0.75, color=ax2_color)
+        ax2.set_ylabel('Clustering duration (seconds)',
+                       color=ax2_color, alpha=0.75,
+                       fontsize=text_fontsize)
+        ax2.tick_params(colors=ax2_color, labelsize=text_fontsize)
 
     return ax
 
@@ -114,7 +126,10 @@ def _clone_and_score_clusterer(clf, X, n_clusters):
 
     Returns:
         score: Score of clusters
+
+        time: Number of seconds it took to fit cluster
     """
+    start = time.time()
     clf = clone(clf)
     setattr(clf, 'n_clusters', n_clusters)
-    return clf.fit(X).score(X)
+    return clf.fit(X).score(X), time.time() - start

@@ -21,6 +21,7 @@ from sklearn.metrics import average_precision_score
 from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples
+from sklearn.calibration import calibration_curve
 
 from scipy import interp
 
@@ -643,5 +644,139 @@ def plot_silhouette(X, cluster_labels, title='Silhouette Analysis',
 
     ax.tick_params(labelsize=text_fontsize)
     ax.legend(loc='best', fontsize=text_fontsize)
+
+    return ax
+
+
+def plot_calibration_curve(y_true, probas_list, clf_names=None, n_bins=10,
+                           title='Calibration plots (Reliability Curves)',
+                           ax=None, figsize=None, cmap='spectral',
+                           title_fontsize="large", text_fontsize="medium"):
+    """Plots calibration curves for a set of classifier probability estimates.
+
+    Plotting the calibration curves of a classifier is useful for determining
+    whether or not you can interpret their predicted probabilities directly as
+    as confidence level. For instance, a well-calibrated binary classifier
+    should classify the samples such that for samples to which it gave a score
+    of 0.8, around 80% should actually be from the positive class.
+
+    This function currently only works for binary classification.
+
+    Args:
+        y_true (array-like, shape (n_samples)):
+            Ground truth (correct) target values.
+
+        probas_list (list of array-like, shape (n_samples, 2) or (n_samples,)):
+            A list containing the outputs of binary classifiers'
+            :func:`predict_proba` method or :func:`decision_function` method.
+
+        clf_names (list of str, optional): A list of strings, where each string
+            refers to the name of the classifier that produced the
+            corresponding probability estimates in `probas_list`. If ``None``,
+            the names "Classifier 1", "Classifier 2", etc. will be used.
+
+        n_bins (int, optional): Number of bins. A bigger number requires more
+            data.
+
+        title (string, optional): Title of the generated plot. Defaults to
+            "Calibration plots (Reliabilirt Curves)"
+
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
+            plot the curve. If None, the plot is drawn on a new set of axes.
+
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot
+            e.g. (6, 6). Defaults to ``None``.
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional):
+            Colormap used for plotting the projection. View Matplotlib Colormap
+            documentation for available options.
+            https://matplotlib.org/users/colormaps.html
+
+        title_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to
+            "large".
+
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to
+            "medium".
+
+    Returns:
+        :class:`matplotlib.axes.Axes`: The axes on which the plot was drawn.
+
+    Example:
+        >>> import scikitplot as skplt
+        >>> rf = RandomForestClassifier()
+        >>> lr = LogisticRegression()
+        >>> nb = GaussianNB()
+        >>> svm = LinearSVC()
+        >>> rf_probas = rf.fit(X_train, y_train).predict_proba(X_test)
+        >>> lr_probas = lr.fit(X_train, y_train).predict_proba(X_test)
+        >>> nb_probas = nb.fit(X_train, y_train).predict_proba(X_test)
+        >>> svm_scores = svm.fit(X_train, y_train).decision_function(X_test)
+        >>> probas_list = [rf_probas, lr_probas, nb_probas, svm_scores]
+        >>> clf_names = ['Random Forest', 'Logistic Regression',
+        ...              'Gaussian Naive Bayes', 'Support Vector Machine']
+        >>> skplt.metrics.plot_calibration_curve(y_test,
+        ...                                      probas_list,
+        ...                                      clf_names)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
+
+        .. image:: _static/examples/plot_calibration_curve.png
+           :align: center
+           :alt: Calibration Curves
+    """
+    y_true = np.asarray(y_true)
+    if not isinstance(probas_list, list):
+        raise ValueError('`probas_list` does not contain a list.')
+
+    classes = np.unique(y_true)
+    if len(classes) > 2:
+        raise ValueError('plot_calibration_curve only '
+                         'works for binary classification')
+
+    if clf_names is None:
+        clf_names = ['Classifier {}'.format(x+1)
+                     for x in range(len(probas_list))]
+
+    if len(clf_names) != len(probas_list):
+        raise ValueError('Length {} of `clf_names` does not match length {} of'
+                         ' `probas_list`'.format(len(clf_names),
+                                                 len(probas_list)))
+
+    if ax is None:
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
+
+    ax.plot([0, 1], [0, 1], "k:", label="Perfectly calibrated")
+
+    for i, probas in enumerate(probas_list):
+        probas = np.asarray(probas)
+        if probas.ndim > 2:
+            raise ValueError('Index {} in probas_list has invalid '
+                             'shape {}'.format(i, probas.shape))
+        if probas.ndim == 2:
+            probas = probas[:, 1]
+
+        if probas.shape != y_true.shape:
+            raise ValueError('Index {} in probas_list has invalid '
+                             'shape {}'.format(i, probas.shape))
+
+        probas = (probas - probas.min()) / (probas.max() - probas.min())
+
+        fraction_of_positives, mean_predicted_value = \
+            calibration_curve(y_true, probas, n_bins=n_bins)
+
+        color = plt.cm.get_cmap(cmap)(float(i) / len(probas_list))
+
+        ax.plot(mean_predicted_value, fraction_of_positives, 's-',
+                label=clf_names[i], color=color)
+
+    ax.set_title(title, fontsize=title_fontsize)
+
+    ax.set_xlabel('Mean predicted value', fontsize=text_fontsize)
+    ax.set_ylabel('Fraction of positives', fontsize=text_fontsize)
+
+    ax.set_ylim([-0.05, 1.05])
+    ax.legend(loc='lower right')
 
     return ax
