@@ -670,12 +670,13 @@ def plot_calibration_curve(y_true, probas_list, clf_names=None, n_bins=10,
             A list containing the outputs of binary classifiers'
             :func:`predict_proba` method or :func:`decision_function` method.
 
-        clf_names (list of str): A list of strings, where each string
+        clf_names (list of str, optional): A list of strings, where each string
             refers to the name of the classifier that produced the
             corresponding probability estimates in `probas_list`. If ``None``,
             the names "Classifier 1", "Classifier 2", etc. will be used.
 
-        n_bins (int): Number of bins. A bigger number requires more data.
+        n_bins (int, optional): Number of bins. A bigger number requires more
+            data.
 
         title (string, optional): Title of the generated plot. Defaults to
             "Calibration plots (Reliabilirt Curves)"
@@ -700,8 +701,7 @@ def plot_calibration_curve(y_true, probas_list, clf_names=None, n_bins=10,
             "medium".
 
     Returns:
-        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
-            drawn.
+        :class:`matplotlib.axes.Axes`: The axes on which the plot was drawn.
 
     Example:
         >>> import scikitplot as skplt
@@ -751,11 +751,13 @@ def plot_calibration_curve(y_true, probas_list, clf_names=None, n_bins=10,
 
     for i, probas in enumerate(probas_list):
         probas = np.asarray(probas)
+        if probas.ndim > 2:
+            raise ValueError('Index {} in probas_list has invalid '
+                             'shape {}'.format(i, probas.shape))
         if probas.ndim == 2:
             probas = probas[:, 1]
-        elif probas.ndim == 1:
-            pass
-        else:
+
+        if probas.shape != y_true.shape:
             raise ValueError('Index {} in probas_list has invalid '
                              'shape {}'.format(i, probas.shape))
 
