@@ -21,6 +21,7 @@ from sklearn.metrics import average_precision_score
 from sklearn.utils.multiclass import unique_labels
 from sklearn.metrics import silhouette_score
 from sklearn.metrics import silhouette_samples
+from sklearn.calibration import calibration_curve
 
 from scipy import interp
 
@@ -647,7 +648,7 @@ def plot_silhouette(X, cluster_labels, title='Silhouette Analysis',
     return ax
 
 
-def plot_calibration_curve(y_true, probas_list, clf_names=None,
+def plot_calibration_curve(y_true, probas_list, clf_names=None, n_bins=10,
                            title='Calibration plots (Reliability Curves)',
                            ax=None, figsize=None, cmap='spectral',
                            title_fontsize="large", text_fontsize="medium"):
@@ -673,6 +674,8 @@ def plot_calibration_curve(y_true, probas_list, clf_names=None,
             refers to the name of the classifier that produced the
             corresponding probability estimates in `probas_list`. If ``None``,
             the names "Classifier 1", "Classifier 2", etc. will be used.
+
+        n_bins (int): Number of bins. A bigger number requires more data.
 
         title (string, optional): Title of the generated plot. Defaults to
             "Calibration plots (Reliabilirt Curves)"
@@ -701,7 +704,7 @@ def plot_calibration_curve(y_true, probas_list, clf_names=None,
         raise ValueError('`probas_list` does not contain a list.')
 
     classes = np.unique(y_true)
-    if len(classes > 2):
+    if len(classes) > 2:
         raise ValueError('plot_calibration_curve only '
                          'works for binary classification')
 
@@ -714,5 +717,24 @@ def plot_calibration_curve(y_true, probas_list, clf_names=None,
                          ' `probas_list`'.format(len(clf_names),
                                                  len(probas_list)))
 
-    for probas in probas_list:
-        pass
+    if ax is None:
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
+
+    ax.plot([0, 1], [0, 1], "k:", label="Perfectly calibrated")
+
+    for i, probas in enumerate(probas_list):
+        fraction_of_positives, mean_predicted_value = \
+            calibration_curve(y_true, probas[:, 1], n_bins=n_bins)
+
+        ax.plot(mean_predicted_value, fraction_of_positives, 's-',
+                label=clf_names[i])
+
+    ax.set_title(title, fontsize=title_fontsize)
+
+    ax.set_xlabel('Mean predicted value', fontsize=text_fontsize)
+    ax.set_ylabel('Fraction of positives', fontsize=text_fontsize)
+
+    ax.set_ylim([-0.05, 1.05])
+    ax.legend(loc='lower right')
+
+    return ax
