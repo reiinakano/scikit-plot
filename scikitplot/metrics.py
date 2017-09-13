@@ -698,6 +698,33 @@ def plot_calibration_curve(y_true, probas_list, clf_names=None, n_bins=10,
         text_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to
             "medium".
+
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
+            drawn.
+
+    Example:
+        >>> import scikitplot as skplt
+        >>> rf = RandomForestClassifier()
+        >>> lr = LogisticRegression()
+        >>> nb = GaussianNB()
+        >>> svm = LinearSVC()
+        >>> rf_probas = rf.fit(X_train, y_train).predict_proba(X_test)
+        >>> lr_probas = lr.fit(X_train, y_train).predict_proba(X_test)
+        >>> nb_probas = nb.fit(X_train, y_train).predict_proba(X_test)
+        >>> svm_scores = svm.fit(X_train, y_train).decision_function(X_test)
+        >>> probas_list = [rf_probas, lr_probas, nb_probas, svm_scores]
+        >>> clf_names = ['Random Forest', 'Logistic Regression',
+        ...              'Gaussian Naive Bayes', 'Support Vector Machine']
+        >>> skplt.metrics.plot_calibration_curve(y_test,
+        ...                                      probas_list,
+        ...                                      clf_names)
+        <matplotlib.axes._subplots.AxesSubplot object at 0x7fe967d64490>
+        >>> plt.show()
+
+        .. image:: _static/examples/plot_calibration_curve.png
+           :align: center
+           :alt: Calibration Curves
     """
     y_true = np.asarray(y_true)
     if not isinstance(probas_list, list):
