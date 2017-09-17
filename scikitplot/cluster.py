@@ -13,7 +13,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from sklearn.base import clone
-from sklearn.utils.estimator_checks import check_estimator
 from joblib import Parallel, delayed
 
 
@@ -73,8 +72,6 @@ def plot_elbow_curve(clf, X, title='Elbow Plot', cluster_ranges=None, n_jobs=1,
            :align: center
            :alt: Elbow Curve
     """
-    check_estimator(clf)
-
     if cluster_ranges is None:
         cluster_ranges = range(1, 12, 2)
     else:
