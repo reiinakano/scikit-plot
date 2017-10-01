@@ -222,7 +222,7 @@ def plot_confusion_matrix_with_cv(clf, X, y, labels=None, true_labels=None,
 def plot_roc_curve_with_cv(clf, X, y, title='ROC Curves', do_cv=True,
                            cv=None, shuffle=True, random_state=None,
                            curves=('micro', 'macro', 'each_class'),
-                           ax=None, figsize=None, cmap='spectral',
+                           ax=None, figsize=None, cmap='nipy_spectral',
                            title_fontsize="large", text_fontsize="medium"):
     """Generates the ROC curves for a given classifier and dataset.
 
@@ -473,7 +473,7 @@ def plot_precision_recall_curve_with_cv(clf, X, y,
                                         random_state=None,
                                         curves=('micro', 'each_class'),
                                         ax=None, figsize=None,
-                                        cmap='spectral',
+                                        cmap='nipy_spectral',
                                         title_fontsize="large",
                                         text_fontsize="medium"):
     """Generates the Precision-Recall curve for a given classifier and dataset.

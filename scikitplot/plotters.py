@@ -185,7 +185,7 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None,
             'scikitplot.metrics.plot_roc_curve instead.')
 def plot_roc_curve(y_true, y_probas, title='ROC Curves',
                    curves=('micro', 'macro', 'each_class'),
-                   ax=None, figsize=None, cmap='spectral',
+                   ax=None, figsize=None, cmap='nipy_spectral',
                    title_fontsize="large", text_fontsize="medium"):
     """Generates the ROC curves from labels and predicted scores/probabilities
 
@@ -422,7 +422,7 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot',
 def plot_precision_recall_curve(y_true, y_probas,
                                 title='Precision-Recall Curve',
                                 curves=('micro', 'each_class'), ax=None,
-                                figsize=None, cmap='spectral',
+                                figsize=None, cmap='nipy_spectral',
                                 title_fontsize="large",
                                 text_fontsize="medium"):
     """Generates the Precision Recall Curve from labels and probabilities
@@ -773,7 +773,7 @@ def plot_learning_curve(clf, X, y, title='Learning Curve', cv=None,
 @deprecated('This will be removed in v0.4.0. Please use '
             'scikitplot.metrics.plot_silhouette instead.')
 def plot_silhouette(clf, X, title='Silhouette Analysis', metric='euclidean',
-                    copy=True, ax=None, figsize=None, cmap='spectral',
+                    copy=True, ax=None, figsize=None, cmap='nipy_spectral',
                     title_fontsize="large", text_fontsize="medium"):
     """Plots silhouette analysis of clusters using fit_predict.
 
