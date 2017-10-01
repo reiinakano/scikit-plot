@@ -41,7 +41,7 @@ setup(
     author='Reiichiro Nakano',
     tests_require=['pytest'],
     install_requires=[
-        'matplotlib>=1.3.1',
+        'matplotlib>=1.4.0',
         'scikit-learn>=0.18',
         'scipy>=0.9',
         'joblib>=0.10'
