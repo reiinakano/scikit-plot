@@ -175,7 +175,7 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None,
 
 def plot_roc_curve(y_true, y_probas, title='ROC Curves',
                    curves=('micro', 'macro', 'each_class'),
-                   ax=None, figsize=None, cmap='spectral',
+                   ax=None, figsize=None, cmap='nipy_spectral',
                    title_fontsize="large", text_fontsize="medium"):
     """Generates the ROC curves from labels and predicted scores/probabilities
 
@@ -408,7 +408,7 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot',
 def plot_precision_recall_curve(y_true, y_probas,
                                 title='Precision-Recall Curve',
                                 curves=('micro', 'each_class'), ax=None,
-                                figsize=None, cmap='spectral',
+                                figsize=None, cmap='nipy_spectral',
                                 title_fontsize="large",
                                 text_fontsize="medium"):
     """Generates the Precision Recall Curve from labels and probabilities
@@ -532,7 +532,7 @@ def plot_precision_recall_curve(y_true, y_probas,
 
 def plot_silhouette(X, cluster_labels, title='Silhouette Analysis',
                     metric='euclidean', copy=True, ax=None, figsize=None,
-                    cmap='spectral', title_fontsize="large",
+                    cmap='nipy_spectral', title_fontsize="large",
                     text_fontsize="medium"):
     """Plots silhouette analysis of clusters provided.
 
@@ -650,7 +650,7 @@ def plot_silhouette(X, cluster_labels, title='Silhouette Analysis',
 
 def plot_calibration_curve(y_true, probas_list, clf_names=None, n_bins=10,
                            title='Calibration plots (Reliability Curves)',
-                           ax=None, figsize=None, cmap='spectral',
+                           ax=None, figsize=None, cmap='nipy_spectral',
                            title_fontsize="large", text_fontsize="medium"):
     """Plots calibration curves for a set of classifier probability estimates.
 

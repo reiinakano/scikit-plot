@@ -73,8 +73,8 @@ class TestPlotConfusionMatrix(unittest.TestCase):
         clf = LogisticRegression()
         clf.fit(self.X, self.y)
         preds = clf.predict(self.X)
-        plot_confusion_matrix(self.y, preds, cmap='spectral')
-        plot_confusion_matrix(self.y, preds, cmap=plt.cm.spectral)
+        plot_confusion_matrix(self.y, preds, cmap='nipy_spectral')
+        plot_confusion_matrix(self.y, preds, cmap=plt.cm.nipy_spectral)
 
     def test_ax(self):
         np.random.seed(0)
@@ -126,8 +126,8 @@ class TestPlotROCCurve(unittest.TestCase):
         clf = LogisticRegression()
         clf.fit(self.X, self.y)
         probas = clf.predict_proba(self.X)
-        plot_roc_curve(self.y, probas, cmap='spectral')
-        plot_roc_curve(self.y, probas, cmap=plt.cm.spectral)
+        plot_roc_curve(self.y, probas, cmap='nipy_spectral')
+        plot_roc_curve(self.y, probas, cmap=plt.cm.nipy_spectral)
 
     def test_curve_diffs(self):
         np.random.seed(0)
@@ -239,8 +239,8 @@ class TestPlotPrecisionRecall(unittest.TestCase):
         clf = LogisticRegression()
         clf.fit(self.X, self.y)
         probas = clf.predict_proba(self.X)
-        plot_precision_recall_curve(self.y, probas, cmap='spectral')
-        plot_precision_recall_curve(self.y, probas, cmap=plt.cm.spectral)
+        plot_precision_recall_curve(self.y, probas, cmap='nipy_spectral')
+        plot_precision_recall_curve(self.y, probas, cmap=plt.cm.nipy_spectral)
 
     def test_invalid_curve_arg(self):
         np.random.seed(0)
