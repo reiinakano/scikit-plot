@@ -4,35 +4,37 @@ from sklearn.preprocessing import LabelEncoder
 
 
 def binary_ks_curve(y_true, y_probas):
-    """This function generates the points necessary to calculate the KS Statistic curve.
+    """This function generates the points necessary to calculate the KS
+    Statistic curve.
 
     Args:
         y_true (array-like, shape (n_samples)): True labels of the data.
 
-        y_probas (array-like, shape (n_samples)): Probability predictions of the positive class.
+        y_probas (array-like, shape (n_samples)): Probability predictions of
+            the positive class.
 
     Returns:
-        thresholds (numpy.ndarray): An array containing the X-axis values for plotting the
-            KS Statistic plot.
+        thresholds (numpy.ndarray): An array containing the X-axis values for
+            plotting the KS Statistic plot.
 
-        pct1 (numpy.ndarray): An array containing the Y-axis values for one curve of the
-            KS Statistic plot.
+        pct1 (numpy.ndarray): An array containing the Y-axis values for one
+            curve of the KS Statistic plot.
 
-        pct2 (numpy.ndarray): An array containing the Y-axis values for one curve of the
-            KS Statistic plot.
+        pct2 (numpy.ndarray): An array containing the Y-axis values for one
+            curve of the KS Statistic plot.
 
-        ks_statistic (float): The KS Statistic, or the maximum vertical distance between the
-            two curves.
+        ks_statistic (float): The KS Statistic, or the maximum vertical
+            distance between the two curves.
 
-        max_distance_at (float): The X-axis value at which the maximum vertical distance between
-            the two curves is seen.
+        max_distance_at (float): The X-axis value at which the maximum vertical
+            distance between the two curves is seen.
 
-        classes (np.ndarray, shape (2)): An array containing the labels of the two classes making
-            up `y_true`.
+        classes (np.ndarray, shape (2)): An array containing the labels of the
+            two classes making up `y_true`.
 
     Raises:
-        ValueError: If `y_true` is not composed of 2 classes. The KS Statistic is only relevant in
-            binary classification.
+        ValueError: If `y_true` is not composed of 2 classes. The KS Statistic
+            is only relevant in binary classification.
     """
     y_true, y_probas = np.asarray(y_true), np.asarray(y_probas)
     lb = LabelEncoder()
@@ -96,7 +98,8 @@ def binary_ks_curve(y_true, y_probas):
         pct2 = np.append(pct2, [1.0])
 
     differences = pct1 - pct2
-    ks_statistic, max_distance_at = np.max(differences), thresholds[np.argmax(differences)]
+    ks_statistic, max_distance_at = (np.max(differences),
+                                     thresholds[np.argmax(differences)])
 
     return thresholds, pct1, pct2, ks_statistic, max_distance_at, lb.classes_
 
@@ -141,8 +144,10 @@ def validate_labels(known_classes, passed_labels, argument_name):
     if np.any(passed_labels_absent):
         absent_labels = [str(x) for x in passed_labels[passed_labels_absent]]
 
-        msg = "The following labels were passed into {0}, but were not found in labels: {1}" \
-                .format(argument_name, ", ".join(absent_labels))
+        msg = ("The following labels "
+               "were passed into {0}, "
+               "but were not found in "
+               "labels: {1}").format(argument_name, ", ".join(absent_labels))
         raise ValueError(msg)
 
     return
