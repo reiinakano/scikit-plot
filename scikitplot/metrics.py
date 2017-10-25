@@ -26,6 +26,7 @@ from sklearn.calibration import calibration_curve
 from scipy import interp
 
 from scikitplot.helpers import binary_ks_curve, validate_labels
+from scikitplot.helpers import cumulative_gain_curve
 
 
 def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None,
@@ -841,32 +842,30 @@ def plot_cumulative_gain(y_true, y_probas, title='Cumulative Gains Plot',
     if len(classes) != 2:
         raise ValueError('Cannot calculate Cumulative Gains for data with '
                          '{} category/ies'.format(len(classes)))
-    probas = y_probas
 
-    # Compute KS Statistic curves
-    thresholds, pct1, pct2, ks_statistic, \
-        max_distance_at, classes = binary_ks_curve(y_true,
-                                                   probas[:, 1].ravel())
+    # Compute Cumulative Gain Curves
+    percentages, gains1 = cumulative_gain_curve(y_true, y_probas[:, 0],
+                                                classes[0])
+    percentages, gains2 = cumulative_gain_curve(y_true, y_probas[:, 1],
+                                                classes[1])
 
     if ax is None:
         fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     ax.set_title(title, fontsize=title_fontsize)
 
-    ax.plot(thresholds, pct1, lw=3, label='Class {}'.format(classes[0]))
-    ax.plot(thresholds, pct2, lw=3, label='Class {}'.format(classes[1]))
-    idx = np.where(thresholds == max_distance_at)[0][0]
-    ax.axvline(max_distance_at, *sorted([pct1[idx], pct2[idx]]),
-               label='KS Statistic: {:.3f} at {:.3f}'.format(ks_statistic,
-                                                             max_distance_at),
-               linestyle=':', lw=3, color='black')
+    ax.plot(percentages, gains1, lw=3, label='Class {}'.format(classes[0]))
+    ax.plot(percentages, gains2, lw=3, label='Class {}'.format(classes[1]))
 
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.0])
 
-    ax.set_xlabel('Threshold', fontsize=text_fontsize)
-    ax.set_ylabel('Percentage below threshold', fontsize=text_fontsize)
+    ax.plot([0, 1], [0, 1], 'k--', lw=2, label='Baseline')
+
+    ax.set_xlabel('Percentage of sample', fontsize=text_fontsize)
+    ax.set_ylabel('Gain', fontsize=text_fontsize)
     ax.tick_params(labelsize=text_fontsize)
+    ax.grid('on')
     ax.legend(loc='lower right', fontsize=text_fontsize)
 
     return ax

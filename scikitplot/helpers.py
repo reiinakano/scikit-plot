@@ -154,7 +154,7 @@ def validate_labels(known_classes, passed_labels, argument_name):
     return
 
 
-def cumulative_gain_curve(y_true, y_probas, pos_label=None):
+def cumulative_gain_curve(y_true, y_score, pos_label=None):
     """This function generates the points necessary to plot the Cumulative Gain
 
     Note: This implementation is restricted to the binary classification task.
@@ -162,8 +162,10 @@ def cumulative_gain_curve(y_true, y_probas, pos_label=None):
     Args:
         y_true (array-like, shape (n_samples)): True labels of the data.
 
-        y_probas (array-like, shape (n_samples)): Probability predictions of
-            the positive class.
+        y_score (array-like, shape (n_samples)): Target scores, can either be
+            probability estimates of the positive class, confidence values, or
+            non-thresholded measure of decisions (as returned by
+            decision_function on some classifiers).
 
         pos_label (int or str, default=None): Label considered as positive and
             others are considered negative
@@ -179,3 +181,33 @@ def cumulative_gain_curve(y_true, y_probas, pos_label=None):
         ValueError: If `y_true` is not composed of 2 classes. The Cumulative
             Gain Chart is only relevant in binary classification.
     """
+    y_true, y_score = np.asarray(y_true), np.asarray(y_score)
+
+    # ensure binary classification if pos_label is not specified
+    classes = np.unique(y_true)
+    if (pos_label is None and
+        not (np.array_equal(classes, [0, 1]) or
+             np.array_equal(classes, [-1, 1]) or
+             np.array_equal(classes, [0]) or
+             np.array_equal(classes, [-1]) or
+             np.array_equal(classes, [1]))):
+        raise ValueError("Data is not binary and pos_label is not specified")
+    elif pos_label is None:
+        pos_label = 1.
+
+    # make y_true a boolean vector
+    y_true = (y_true == pos_label)
+
+    sorted_indices = np.argsort(y_score)[::-1]
+    y_true = y_true[sorted_indices]
+    gains = np.cumsum(y_true)
+
+    percentages = np.arange(start=1, stop=len(y_true) + 1)
+
+    gains = gains / float(np.sum(y_true))
+    percentages = percentages / float(len(y_true))
+
+    gains = np.insert(gains, 0, [0])
+    percentages = np.insert(percentages, 0, [0])
+
+    return percentages, gains
