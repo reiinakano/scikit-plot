@@ -1,4 +1,5 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function, \
+    unicode_literals
 import numpy as np
 from sklearn.preprocessing import LabelEncoder
 
@@ -151,3 +152,30 @@ def validate_labels(known_classes, passed_labels, argument_name):
         raise ValueError(msg)
 
     return
+
+
+def cumulative_gain_curve(y_true, y_probas, pos_label=None):
+    """This function generates the points necessary to plot the Cumulative Gain
+
+    Note: This implementation is restricted to the binary classification task.
+
+    Args:
+        y_true (array-like, shape (n_samples)): True labels of the data.
+
+        y_probas (array-like, shape (n_samples)): Probability predictions of
+            the positive class.
+
+        pos_label (int or str, default=None): Label considered as positive and
+            others are considered negative
+
+    Returns:
+        percentages (numpy.ndarray): An array containing the X-axis values for
+            plotting the Cumulative Gains chart.
+
+        gains (numpy.ndarray): An array containing the Y-axis values for one
+            curve of the Cumulative Gains chart.
+
+    Raises:
+        ValueError: If `y_true` is not composed of 2 classes. The Cumulative
+            Gain Chart is only relevant in binary classification.
+    """
