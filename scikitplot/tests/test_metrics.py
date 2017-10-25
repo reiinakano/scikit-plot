@@ -17,6 +17,7 @@ from scikitplot.metrics import plot_ks_statistic
 from scikitplot.metrics import plot_precision_recall_curve
 from scikitplot.metrics import plot_silhouette
 from scikitplot.metrics import plot_calibration_curve
+from scikitplot.metrics import plot_cumulative_gain
 
 
 def convert_labels_into_string(y_true):
@@ -377,3 +378,46 @@ class TestPlotCalibrationCurve(unittest.TestCase):
                                    self.rf_probas])
         self.assertRaises(ValueError, plot_calibration_curve,
                           self.y, [np.random.randn(1, 5)])
+
+
+class TestPlotCumulativeGain(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_breast_cancer(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, convert_labels_into_string(self.y))
+        probas = clf.predict_proba(self.X)
+        plot_cumulative_gain(convert_labels_into_string(self.y), probas)
+
+    def test_two_classes(self):
+        np.random.seed(0)
+        # Test this one on Iris (3 classes)
+        X, y = load_data(return_X_y=True)
+        clf = LogisticRegression()
+        clf.fit(X, y)
+        probas = clf.predict_proba(X)
+        self.assertRaises(ValueError, plot_cumulative_gain, y, probas)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = plot_cumulative_gain(self.y, probas)
+        assert ax is not out_ax
+        out_ax = plot_cumulative_gain(self.y, probas, ax=ax)
+        assert ax is out_ax
+
+    def test_array_like(self):
+        plot_cumulative_gain([0, 1], [[0.8, 0.2], [0.2, 0.8]])
+        plot_cumulative_gain([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
+        plot_cumulative_gain(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
