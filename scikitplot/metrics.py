@@ -878,7 +878,7 @@ def plot_lift_curve(y_true, y_probas, title='Lift Curve',
 
     The lift curve is used to determine the effectiveness of a
     binary classifier. A detailed explanation can be found at
-    www2.cs.uregina.ca/~dbd/cs831/notes/lift_chart/lift_chart.html.
+    http://www2.cs.uregina.ca/~dbd/cs831/notes/lift_chart/lift_chart.html.
     The implementation here works only for binary classification.
 
     Args:
