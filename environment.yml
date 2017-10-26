@@ -1,0 +1,9 @@
+name: scikit-plot-env
+
+dependencies:
+- python=3
+- numpy
+- scipy
+- scikit-learn
+- matplotlib
+- joblib
