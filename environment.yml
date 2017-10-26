@@ -6,3 +6,4 @@ dependencies:
 - scipy
 - scikit-learn
 - matplotlib
+- joblib
