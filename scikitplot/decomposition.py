@@ -133,9 +133,8 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None,
             Use e.g. "small", "medium", "large" or integer-values. Defaults to
             "medium".
 
-        biplot (bool, optional): If True, the function will generate biplots 
-        	whos axes are generated from the first and second principle component. 
-        	If false, the biplots are not generated.
+        biplot (bool, optional): If True, the function will generate and plot
+        	biplots. If false, the biplots are not generated.
 
         feature_labels (array-like, shape (n_classes), optional): List of labels 
         	that represent each feature of X. It's index position must also be 
