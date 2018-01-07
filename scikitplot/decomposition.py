@@ -94,10 +94,10 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
     return ax
 
 
-def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None,
-                           figsize=None, cmap='Spectral',  
-                           title_fontsize="large", text_fontsize="medium", 
-                           biplot=False, feature_labels=None):
+def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection',
+                           biplot=False, feature_labels=None,
+                           ax=None, figsize=None, cmap='Spectral',
+                           title_fontsize="large", text_fontsize="medium"):
     """Plots the 2-dimensional projection of PCA on a given dataset.
 
     Args:
@@ -113,6 +113,15 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None,
 
         title (string, optional): Title of the generated plot. Defaults to
             "PCA 2-D Projection"
+
+        biplot (bool, optional): If True, the function will generate and plot
+        	biplots. If false, the biplots are not generated.
+
+        feature_labels (array-like, shape (n_classes), optional): List of labels
+        	that represent each feature of X. Its index position must also be
+        	relative to the features. If ``None`` is given, then labels will be
+        	automatically generated for each feature.
+        	e.g. "variable1", "variable2", "variable3" ...
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
             plot the curve. If None, the plot is drawn on a new set of axes.
@@ -132,15 +141,6 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None,
         text_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to
             "medium".
-
-        biplot (bool, optional): If True, the function will generate and plot
-        	biplots. If false, the biplots are not generated.
-
-        feature_labels (array-like, shape (n_classes), optional): List of labels 
-        	that represent each feature of X. It's index position must also be 
-        	relative to the features. If none is given, then labels will be 
-        	automatically generated for each feature. 
-        	e.g. "variable1", "variable2", "variable3" ...
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
@@ -166,30 +166,23 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None,
     classes = np.unique(np.array(y))
 
     colors = plt.cm.get_cmap(cmap)(np.linspace(0, 1, len(classes)))
-    
-    vectors=np.transpose(clf.components_[0:2, :])
-    
-    xs = transformed_X[:,0]
-    ys = transformed_X[:,1]   
-    
-    
+
     for label, color in zip(classes, colors):
         ax.scatter(transformed_X[y == label, 0], transformed_X[y == label, 1],
                    alpha=0.8, lw=2, label=label, color=color)
-        
-    if biplot:  
+
+    if biplot:
+        vectors = np.transpose(clf.components_[:2, :])
+        xs = transformed_X[:, 0]
+        ys = transformed_X[:, 1]
         for i in range(vectors.shape[0]):
-            ax.annotate("", xy=(vectors[i,0]*max(xs), 
-                        vectors[i,1]*max(ys)), xycoords='data',
-                        xytext=(0, 0), textcoords='data', 
+            ax.annotate("", xy=(vectors[i, 0]*max(xs), vectors[i, 1] * max(ys)),
+                        xycoords='data', xytext=(0, 0), textcoords='data',
                         arrowprops={'arrowstyle': '-|>', 'ec': 'r'})
 
-            if feature_labels is None:
-                plt.text(vectors[i,0]*max(xs)*1.05, vectors[i,1]*max(ys)*1.05,
-                         "Variable"+str(i), color='b', fontsize=text_fontsize)
-            else:
-                plt.text(vectors[i,0]*max(xs)*1.05, vectors[i,1]*max(ys)*1.05,
-                        feature_labels[i], color='b', fontsize=text_fontsize)
+            plt.text(vectors[i, 0] * max(xs) * 1.05, vectors[i, 1] * max(ys) * 1.05,
+                     feature_labels[i] if feature_labels else "Variable" + str(i),
+                     color='b', fontsize=text_fontsize)
 
     ax.legend(loc='best', shadow=False, scatterpoints=1,
               fontsize=text_fontsize)
@@ -198,4 +191,3 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None,
     ax.tick_params(labelsize=text_fontsize)
 
     return ax
-
