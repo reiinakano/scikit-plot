@@ -172,17 +172,18 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection',
                    alpha=0.8, lw=2, label=label, color=color)
 
     if biplot:
-        vectors = np.transpose(clf.components_[:2, :])
         xs = transformed_X[:, 0]
         ys = transformed_X[:, 1]
+        vectors = np.transpose(clf.components_[:2, :])
+        vectors_scaled = vectors * [xs.max(), ys.max()]
         for i in range(vectors.shape[0]):
-            ax.annotate("", xy=(vectors[i, 0]*max(xs), vectors[i, 1] * max(ys)),
+            ax.annotate("", xy=(vectors_scaled[i, 0], vectors_scaled[i, 1]),
                         xycoords='data', xytext=(0, 0), textcoords='data',
                         arrowprops={'arrowstyle': '-|>', 'ec': 'r'})
 
-            plt.text(vectors[i, 0] * max(xs) * 1.05, vectors[i, 1] * max(ys) * 1.05,
-                     feature_labels[i] if feature_labels else "Variable" + str(i),
-                     color='b', fontsize=text_fontsize)
+            ax.text(vectors_scaled[i, 0] * 1.05, vectors_scaled[i, 1] * 1.05,
+                    feature_labels[i] if feature_labels else "Variable" + str(i),
+                    color='b', fontsize=text_fontsize)
 
     ax.legend(loc='best', shadow=False, scatterpoints=1,
               fontsize=text_fontsize)
