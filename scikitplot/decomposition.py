@@ -94,8 +94,9 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
     return ax
 
 
-def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None,
-                           figsize=None, cmap='Spectral',
+def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection',
+                           biplot=False, feature_labels=None,
+                           ax=None, figsize=None, cmap='Spectral',
                            title_fontsize="large", text_fontsize="medium"):
     """Plots the 2-dimensional projection of PCA on a given dataset.
 
@@ -112,6 +113,15 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None,
 
         title (string, optional): Title of the generated plot. Defaults to
             "PCA 2-D Projection"
+
+        biplot (bool, optional): If True, the function will generate and plot
+        	biplots. If false, the biplots are not generated.
+
+        feature_labels (array-like, shape (n_classes), optional): List of labels
+        	that represent each feature of X. Its index position must also be
+        	relative to the features. If ``None`` is given, then labels will be
+        	automatically generated for each feature.
+        	e.g. "variable1", "variable2", "variable3" ...
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
             plot the curve. If None, the plot is drawn on a new set of axes.
@@ -160,6 +170,21 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection', ax=None,
     for label, color in zip(classes, colors):
         ax.scatter(transformed_X[y == label, 0], transformed_X[y == label, 1],
                    alpha=0.8, lw=2, label=label, color=color)
+
+    if biplot:
+        xs = transformed_X[:, 0]
+        ys = transformed_X[:, 1]
+        vectors = np.transpose(clf.components_[:2, :])
+        vectors_scaled = vectors * [xs.max(), ys.max()]
+        for i in range(vectors.shape[0]):
+            ax.annotate("", xy=(vectors_scaled[i, 0], vectors_scaled[i, 1]),
+                        xycoords='data', xytext=(0, 0), textcoords='data',
+                        arrowprops={'arrowstyle': '-|>', 'ec': 'r'})
+
+            ax.text(vectors_scaled[i, 0] * 1.05, vectors_scaled[i, 1] * 1.05,
+                    feature_labels[i] if feature_labels else "Variable" + str(i),
+                    color='b', fontsize=text_fontsize)
+
     ax.legend(loc='best', shadow=False, scatterpoints=1,
               fontsize=text_fontsize)
     ax.set_xlabel('First Principal Component', fontsize=text_fontsize)
