@@ -65,7 +65,7 @@ class TestPlotPCA2DProjection(unittest.TestCase):
         fig, ax = plt.subplots(1, 1)
         out_ax = plot_pca_2d_projection(clf, self.X, self.y)
         assert ax is not out_ax
-        out_ax =plot_pca_2d_projection(clf, self.X, self.y, ax=ax)
+        out_ax = plot_pca_2d_projection(clf, self.X, self.y, ax=ax)
         assert ax is out_ax
 
     def test_cmap(self):
@@ -74,3 +74,10 @@ class TestPlotPCA2DProjection(unittest.TestCase):
         clf.fit(self.X)
         plot_pca_2d_projection(clf, self.X, self.y, cmap='Spectral')
         plot_pca_2d_projection(clf, self.X, self.y, cmap=plt.cm.Spectral)
+
+    def test_biplot(self):
+        np.random.seed(0)
+        clf = PCA()
+        clf.fit(self.X)
+        ax = plot_pca_2d_projection(clf, self.X, self.y, biplot=True,
+                                    feature_labels=load_data().feature_names)
