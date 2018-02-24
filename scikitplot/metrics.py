@@ -425,7 +425,7 @@ def plot_precision_recall_curve(y_true, y_probas,
             "Precision-Recall curve".
 
         curves (array-like): A listing of which curves should be plotted on the
-            resulting plot. Defaults to `("micro", "each_class"， "positive")`
+            resulting plot. Defaults to `("micro", "each_class", "positive")`
             i.e. "micro" for micro-averaged curve
             noted "positive" means regarding the first class as positive
 
