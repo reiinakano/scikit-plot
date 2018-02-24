@@ -408,7 +408,7 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot',
 
 def plot_precision_recall_curve(y_true, y_probas,
                                 title='Precision-Recall Curve',
-                                curves=('micro', 'each_class'), ax=None,
+                                curves=('micro', 'each_class', 'positive'), ax=None,
                                 figsize=None, cmap='nipy_spectral',
                                 title_fontsize="large",
                                 text_fontsize="medium"):
@@ -425,8 +425,9 @@ def plot_precision_recall_curve(y_true, y_probas,
             "Precision-Recall curve".
 
         curves (array-like): A listing of which curves should be plotted on the
-            resulting plot. Defaults to `("micro", "each_class")`
+            resulting plot. Defaults to `("micro", "each_class"， "positive")`
             i.e. "micro" for micro-averaged curve
+            noted "positive" means regarding the first class as positive
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
             plot the curve. If None, the plot is drawn on a new set of axes.
@@ -470,9 +471,9 @@ def plot_precision_recall_curve(y_true, y_probas,
     classes = np.unique(y_true)
     probas = y_probas
 
-    if 'micro' not in curves and 'each_class' not in curves:
+    if 'micro' not in curves and 'each_class' not in curves and 'positive' not in curves:
         raise ValueError('Invalid argument for curves as it '
-                         'only takes "micro" or "each_class"')
+                         'only takes "micro" or "each_class" or "positive"')
 
     # Compute Precision-Recall curve and area for each class
     precision = dict()
@@ -521,6 +522,14 @@ def plot_precision_recall_curve(y_true, y_probas,
                 label='micro-average Precision-recall curve '
                       '(area = {0:0.3f})'.format(average_precision[micro_key]),
                 color='navy', linestyle=':', linewidth=4)
+
+    if 'positive' in curves:
+        pos_index = 0
+        ax.plot(recall[pos_index], precision[pos_index], lw=2,
+                label='Precision-recall curve of positive class'
+                      '(area = {1:0.3f})'.format(classes[pos_index],
+                                                 average_precision[pos_index]),
+                color='navy')
 
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
