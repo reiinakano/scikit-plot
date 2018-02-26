@@ -408,8 +408,9 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot',
 
 def plot_precision_recall_curve(y_true, y_probas,
                                 title='Precision-Recall Curve',
-                                curves=('micro', 'each_class', 'positive'), ax=None,
-                                figsize=None, cmap='nipy_spectral',
+                                plot_micro=True, plot_macro=True,
+                                classes_to_plot=None,
+                                ax=None, figsize=None, cmap='nipy_spectral',
                                 title_fontsize="large",
                                 text_fontsize="medium"):
     """Generates the Precision Recall Curve from labels and probabilities
@@ -424,10 +425,18 @@ def plot_precision_recall_curve(y_true, y_probas,
         title (string, optional): Title of the generated plot. Defaults to
             "Precision-Recall curve".
 
-        curves (array-like): A listing of which curves should be plotted on the
-            resulting plot. Defaults to `("micro", "each_class", "positive")`
-            i.e. "micro" for micro-averaged curve
-            noted "positive" means regarding the first class as positive
+        # curves (array-like): A listing of which curves should be plotted on the
+        #     resulting plot. Defaults to `("micro", "each_class", "positive")`
+        #     i.e. "micro" for micro-averaged curve
+        #     noted "positive" means regarding the first class as positive
+        plot_micro (boolean, optional): whether to plot the micro average ROC curve
+            Defaults to `True`
+
+        plot_macro (boolean, optional): whether to plot the macro average ROC curve
+            Defaults to `True`
+
+        classes_to_plot (list-like, optional): classes needed to be plot.
+            e.g. [0,2]. If given class not in the classes, a ValueError will be returned.
 
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
             plot the curve. If None, the plot is drawn on a new set of axes.
@@ -471,65 +480,84 @@ def plot_precision_recall_curve(y_true, y_probas,
     classes = np.unique(y_true)
     probas = y_probas
 
-    if 'micro' not in curves and 'each_class' not in curves and 'positive' not in curves:
-        raise ValueError('Invalid argument for curves as it '
-                         'only takes "micro" or "each_class" or "positive"')
-
-    # Compute Precision-Recall curve and area for each class
+    # compute Precision-Recall curve and area for each classs
     precision = dict()
     recall = dict()
     average_precision = dict()
     for i in range(len(classes)):
         precision[i], recall[i], _ = precision_recall_curve(
-            y_true, probas[:, i], pos_label=classes[i])
+            y_true, probas[:,i], pos_label=classes[i])
 
     y_true = label_binarize(y_true, classes=classes)
     if len(classes) == 2:
         y_true = np.hstack((1 - y_true, y_true))
 
     for i in range(len(classes)):
-        average_precision[i] = average_precision_score(y_true[:, i],
-                                                       probas[:, i])
+        average_precision[i] = average_precision_score(y_true[:,i],
+                                                       probas[:,i])
 
-    # Compute micro-average ROC curve and ROC area
+    # compute the micro-average and macro-average ROC curve and ROC area
     micro_key = 'micro'
-    i = 0
-    while micro_key in precision:
-        i += 1
-        micro_key += str(i)
+    macro_key = 'macro'
 
     precision[micro_key], recall[micro_key], _ = precision_recall_curve(
         y_true.ravel(), probas.ravel())
-    average_precision[micro_key] = average_precision_score(y_true, probas,
-                                                           average='micro')
+    precision[macro_key], recall[macro_key], _ = precision_recall_curve(
+        y_true.ravel(), probas.ravel())
+    average_precision[micro_key] = average_precision_score(
+        y_true, probas, average='micro')
+    average_precision[macro_key] = average_precision_score(
+        y_true, probas, average='macro')
 
     if ax is None:
         fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     ax.set_title(title, fontsize=title_fontsize)
 
-    if 'each_class' in curves:
-        for i in range(len(classes)):
-            color = plt.cm.get_cmap(cmap)(float(i) / len(classes))
+    #create new object for classes_to_plot
+    classes_average_precision = dict()
+    new_classes = list()
+    classes_length = len(classes)
+
+    if(classes_to_plot is None):
+        for i in range(classes_length):
+            color = plt.cm.get_cmap(cmap)(float(i) / classes_length)
             ax.plot(recall[i], precision[i], lw=2,
                     label='Precision-recall curve of class {0} '
-                          '(area = {1:0.3f})'.format(classes[i],
-                                                     average_precision[i]),
+                              '(area = {1:0.3f})'.format(classes[i],
+                                                         average_precision[i]),
+                    color=color)
+    else:
+        if not isinstance(classes_to_plot,list):
+            raise ValueError('only list-like is supported for the parameter classes_to_plot')
+
+        classes_to_plot = np.array(classes_to_plot)
+        for j in range(len(classes_to_plot)):
+            if(classes_to_plot[j] not in classes):
+                raise ValueError('given class %d not in classes'%(classes_to_plot[j]))
+            new_classes.append(classes_to_plot[j])
+            classes_average_precision[classes_to_plot[j]] = average_precision[classes_to_plot[j]]
+        new_classes = np.array(new_classes)
+        for t in range(len(new_classes)):
+            color = plt.cm.get_cmap(cmap)(float(t) / (len(new_classes)))
+            index = new_classes[t]
+            ax.plot(recall[index], precision[index], lw=2,
+                    label='Precision-recall curve of class {0} '
+                          '(area = {1:0.3f})'.format(classes[index],
+                                                     classes_average_precision[index]),
                     color=color)
 
-    if 'micro' in curves:
-        ax.plot(recall[micro_key], precision[micro_key],
+    if (plot_macro):
+        ax.plot(recall[macro_key], precision[macro_key], lw=4,
+            label='macro-average Precision-recall curve '
+                  '(area = {0:0.3f})'.format(average_precision[macro_key]),
+            color='navy', linestyle=':')
+
+    if (plot_micro):
+        ax.plot(recall[micro_key], precision[micro_key], lw=4,
                 label='micro-average Precision-recall curve '
                       '(area = {0:0.3f})'.format(average_precision[micro_key]),
-                color='navy', linestyle=':', linewidth=4)
-
-    if 'positive' in curves:
-        pos_index = 0
-        ax.plot(recall[pos_index], precision[pos_index], lw=2,
-                label='Precision-recall curve of positive class'
-                      '(area = {1:0.3f})'.format(classes[pos_index],
-                                                 average_precision[pos_index]),
-                color='navy')
+                color='steelblue', linestyle=':')
 
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
