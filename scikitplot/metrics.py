@@ -408,6 +408,7 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot',
 
 def plot_precision_recall_curve(y_true, y_probas,
                                 title='Precision-Recall Curve',
+                                curves=('micro', 'each_class'),
                                 plot_micro=True, plot_macro=True,
                                 classes_to_plot=None,
                                 ax=None, figsize=None, cmap='nipy_spectral',
@@ -425,10 +426,12 @@ def plot_precision_recall_curve(y_true, y_probas,
         title (string, optional): Title of the generated plot. Defaults to
             "Precision-Recall curve".
 
-        # curves (array-like): A listing of which curves should be plotted on the
-        #     resulting plot. Defaults to `("micro", "each_class", "positive")`
-        #     i.e. "micro" for micro-averaged curve
-        #     noted "positive" means regarding the first class as positive
+        curves (array-like): A listing of which curves should be plotted on the
+            resulting plot. Defaults to `("micro", "each_class")`
+            i.e. "micro" for micro-averaged curve
+            noted: the "each_class" has deprecated, if you choose to plot the classes
+                   you want, please use the classes_to_plot parameter.
+
         plot_micro (boolean, optional): whether to plot the micro average ROC curve
             Defaults to `True`
 
@@ -519,6 +522,12 @@ def plot_precision_recall_curve(y_true, y_probas,
     new_classes = list()
     classes_length = len(classes)
 
+    # if user just choose the curves parameter of 'each_class', just give user a warning.
+    if('each_class' == curves):
+        print("Warning: parameter 'each_class' has been deprecated. If want to plot the exactly class, "
+              "please use the 'classes_to_plot' parameter.")
+
+    # if classes_to_plot is default, just plot all classes for user.
     if(classes_to_plot is None):
         for i in range(classes_length):
             color = plt.cm.get_cmap(cmap)(float(i) / classes_length)
@@ -527,14 +536,16 @@ def plot_precision_recall_curve(y_true, y_probas,
                               '(area = {1:0.3f})'.format(classes[i],
                                                          average_precision[i]),
                     color=color)
+
     else:
         if not isinstance(classes_to_plot,list):
-            raise ValueError('only list-like is supported for the parameter classes_to_plot')
+            raise ValueError("only list-like is supported for the parameter classes_to_plot")
 
         classes_to_plot = np.array(classes_to_plot)
+        # check the user given 'classes_to_plot', in case the needed class not in the classes.
         for j in range(len(classes_to_plot)):
             if(classes_to_plot[j] not in classes):
-                raise ValueError('given class %d not in classes'%(classes_to_plot[j]))
+                raise ValueError("given class %d not in classes"%(classes_to_plot[j]))
             new_classes.append(classes_to_plot[j])
             classes_average_precision[classes_to_plot[j]] = average_precision[classes_to_plot[j]]
         new_classes = np.array(new_classes)
