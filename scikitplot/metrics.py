@@ -11,6 +11,7 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
+import warnings
 from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import label_binarize
 from sklearn.preprocessing import LabelEncoder
@@ -524,8 +525,8 @@ def plot_precision_recall_curve(y_true, y_probas,
 
     # if user just choose the curves parameter of 'each_class', just give user a warning.
     if('each_class' == curves):
-        print("Warning: parameter 'each_class' has been deprecated. If want to plot the exactly class, "
-              "please use the 'classes_to_plot' parameter.")
+        warnings.warn("parameter 'each_class' has been deprecated. "
+                      "If want to plot the exactly class, please use the 'classes_to_plot' parameter.")
 
     # if classes_to_plot is default, just plot all classes for user.
     if(classes_to_plot is None):
