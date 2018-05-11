@@ -537,7 +537,7 @@ def plot_precision_recall_curve(y_true, y_probas,
 
 def plot_precision_recall(y_true, y_probas,
                           title='Precision-Recall Curve',
-                          plot_macro=True, plot_micro=True,
+                          plot_micro=True,
                           classes_to_plot=None, ax=None,
                           figsize=None, cmap='nipy_spectral',
                           title_fontsize="large",
