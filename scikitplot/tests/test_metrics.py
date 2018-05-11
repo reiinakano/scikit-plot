@@ -231,9 +231,9 @@ class TestPlotPrecisionRecall(unittest.TestCase):
         clf = LogisticRegression()
         clf.fit(self.X, self.y)
         probas = clf.predict_proba(self.X)
-        ax_micro = plot_precision_recall_curve(self.y, probas, plot_macro=False)
+        ax_micro = plot_precision_recall_curve(self.y, probas, curves='micro')
         ax_class = plot_precision_recall_curve(self.y, probas,
-                                               plot_micro=False)
+                                               curves='each_class')
         self.assertNotEqual(ax_micro, ax_class)
 
     def test_cmap(self):
@@ -250,7 +250,7 @@ class TestPlotPrecisionRecall(unittest.TestCase):
         clf.fit(self.X, self.y)
         probas = clf.predict_proba(self.X)
         self.assertRaises(ValueError, plot_precision_recall_curve, self.y,
-                          probas, classes_to_plot='zzz')
+                          probas, curves='zzz')
 
     def test_array_like(self):
         plot_precision_recall_curve([0, 1], [[0.8, 0.2], [0.2, 0.8]])
