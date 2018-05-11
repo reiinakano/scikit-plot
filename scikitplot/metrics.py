@@ -11,7 +11,6 @@ import matplotlib.pyplot as plt
 
 import numpy as np
 
-import warnings
 from sklearn.metrics import confusion_matrix
 from sklearn.preprocessing import label_binarize
 from sklearn.preprocessing import LabelEncoder
