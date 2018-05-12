@@ -117,14 +117,14 @@ If so, please consider citing Scikit-plot with DOI [![DOI](https://zenodo.org/ba
 
 #### APA
 
-> Reiichiro Nakano. (2017). reiinakano/scikit-plot: 0.3.4 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.293191
+> Reiichiro Nakano. (2017). reiinakano/scikit-plot: 0.3.5 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.293191
 
 #### IEEE
 
-> [1]Reiichiro Nakano, “reiinakano/scikit-plot: 0.3.4”. Zenodo, 19-Feb-2017.
+> [1]Reiichiro Nakano, “reiinakano/scikit-plot: 0.3.5”. Zenodo, 19-Feb-2017.
 
 #### ACM
 
-> [1]Reiichiro Nakano 2017. reiinakano/scikit-plot: 0.3.4. Zenodo.
+> [1]Reiichiro Nakano 2017. reiinakano/scikit-plot: 0.3.5. Zenodo.
 
 Happy plotting!
