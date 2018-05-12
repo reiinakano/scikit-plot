@@ -41,7 +41,7 @@ predicted_probas = nb.predict_proba(X_test)
 # The magic happens here
 import matplotlib.pyplot as plt
 import scikitplot as skplt
-skplt.metrics.plot_roc_curve(y_test, predicted_probas)
+skplt.metrics.plot_roc(y_test, predicted_probas)
 plt.show()
 ```
 ![roc_curves](examples/roc_curves.png)
