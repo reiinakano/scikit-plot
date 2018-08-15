@@ -59,6 +59,13 @@ class TestPlotConfusionMatrix(unittest.TestCase):
         preds = clf.predict(self.X)
         plot_confusion_matrix(self.y, preds, labels=[0, 1, 2])
 
+    def test_hide_counts(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        preds = clf.predict(self.X)
+        plot_confusion_matrix(self.y, preds, hide_counts=True)
+
     def test_true_pred_labels(self):
         np.random.seed(0)
         clf = LogisticRegression()
