@@ -35,7 +35,7 @@ class PyTest(TestCommand):
 
 setup(
     name='scikit-plot',
-    version='0.3.5',
+    version='0.3.7',
     url='https://github.com/reiinakano/scikit-plot',
     license='MIT License',
     author='Reiichiro Nakano',
