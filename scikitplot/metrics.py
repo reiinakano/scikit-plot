@@ -175,7 +175,7 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None,
 
     ax.set_ylabel('True label', fontsize=text_fontsize)
     ax.set_xlabel('Predicted label', fontsize=text_fontsize)
-    ax.grid('off')
+    ax.grid(False)
 
     return ax
 
