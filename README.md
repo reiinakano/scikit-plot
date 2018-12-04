@@ -41,7 +41,7 @@ predicted_probas = nb.predict_proba(X_test)
 # The magic happens here
 import matplotlib.pyplot as plt
 import scikitplot as skplt
-skplt.metrics.plot_roc_curve(y_test, predicted_probas)
+skplt.metrics.plot_roc(y_test, predicted_probas)
 plt.show()
 ```
 ![roc_curves](examples/roc_curves.png)
@@ -117,14 +117,14 @@ If so, please consider citing Scikit-plot with DOI [![DOI](https://zenodo.org/ba
 
 #### APA
 
-> Reiichiro Nakano. (2017). reiinakano/scikit-plot: 0.3.3 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.293191
+> Reiichiro Nakano. (2018). reiinakano/scikit-plot: 0.3.7 [Data set]. Zenodo. http://doi.org/10.5281/zenodo.293191
 
 #### IEEE
 
-> [1]Reiichiro Nakano, “reiinakano/scikit-plot: 0.3.3”. Zenodo, 19-Feb-2017.
+> [1]Reiichiro Nakano, “reiinakano/scikit-plot: 0.3.7”. Zenodo, 19-Feb-2017.
 
 #### ACM
 
-> [1]Reiichiro Nakano 2017. reiinakano/scikit-plot: 0.3.3. Zenodo.
+> [1]Reiichiro Nakano 2018. reiinakano/scikit-plot: 0.3.7. Zenodo.
 
 Happy plotting!

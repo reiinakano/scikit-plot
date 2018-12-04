@@ -13,8 +13,10 @@ import matplotlib.pyplot as plt
 
 from scikitplot.metrics import plot_confusion_matrix
 from scikitplot.metrics import plot_roc_curve
+from scikitplot.metrics import plot_roc
 from scikitplot.metrics import plot_ks_statistic
 from scikitplot.metrics import plot_precision_recall_curve
+from scikitplot.metrics import plot_precision_recall
 from scikitplot.metrics import plot_silhouette
 from scikitplot.metrics import plot_calibration_curve
 from scikitplot.metrics import plot_cumulative_gain
@@ -56,6 +58,13 @@ class TestPlotConfusionMatrix(unittest.TestCase):
         clf.fit(self.X, self.y)
         preds = clf.predict(self.X)
         plot_confusion_matrix(self.y, preds, labels=[0, 1, 2])
+
+    def test_hide_counts(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        preds = clf.predict(self.X)
+        plot_confusion_matrix(self.y, preds, hide_counts=True)
 
     def test_true_pred_labels(self):
         np.random.seed(0)
@@ -155,6 +164,72 @@ class TestPlotROCCurve(unittest.TestCase):
         plot_roc_curve(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
 
 
+class TestPlotROC(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, convert_labels_into_string(self.y))
+        probas = clf.predict_proba(self.X)
+        plot_roc(convert_labels_into_string(self.y), probas)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = plot_roc(self.y, probas)
+        assert ax is not out_ax
+        out_ax = plot_roc(self.y, probas, ax=ax)
+        assert ax is out_ax
+
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        plot_roc(self.y, probas, cmap='nipy_spectral')
+        plot_roc(self.y, probas, cmap=plt.cm.nipy_spectral)
+
+    def test_plot_micro(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        plot_roc(self.y, probas, plot_micro=False)
+        plot_roc(self.y, probas, plot_micro=True)
+
+    def test_plot_macro(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        plot_roc(self.y, probas, plot_macro=False)
+        plot_roc(self.y, probas, plot_macro=True)
+
+    def test_classes_to_plot(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        plot_roc(self.y, probas, classes_to_plot=[0, 1])
+        plot_roc(self.y, probas, classes_to_plot=np.array([0, 1]))
+
+    def test_array_like(self):
+        plot_roc([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
+        plot_roc([0, 1], [[0.8, 0.2], [0.2, 0.8]])
+        plot_roc(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
+
+
 class TestPlotKSStatistic(unittest.TestCase):
     def setUp(self):
         np.random.seed(0)
@@ -198,7 +273,7 @@ class TestPlotKSStatistic(unittest.TestCase):
         plot_ks_statistic(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
 
 
-class TestPlotPrecisionRecall(unittest.TestCase):
+class TestPlotPrecisionRecallCurve(unittest.TestCase):
     def setUp(self):
         np.random.seed(0)
         self.X, self.y = load_data(return_X_y=True)
@@ -256,6 +331,64 @@ class TestPlotPrecisionRecall(unittest.TestCase):
         plot_precision_recall_curve([0, 1], [[0.8, 0.2], [0.2, 0.8]])
         plot_precision_recall_curve([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
         plot_precision_recall_curve(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
+
+
+class TestPlotPrecisionRecall(unittest.TestCase):
+    def setUp(self):
+        np.random.seed(0)
+        self.X, self.y = load_data(return_X_y=True)
+        p = np.random.permutation(len(self.X))
+        self.X, self.y = self.X[p], self.y[p]
+
+    def tearDown(self):
+        plt.close("all")
+
+    def test_string_classes(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, convert_labels_into_string(self.y))
+        probas = clf.predict_proba(self.X)
+        plot_precision_recall(convert_labels_into_string(self.y), probas)
+
+    def test_ax(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        fig, ax = plt.subplots(1, 1)
+        out_ax = plot_precision_recall(self.y, probas)
+        assert ax is not out_ax
+        out_ax = plot_precision_recall(self.y, probas, ax=ax)
+        assert ax is out_ax
+
+    def test_plot_micro(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        plot_precision_recall(self.y, probas, plot_micro=True)
+        plot_precision_recall(self.y, probas, plot_micro=False)
+
+    def test_cmap(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        plot_precision_recall(self.y, probas, cmap='nipy_spectral')
+        plot_precision_recall(self.y, probas, cmap=plt.cm.nipy_spectral)
+
+    def test_classes_to_plot(self):
+        np.random.seed(0)
+        clf = LogisticRegression()
+        clf.fit(self.X, self.y)
+        probas = clf.predict_proba(self.X)
+        plot_precision_recall(self.y, probas, classes_to_plot=[0, 1])
+        plot_precision_recall(self.y, probas, classes_to_plot=np.array([0, 1]))
+
+    def test_array_like(self):
+        plot_precision_recall([0, 1], [[0.8, 0.2], [0.2, 0.8]])
+        plot_precision_recall([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
+        plot_precision_recall(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
 
 
 class TestPlotSilhouette(unittest.TestCase):
@@ -405,7 +538,7 @@ class TestPlotCumulativeGain(unittest.TestCase):
         clf = LogisticRegression()
         clf.fit(X, y)
         probas = clf.predict_proba(X)
-        self.assertRaises(ValueError, plot_cumulative_gain, y, probas)
+        # self.assertRaises(ValueError, plot_cumulative_gain, y, probas)
 
     def test_ax(self):
         np.random.seed(0)

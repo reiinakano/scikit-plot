@@ -8,7 +8,6 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import load_breast_cancer as load_data
 import scikitplot as skplt
 
-
 X, y = load_data(return_X_y=True)
 lr = LogisticRegression()
 lr.fit(X, y)
