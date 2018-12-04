@@ -1043,7 +1043,8 @@ def plot_calibration_curve(y_true, probas_list, clf_names=None, n_bins=10,
 
 
 def plot_cumulative_gain(y_true, y_probas, title='Cumulative Gains Curve',
-                         ax=None, figsize=None, title_fontsize="large",
+                         classes_to_plot=None, plot_micro=True, plot_macro=True,
+                         ax=None, figsize=None, title_fontsize="large", cmap='nipy_spectral',
                          text_fontsize="medium"):
     """Generates the Cumulative Gains Plot from labels and scores/probabilities
 
@@ -1062,6 +1063,17 @@ def plot_cumulative_gain(y_true, y_probas, title='Cumulative Gains Curve',
         title (string, optional): Title of the generated plot. Defaults to
             "Cumulative Gains Curve".
 
+        classes_to_plot (list-like, optional): Classes for which the Cumulative Gain
+            curve should be plotted. e.g. [0, 'cold']. If given class does not exist,
+            it will be ignored. If ``None``, all classes will be plotted. Defaults to
+            ``None``
+
+        plot_micro (boolean, optional): Plot the micro average ROC curve.
+            Defaults to ``True``.
+
+        plot_macro (boolean, optional): Plot the macro average ROC curve.
+            Defaults to ``True``.
+
         ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
             plot the learning curve. If None, the plot is drawn on a new set of
             axes.
@@ -1072,6 +1084,11 @@ def plot_cumulative_gain(y_true, y_probas, title='Cumulative Gains Curve',
         title_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to
             "large".
+
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional):
+            Colormap used for plotting the projection. View Matplotlib Colormap
+            documentation for available options.
+            https://matplotlib.org/users/colormaps.html
 
         text_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to
@@ -1098,28 +1115,56 @@ def plot_cumulative_gain(y_true, y_probas, title='Cumulative Gains Curve',
     y_probas = np.array(y_probas)
 
     classes = np.unique(y_true)
-    if len(classes) != 2:
-        raise ValueError('Cannot calculate Cumulative Gains for data with '
-                         '{} category/ies'.format(len(classes)))
 
-    # Compute Cumulative Gain Curves
-    percentages, gains1 = cumulative_gain_curve(y_true, y_probas[:, 0],
-                                                classes[0])
-    percentages, gains2 = cumulative_gain_curve(y_true, y_probas[:, 1],
-                                                classes[1])
+    if classes_to_plot is None:
+        classes_to_plot = classes
 
     if ax is None:
         fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     ax.set_title(title, fontsize=title_fontsize)
 
-    ax.plot(percentages, gains1, lw=3, label='Class {}'.format(classes[0]))
-    ax.plot(percentages, gains2, lw=3, label='Class {}'.format(classes[1]))
+    perc_dict = dict()
+    gain_dict = dict()
+
+    indices_to_plot = np.isin(classes, classes_to_plot)
+    # Loop for all classes to get different class gain
+    for i, to_plot in enumerate(indices_to_plot):
+        perc_dict[i], gain_dict[i] = cumulative_gain_curve(y_true, y_probas[:, i], pos_label=classes[i])
+
+        if to_plot:
+            color = plt.cm.get_cmap(cmap)(float(i) / len(classes))
+            ax.plot(perc_dict[i], gain_dict[i], lw=2, color=color,
+                    label='Class {} Cumulative Gain curve'.format(classes[i]))
+
+    # Whether or to plot macro or micro
+    if plot_micro:
+        binarized_y_true = label_binarize(y_true, classes=classes)
+        if len(classes) == 2:
+            binarized_y_true = np.hstack((1 - binarized_y_true, binarized_y_true))
+
+        perc, gain = cumulative_gain_curve(binarized_y_true.ravel(), y_probas.ravel())
+        ax.plot(perc, gain, label='micro-average Cumulative Gain curve',
+                color='deeppink', linestyle=':', linewidth=4)
+
+    if plot_macro:
+        # First aggregate all percentages
+        all_perc = np.unique(np.concatenate([perc_dict[x] for x in range(len(classes))]))
+
+        # Then interpolate all cumulative gain
+        mean_gain = np.zeros_like(all_perc)
+        for i in range(len(classes)):
+            mean_gain += interp(all_perc, perc_dict[i], gain_dict[i])
+
+        mean_gain /= len(classes)
+
+        ax.plot(all_perc, mean_gain, label='macro-average Cumulative Gain curve',
+                color='navy', linestyle=':', linewidth=4)
 
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.0])
 
-    ax.plot([0, 1], [0, 1], 'k--', lw=2, label='Baseline')
+    ax.plot([0, 1], [0, 1], 'k--', lw=2)
 
     ax.set_xlabel('Percentage of sample', fontsize=text_fontsize)
     ax.set_ylabel('Gain', fontsize=text_fontsize)
