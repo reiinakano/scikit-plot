@@ -332,7 +332,7 @@ def plot_roc_curve(y_true, y_probas, title='ROC Curves',
 def plot_roc(y_true, y_probas, title='ROC Curves',
                    plot_micro=True, plot_macro=True, classes_to_plot=None,
                    ax=None, figsize=None, cmap='nipy_spectral',
-                   title_fontsize="large", text_fontsize="medium"):
+                   title_fontsize="large", text_fontsize="medium", digits=2):
     """Generates the ROC curves from labels and predicted scores/probabilities
 
     Args:
@@ -374,6 +374,9 @@ def plot_roc(y_true, y_probas, title='ROC Curves',
         text_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to
             "medium".
+
+        digits (int, optional): Number of digits for formatting output floating point values.
+            Use e.g. 2 or 4. Defaults to 2.
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
@@ -429,7 +432,7 @@ def plot_roc(y_true, y_probas, title='ROC Curves',
         roc_auc = auc(fpr, tpr)
         ax.plot(fpr, tpr,
                 label='micro-average ROC curve '
-                      '(area = {0:0.2f})'.format(roc_auc),
+                      '(area = {0:.{digits}f})'.format(roc_auc, digits=digits),
                 color='deeppink', linestyle=':', linewidth=4)
 
     if plot_macro:
@@ -448,7 +451,7 @@ def plot_roc(y_true, y_probas, title='ROC Curves',
 
         ax.plot(all_fpr, mean_tpr,
                 label='macro-average ROC curve '
-                      '(area = {0:0.2f})'.format(roc_auc),
+                      '(area = {0:.{digits}f})'.format(roc_auc, digits=digits),
                 color='navy', linestyle=':', linewidth=4)
 
     ax.plot([0, 1], [0, 1], 'k--', lw=2)
@@ -463,7 +466,7 @@ def plot_roc(y_true, y_probas, title='ROC Curves',
 
 def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot',
                       ax=None, figsize=None, title_fontsize="large",
-                      text_fontsize="medium"):
+                      text_fontsize="medium", digits=2):
     """Generates the KS Statistic plot from labels and scores/probabilities
 
     Args:
@@ -490,6 +493,9 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot',
         text_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to
             "medium".
+
+        digits (int, optional): Number of digits for formatting output floating point values.
+            Use e.g. 2 or 4. Defaults to 2.
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
@@ -531,8 +537,8 @@ def plot_ks_statistic(y_true, y_probas, title='KS Statistic Plot',
     ax.plot(thresholds, pct2, lw=3, label='Class {}'.format(classes[1]))
     idx = np.where(thresholds == max_distance_at)[0][0]
     ax.axvline(max_distance_at, *sorted([pct1[idx], pct2[idx]]),
-               label='KS Statistic: {:.3f} at {:.3f}'.format(ks_statistic,
-                                                             max_distance_at),
+               label='KS Statistic: {:.{digits}f} at {:.{digits}f}'.format(ks_statistic,
+                                                             max_distance_at, digits=digits),
                linestyle=':', lw=3, color='black')
 
     ax.set_xlim([0.0, 1.0])
@@ -679,7 +685,8 @@ def plot_precision_recall(y_true, y_probas,
                           classes_to_plot=None, ax=None,
                           figsize=None, cmap='nipy_spectral',
                           title_fontsize="large",
-                          text_fontsize="medium"):
+                          text_fontsize="medium",
+                          digits=2):
     """Generates the Precision Recall Curve from labels and probabilities
 
     Args:
@@ -718,6 +725,9 @@ def plot_precision_recall(y_true, y_probas,
         text_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to
             "medium".
+
+        digits (int, optional): Number of digits for formatting output floating point values.
+            Use e.g. 2 or 4. Defaults to 2.
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
@@ -766,8 +776,9 @@ def plot_precision_recall(y_true, y_probas,
             color = plt.cm.get_cmap(cmap)(float(i) / len(classes))
             ax.plot(recall, precision, lw=2,
                     label='Precision-recall curve of class {0} '
-                          '(area = {1:0.3f})'.format(classes[i],
-                                                     average_precision),
+                          '(area = {1:.{digits}f})'.format(classes[i],
+                                                     average_precision,
+                                                     digits=digits),
                     color=color)
 
     if plot_micro:
@@ -778,7 +789,7 @@ def plot_precision_recall(y_true, y_probas,
                                                     average='micro')
         ax.plot(recall, precision,
                 label='micro-average Precision-recall curve '
-                      '(area = {0:0.3f})'.format(average_precision),
+                      '(area = {0:.{digits}f})'.format(average_precision, digits=digits),
                 color='navy', linestyle=':', linewidth=4)
 
     ax.set_xlim([0.0, 1.0])
@@ -793,7 +804,7 @@ def plot_precision_recall(y_true, y_probas,
 def plot_silhouette(X, cluster_labels, title='Silhouette Analysis',
                     metric='euclidean', copy=True, ax=None, figsize=None,
                     cmap='nipy_spectral', title_fontsize="large",
-                    text_fontsize="medium"):
+                    text_fontsize="medium", digits=2):
     """Plots silhouette analysis of clusters provided.
 
     Args:
@@ -834,6 +845,9 @@ def plot_silhouette(X, cluster_labels, title='Silhouette Analysis',
         text_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to
             "medium".
+
+        digits (int, optional): Number of digits for formatting output floating point values.
+            Use e.g. 2 or 4. Defaults to 2.
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
@@ -897,7 +911,7 @@ def plot_silhouette(X, cluster_labels, title='Silhouette Analysis',
         y_lower = y_upper + 10
 
     ax.axvline(x=silhouette_avg, color="red", linestyle="--",
-               label='Silhouette score: {0:0.3f}'.format(silhouette_avg))
+               label='Silhouette score: {0:.{digits}f}'.format(silhouette_avg, digits=2))
 
     ax.set_yticks([])  # Clear the y-axis labels / ticks
     ax.set_xticks(np.arange(-0.1, 1.0, 0.2))
