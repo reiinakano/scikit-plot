@@ -97,7 +97,8 @@ def plot_pca_component_variance(clf, title='PCA Component Explained Variances',
 def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection',
                            biplot=False, feature_labels=None,
                            ax=None, figsize=None, cmap='Spectral',
-                           title_fontsize="large", text_fontsize="medium"):
+                           title_fontsize="large", text_fontsize="medium",
+                           label_dots=False):
     """Plots the 2-dimensional projection of PCA on a given dataset.
 
     Args:
@@ -173,6 +174,10 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection',
     for label, color in zip(classes, colors):
         ax.scatter(transformed_X[y == label, 0], transformed_X[y == label, 1],
                    alpha=0.8, lw=2, label=label, color=color)
+
+        if label_dots:
+            for dot in transformed_X[y == label, 0:2]:
+                ax.text(*dot, label)
 
     if biplot:
         xs = transformed_X[:, 0]
