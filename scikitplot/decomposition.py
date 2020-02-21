@@ -163,7 +163,10 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection',
         fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     ax.set_title(title, fontsize=title_fontsize)
-    classes = np.unique(np.array(y))
+
+    # Get unique classes from y, preserving order of class occurence in y
+    _, class_indexes = np.unique(np.array(y), return_index=True)
+    classes = np.array(y)[np.sort(class_indexes)]
 
     colors = plt.cm.get_cmap(cmap)(np.linspace(0, 1, len(classes)))
 
