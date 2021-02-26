@@ -34,7 +34,7 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None,
                           pred_labels=None, title=None, normalize=False,
                           hide_zeros=False, hide_counts=False, x_tick_rotation=0, ax=None,
                           figsize=None, cmap='Blues', title_fontsize="large",
-                          text_fontsize="medium"):
+                          text_fontsize="medium",colorbar=True):
     """Generates confusion matrix plot from predictions and true labels
 
     Args:
@@ -65,7 +65,7 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None,
         hide_zeros (bool, optional): If True, does not plot cells containing a
             value of zero. Defaults to False.
 
-        hide_counts (bool, optional): If True, doe not overlay counts.
+        hide_counts (bool, optional): If True, does not overlay counts.
             Defaults to False.
 
         x_tick_rotation (int, optional): Rotates x-axis tick labels by the
@@ -90,6 +90,10 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None,
         text_fontsize (string or int, optional): Matplotlib-style fontsizes.
             Use e.g. "small", "medium", "large" or integer-values. Defaults to
             "medium".
+        
+        colorbar (bool, optional): If False, does not add colourmap.
+            Defaults to True.
+
 
     Returns:
         ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
@@ -153,7 +157,10 @@ def plot_confusion_matrix(y_true, y_pred, labels=None, true_labels=None,
         ax.set_title('Confusion Matrix', fontsize=title_fontsize)
 
     image = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.get_cmap(cmap))
-    plt.colorbar(mappable=image)
+    
+    if colorbar == True:
+        plt.colorbar(mappable=image)
+    
     x_tick_marks = np.arange(len(pred_classes))
     y_tick_marks = np.arange(len(true_classes))
     ax.set_xticks(x_tick_marks)
