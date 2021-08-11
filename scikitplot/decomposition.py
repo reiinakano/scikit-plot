@@ -177,7 +177,7 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection',
                    alpha=0.8, lw=2, label=label, color=color)
 
         if label_dots:
-            for dot in transformed_X[y == label, np.array(dimensions)[:, np.newaxis]]:
+            for dot in transformed_X[y == label][:, dimensions]:
                 ax.text(*dot, label)
 
     if biplot:
