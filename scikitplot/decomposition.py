@@ -197,7 +197,7 @@ def plot_pca_2d_projection(clf, X, y, title='PCA 2-D Projection',
     ax.legend(loc='best', shadow=False, scatterpoints=1,
               fontsize=text_fontsize)
     ax.set_xlabel(f'Principal Component {dimensions[0]+1}', fontsize=text_fontsize)
-    ax.set_ylabel(f'Principal Component {dimension[1]+1}', fontsize=text_fontsize)
+    ax.set_ylabel(f'Principal Component {dimensions[1]+1}', fontsize=text_fontsize)
     ax.tick_params(labelsize=text_fontsize)
 
     return ax
