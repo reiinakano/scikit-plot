@@ -1,0 +1,110 @@
+{
+ "CalibratedClassifierCV": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.calibration",
+   "module_short": "sklearn.calibration",
+   "name": "CalibratedClassifierCV"
+  }
+ ],
+ "GaussianNB": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.naive_bayes",
+   "module_short": "sklearn.naive_bayes",
+   "name": "GaussianNB"
+  }
+ ],
+ "LinearSVC": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.svm",
+   "module_short": "sklearn.svm",
+   "name": "LinearSVC"
+  }
+ ],
+ "LogisticRegression": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.linear_model",
+   "module_short": "sklearn.linear_model",
+   "name": "LogisticRegression"
+  }
+ ],
+ "RandomForestClassifier": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.ensemble",
+   "module_short": "sklearn.ensemble",
+   "name": "RandomForestClassifier"
+  }
+ ],
+ "make_classification": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.datasets",
+   "module_short": "sklearn.datasets",
+   "name": "make_classification"
+  }
+ ],
+ "np.random.seed": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy.random",
+   "module_short": "numpy.random",
+   "name": "seed"
+  }
+ ],
+ "plt.show": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "show"
+  }
+ ],
+ "plt.subplots": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "subplots"
+  }
+ ],
+ "plt.tight_layout": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "tight_layout"
+  }
+ ],
+ "scikitplot.api.metrics.plot_calibration": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "scikitplot.api.metrics",
+   "module_short": "scikitplot.api.metrics",
+   "name": "plot_calibration"
+  }
+ ],
+ "skplt.metrics.plot_calibration": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "scikitplot.api.metrics",
+   "module_short": "scikitplot.api.metrics",
+   "name": "plot_calibration"
+  }
+ ]
+}

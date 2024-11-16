@@ -1,0 +1,92 @@
+{
+ "LogisticRegression": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.linear_model",
+   "module_short": "sklearn.linear_model",
+   "name": "LogisticRegression"
+  }
+ ],
+ "data_3_classes": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.datasets",
+   "module_short": "sklearn.datasets",
+   "name": "load_iris"
+  }
+ ],
+ "np.random.seed": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy.random",
+   "module_short": "numpy.random",
+   "name": "seed"
+  }
+ ],
+ "np.unique": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy",
+   "module_short": "numpy",
+   "name": "unique"
+  }
+ ],
+ "plt.show": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "show"
+  }
+ ],
+ "plt.tight_layout": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "tight_layout"
+  }
+ ],
+ "scikitplot.api.metrics.plot_classifier_eval": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "scikitplot.api.metrics",
+   "module_short": "scikitplot.api.metrics",
+   "name": "plot_classifier_eval"
+  }
+ ],
+ "skplt.metrics.plot_classifier_eval": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "scikitplot.metrics",
+   "module_short": "scikitplot.metrics",
+   "name": "plot_classifier_eval"
+  }
+ ],
+ "skplt.utils.combine_and_save_figures": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "scikitplot.utils",
+   "module_short": "scikitplot.utils",
+   "name": "combine_and_save_figures"
+  }
+ ],
+ "train_test_split": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.model_selection",
+   "module_short": "sklearn.model_selection",
+   "name": "train_test_split"
+  }
+ ]
+}

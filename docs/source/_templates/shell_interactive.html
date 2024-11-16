@@ -1,0 +1,11 @@
+{%- set repl_url = repl_url | default("https://jupyterlite.github.io/demo/repl/?toolbar=1&kernel=python&code=import%20numpy%20as%20np") %}
+<div class="shell-lesson shell-content">
+  <!-- Interactive Shell -->
+  <!-- src="https://jupyterlite.github.io/demo/repl/?toolbar=1&kernel=python&code=import%20numpy%20as%20np" -->
+  <iframe
+    class="numpy-shell"
+    src={{ repl_url }}
+    width="100%" height="500px"
+  >Try the REPL!
+  </iframe>
+</div>

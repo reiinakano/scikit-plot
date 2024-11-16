@@ -1,0 +1,42 @@
+
+
+Examples using ``scikitplot.api.kds.plot_lift``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. start-sphx-glr-thumbnails
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example showing the :py~scikitplot.api.kds.plot_lift function used by a scikit-learn classifier.">
+
+.. only:: html
+
+  .. image:: /auto_examples/kds/images/thumb/sphx_glr_plot_lift_script_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_kds_plot_lift_script.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">plot_lift with examples</div>
+    </div>
+
+
+.. only:: not html
+
+ * :ref:`sphx_glr_auto_examples_kds_plot_lift_script.py`
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+

@@ -1,0 +1,9 @@
+[wrap-file]
+directory = boost
+# https://www.boost.org/users/history/version_1_81_0.html
+# url = https://github.com/boostorg/boost.git
+# revision = boost-1.81.0
+source_url = https://archives.boost.io/release/1.81.0/source/boost_1_81_0.tar.gz
+source_filename = boost_1_81_0.tar.gz
+# You need to provide the correct hash for the downloaded file.
+source_hash = 205666dea9f6a7cfed87c7a6dfbeb52a2c1b9de55712c9c1a87735d7181452b6

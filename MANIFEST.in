@@ -1,3 +1,18 @@
-include README.md
+## Optional file to specify additional files for packaging.
+## Setuptools Build System
+
+# Include the LICENSE file from the LICENSE directory
 include LICENSE
+include LICENSES/
+
+# Include other files as needed
+include README.md
 include requirements.txt
+include setup.cfg
+include pyproject.toml
+
+# Include all files under the tests directory
+recursive-include tests *
+
+# Include the package source code
+recursive-include scikitplot *

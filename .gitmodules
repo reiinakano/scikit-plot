@@ -1,0 +1,20 @@
+[submodule "third_party/array-api-compat"]
+	path = third_party/array-api-compat
+	url = https://github.com/scikit-plots/array-api-compat
+	branch = gh_array_api_compat
+[submodule "third_party/math"]
+	path = third_party/math
+	url = https://github.com/scikit-plots/math.git
+	branch = gh_boost_math
+[submodule "third_party/boost"]
+	path = third_party/boost
+	url = https://github.com/scikit-plots/boost.git
+	branch = gh_boost
+[submodule "third_party/NumCpp"]
+	path = third_party/NumCpp
+	url = https://github.com/scikit-plots/NumCpp
+	branch = gh_numcpp
+[submodule "third_party/xla"]
+	path = third_party/xla
+	url = https://github.com/scikit-plots/xla.git
+	branch = gh_xla

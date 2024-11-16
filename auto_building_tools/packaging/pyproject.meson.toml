@@ -1,0 +1,493 @@
+# This file is the modern replacement for setup.py, used to configure how your Python package is built.
+# 
+# https://packaging.python.org/en/latest/discussions/setup-py-deprecated/#setup-py-deprecated
+# https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#a-full-example
+# 
+# The [build-system] section specifies the build system requirements.
+# "setuptools.build_meta" is the default backend used by setuptools for building projects.
+# You can add other build dependencies as needed.
+[build-system]
+# "build-backend" specifies the Python backend to use for building the package.
+build-backend = "mesonpy"
+requires = [
+  # building an env isolated one
+  "meson>=1.1.0",          # The Meson build system itself to coordinate the compilation of code.
+  "ninja>=1.11.0",         # The ninja build system used to compile code
+  "meson-python>=0.16.0",  # A PEP 517 backend for building Python packages with Meson.
+  "Cython>=3.0.10",
+  "pybind11>=2.13.1",
+  "pythran>=0.14.0",
+  "scipy>=1.6.0",
+
+  # numpy requirement for wheel builds for distribution on PyPI - building
+  # against 2.x yields wheels that are also compatible with numpy 1.x at
+  # runtime.
+  # Note that building against numpy 1.x works fine too - users and
+  # redistributors can do this by installing the numpy version they like and
+  # disabling build isolation.
+  "numpy>=2.0.0rc1",
+  # Add other dependencies here if needed
+]
+
+# The [project] section contains metadata about your project.
+[project]
+name = "scikit-plots"  # The name of your project
+dynamic = ["version"]  # The version is determined dynamically, inside meson.build
+description = "An intuitive library to add plotting functionality to scikit-learn objects."
+
+# [project.readme]
+# content-type = "text/x-rst"
+# The readme file is specified here. This is what users will see on your project's PyPI page.
+readme = "README.md"
+
+# [project.license]
+# License information is critical. It's recommended to specify the license file.
+# license = {text = "MIT License"}
+# TODO: add `license-files` once PEP 639 is accepted (see meson-python#88)
+#       at that point, no longer include them in `py3.install_sources()`
+license = {file = "LICENSE"}
+
+# [[project.authors]]
+# List the authors of the project
+authors = [
+  {name = "Reiichiro Nakano et al.", email = "reiichiro.s.nakano@gmail.com"},
+  # {name = "Prateek Sharma", email = "s.prateek3080@gmail.com"},
+]
+# [[project.maintainers]]
+# Project maintainers
+maintainers = [
+  {name = "Muhammed Çelik", email = "muhammed.business.network@gmail.com"}
+]
+
+# Keywords to describe your project, useful for searchability
+keywords = [
+  "matplotlib",
+  "scikit-learn",
+  "xgboost",
+  "catboost",
+  "tensorflow",
+  "keras",
+  "pytorch",
+  "machine learning",
+  "data science",
+  "visualization",
+]
+
+# Classifiers help users understand the maturity, audience, and compatible environments for your project.
+# https://pypi.org/pypi?%3Aaction=list_classifiers
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  'License :: OSI Approved :: BSD License',
+  'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  'Programming Language :: C',
+  'Programming Language :: C++',
+  'Programming Language :: Cython',
+  'Programming Language :: Fortran',
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.5",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Topic :: Scientific/Engineering :: Visualization",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+# This specifies the minimum Python version required for your project.
+requires-python = ">=3"
+
+# List of dependencies that your project needs to run
+dependencies = [
+  # Replace these with the actual dependencies from requirements.txt
+  "scipy>=1.6.0",
+  "numpy>=1.19.5",
+  "pandas>=1.1.5",
+  "matplotlib>=1.4.0",
+  "scikit-learn>=0.24",
+  "joblib>=1.2.0", 
+  "threadpoolctl>=3.1.0", 
+]
+
+# Optional dependencies, for example for testing
+[project.optional-dependencies]
+# List CPU-related libraries here
+cpu = ["numpy",]
+# List GPU-related libraries here
+gpu = ["cupy",]
+# Replace with actual TPU-related libraries
+tpu = ["tensorflow",]
+dev = [
+  # "mypy==1.10.0",
+  # "typing_extensions",
+  # "types-psutil",
+  # "pycodestyle",
+  # "ruff>=0.0.292",
+  # "cython-lint>=0.12.2",
+  # "rich-click",
+  # "doit>=0.36.0",
+  # "pydevtool",
+]
+build = [
+  "meson>=1.1.0",          # The Meson build system itself to coordinate the compilation of code.
+  "ninja>=1.11.0",         # The ninja build system used to compile code
+  "meson-python>=0.16.0",  # A PEP 517 backend for building Python packages with Meson.
+  "Cython>=3.0.10",
+  "pybind11>=2.13.1",
+  "pythran>=0.14.0",
+  "scipy>=1.6.0",  
+  "numpy>=1.23.5",
+  "pandas>=1.5.0",
+  "matplotlib>=1.4.0",
+  "build",
+  "twine",
+]
+test = [
+  "pandas>=1.1.5",
+  "polars>=0.20.30",
+  "pyarrow>=12.0.0",
+  "matplotlib>=3.3.4",
+  "catboost",
+  "tensorflow",
+  "numpydoc>=1.2.0",
+  "pytest>=7.1.2",
+  "pytest-mpl",
+  "hypothesis>=6.30",
+  "pooch>=1.6.0",
+  "black>=24.3.0",
+  "ruff>=0.5.1",
+]
+doc = [
+  "packaging>=21",
+  "jinja2",
+  "numpydoc>=1.2.0",
+  "pandas>=1.5",
+  "polars>=0.20.30",
+  "pyarrow>=12.0.0",
+  "matplotlib>=3.5",
+  "seaborn>=0.11",
+  "plotly>=5.10",
+  "Pillow>=9.1",
+  "pooch",
+  "scikit-image>=0.17.2",
+  "scikit-learn>=1.1",
+  "tensorflow>=2.10",
+  "sphinx>=5.0.0,<8.0.0",
+  "sphinx-rtd-theme",
+  "pydata-sphinx-theme",
+  "sphinx-gallery",
+  "sphinx-prompt",
+  "sphinxext-opengraph",
+  "sphinx-copybutton",
+  "sphinxcontrib-sass",
+  "sphinx-design",
+  "sphinx-remove-toctrees",
+  "myst-nb",
+  "jupytext",
+  "jupyter-sphinx",
+  "jupyterlite-sphinx",
+  "jupyterlite-pyodide-kernel",
+  "intersphinx_registry",
+  "colorspacious",
+  "sphinxcontrib-svg2pdfconverter",
+  "sphinxcontrib-inlinesyntaxhighlight",
+]
+
+# Links to important pages related to the project
+[project.urls]
+Homepage      = "https://scikit-plots.github.io"
+Download      = "https://github.com/celik-muhammed/scikit-plot/tree/muhammed-dev"
+Documentation = "https://scikit-plots.github.io/stable/"
+Donate        = "https://github.com/celik-muhammed/scikit-plot#donate"
+Forum         = "https://github.com/celik-muhammed/scikit-plot/issues"
+Issues        = "https://github.com/celik-muhammed/scikit-plot/issues"
+Repo_Forked   = "https://github.com/reiinakano/scikit-plot"
+Repository    = "https://github.com/scikit-plots/scikit-plots"
+# The changelog, really useful for ongoing users of your project
+changelog     = "https://scikit-plots.github.io/dev/whats_new/whats_new.html"
+
+# Configuration for the pytest testing framework
+[tool.pytest.ini_options]
+minversion = "6.0"  # Specify the minimum version of pytest
+addopts = "-ra -q"  # Add command-line options
+testpaths = [
+  "scikitplot",
+]  # Directories where tests are located
+# filterwarnings = [
+#     "error",
+#     'default:.*pyamg, which cannot \(yet\) be imported with NumPy >=2:RuntimeWarning'
+# ]
+
+# Black is a code formatter; this section configures its behavior.
+[tool.black]
+line-length = 100  # Maximum line length 88
+target-version = ['py35', 'py310', 'py314']  # Python versions to target
+preview = true     # Enable Black's preview features
+exclude = '''
+/(
+    \.eggs         # exclude a few common directories in the
+  | \.git          # root of the project
+  | \.mypy_cache
+  | \.vscode
+  | builddir
+  | build
+  | dist
+  | doc/build
+  | doc/_build
+  | doc/auto_examples
+  | scikitplot/externals
+  | asv_benchmarks/env
+  | auto_building_tools/
+)/
+'''# This file is the modern replacement for setup.py, used to configure how your Python package is built.
+# 
+# https://packaging.python.org/en/latest/discussions/setup-py-deprecated/#setup-py-deprecated
+# https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#a-full-example
+# 
+# The [build-system] section specifies the build system requirements.
+# "setuptools.build_meta" is the default backend used by setuptools for building projects.
+# You can add other build dependencies as needed.
+[build-system]
+# "build-backend" specifies the Python backend to use for building the package.
+build-backend = "mesonpy"
+requires = [
+  # building an env isolated one
+  "meson>=1.1.0",          # The Meson build system itself to coordinate the compilation of code.
+  "ninja>=1.11.0",         # The ninja build system used to compile code
+  "meson-python>=0.16.0",  # A PEP 517 backend for building Python packages with Meson.
+  "Cython>=3.0.10",
+  "pybind11>=2.13.1",
+  "pythran>=0.14.0",
+  "scipy>=1.6.0",
+
+  # numpy requirement for wheel builds for distribution on PyPI - building
+  # against 2.x yields wheels that are also compatible with numpy 1.x at
+  # runtime.
+  # Note that building against numpy 1.x works fine too - users and
+  # redistributors can do this by installing the numpy version they like and
+  # disabling build isolation.
+  "numpy>=2.0.0rc1",
+  # Add other dependencies here if needed
+]
+
+# The [project] section contains metadata about your project.
+[project]
+name = "scikit-plots"  # The name of your project
+dynamic = ["version"]  # The version is determined dynamically, inside meson.build
+description = "An intuitive library to add plotting functionality to scikit-learn objects."
+
+# [project.readme]
+# content-type = "text/x-rst"
+# The readme file is specified here. This is what users will see on your project's PyPI page.
+readme = "README.md"
+
+# [project.license]
+# License information is critical. It's recommended to specify the license file.
+# license = {text = "MIT License"}
+# TODO: add `license-files` once PEP 639 is accepted (see meson-python#88)
+#       at that point, no longer include them in `py3.install_sources()`
+license = {file = "LICENSE"}
+
+# [[project.authors]]
+# List the authors of the project
+authors = [
+  {name = "Reiichiro Nakano et al.", email = "reiichiro.s.nakano@gmail.com"},
+  # {name = "Prateek Sharma", email = "s.prateek3080@gmail.com"},
+]
+# [[project.maintainers]]
+# Project maintainers
+maintainers = [
+  {name = "Muhammed Çelik", email = "muhammed.business.network@gmail.com"}
+]
+
+# Keywords to describe your project, useful for searchability
+keywords = [
+  "matplotlib",
+  "scikit-learn",
+  "xgboost",
+  "catboost",
+  "tensorflow",
+  "keras",
+  "pytorch",
+  "machine learning",
+  "data science",
+  "visualization",
+]
+
+# Classifiers help users understand the maturity, audience, and compatible environments for your project.
+# https://pypi.org/pypi?%3Aaction=list_classifiers
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  'License :: OSI Approved :: BSD License',
+  'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  'Programming Language :: C',
+  'Programming Language :: C++',
+  'Programming Language :: Cython',
+  'Programming Language :: Fortran',
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.5",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Topic :: Scientific/Engineering :: Visualization",
+  "Topic :: Software Development :: Libraries",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+# This specifies the minimum Python version required for your project.
+requires-python = ">=3"
+
+# List of dependencies that your project needs to run
+dependencies = [
+  # Replace these with the actual dependencies from requirements.txt
+  "scipy>=1.6.0",
+  "numpy>=1.19.5",
+  "pandas>=1.1.5",
+  "matplotlib>=1.4.0",
+  "scikit-learn>=0.24",
+  "joblib>=1.2.0", 
+  "threadpoolctl>=3.1.0", 
+]
+
+# Optional dependencies, for example for testing
+[project.optional-dependencies]
+# List CPU-related libraries here
+cpu = ["numpy",]
+# List GPU-related libraries here
+gpu = ["cupy",]
+# Replace with actual TPU-related libraries
+tpu = ["tensorflow",]
+dev = [
+  # "mypy==1.10.0",
+  # "typing_extensions",
+  # "types-psutil",
+  # "pycodestyle",
+  # "ruff>=0.0.292",
+  # "cython-lint>=0.12.2",
+  # "rich-click",
+  # "doit>=0.36.0",
+  # "pydevtool",
+]
+build = [
+  "meson>=1.1.0",          # The Meson build system itself to coordinate the compilation of code.
+  "ninja>=1.11.0",         # The ninja build system used to compile code
+  "meson-python>=0.16.0",  # A PEP 517 backend for building Python packages with Meson.
+  "Cython>=3.0.10",
+  "pybind11>=2.13.1",
+  "pythran>=0.14.0",
+  "scipy>=1.6.0",  
+  "numpy>=1.23.5",
+  "pandas>=1.5.0",
+  "matplotlib>=1.4.0",
+  "build",
+  "twine",
+]
+test = [
+  "pandas>=1.1.5",
+  "polars>=0.20.30",
+  "pyarrow>=12.0.0",
+  "matplotlib>=3.3.4",
+  "catboost",
+  "tensorflow",
+  "numpydoc>=1.2.0",
+  "pytest>=7.1.2",
+  "pytest-mpl",
+  "hypothesis>=6.30",
+  "pooch>=1.6.0",
+  "black>=24.3.0",
+  "ruff>=0.5.1",
+]
+doc = [
+  "packaging>=21",
+  "jinja2",
+  "numpydoc>=1.2.0",
+  "pandas>=1.5",
+  "polars>=0.20.30",
+  "pyarrow>=12.0.0",
+  "matplotlib>=3.5",
+  "seaborn>=0.11",
+  "plotly>=5.10",
+  "Pillow>=9.1",
+  "pooch",
+  "scikit-image>=0.17.2",
+  "scikit-learn>=1.1",
+  "tensorflow>=2.10",
+  "sphinx>=5.0.0,<8.0.0",
+  "sphinx-rtd-theme",
+  "pydata-sphinx-theme",
+  "sphinx-gallery",
+  "sphinx-prompt",
+  "sphinxext-opengraph",
+  "sphinx-copybutton",
+  "sphinxcontrib-sass",
+  "sphinx-design",
+  "sphinx-remove-toctrees",
+  "myst-nb",
+  "jupytext",
+  "jupyter-sphinx",
+  "jupyterlite-sphinx",
+  "jupyterlite-pyodide-kernel",
+  "intersphinx_registry",
+  "colorspacious",
+  "sphinxcontrib-svg2pdfconverter",
+  "sphinxcontrib-inlinesyntaxhighlight",
+]
+
+# Links to important pages related to the project
+[project.urls]
+Homepage      = "https://scikit-plots.github.io"
+Download      = "https://github.com/celik-muhammed/scikit-plot/tree/muhammed-dev"
+Documentation = "https://scikit-plots.github.io/stable/"
+Donate        = "https://github.com/celik-muhammed/scikit-plot#donate"
+Forum         = "https://github.com/celik-muhammed/scikit-plot/issues"
+Issues        = "https://github.com/celik-muhammed/scikit-plot/issues"
+Repo_Forked   = "https://github.com/reiinakano/scikit-plot"
+Repository    = "https://github.com/scikit-plots/scikit-plots"
+# The changelog, really useful for ongoing users of your project
+changelog     = "https://scikit-plots.github.io/dev/whats_new/whats_new.html"
+
+# Configuration for the pytest testing framework
+[tool.pytest.ini_options]
+minversion = "6.0"  # Specify the minimum version of pytest
+addopts = "-ra -q"  # Add command-line options
+testpaths = [
+  "scikitplot",
+]  # Directories where tests are located
+# filterwarnings = [
+#     "error",
+#     'default:.*pyamg, which cannot \(yet\) be imported with NumPy >=2:RuntimeWarning'
+# ]
+
+# Black is a code formatter; this section configures its behavior.
+[tool.black]
+line-length = 100  # Maximum line length 88
+target-version = ['py35', 'py310', 'py314']  # Python versions to target
+preview = true     # Enable Black's preview features
+exclude = '''
+/(
+    \.eggs         # exclude a few common directories in the
+  | \.git          # root of the project
+  | \.mypy_cache
+  | \.vscode
+  | builddir
+  | build
+  | dist
+  | doc/build
+  | doc/_build
+  | doc/auto_examples
+  | scikitplot/externals
+  | asv_benchmarks/env
+  | auto_building_tools/
+)/
+'''

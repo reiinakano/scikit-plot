@@ -1,0 +1,6 @@
+# This file is used to disable Jekyll processing on GitHub Pages.
+# The presence of this file ensures that Jekyll does not process or
+# modify files in the repository, allowing the site to be served as-is.
+
+# For more information, see:
+# https://docs.github.com/en/pages/configuring-your-builds/setting-up-your-github-pages-site-to-not-use-jekyll

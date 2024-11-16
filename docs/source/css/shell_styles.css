@@ -1,0 +1,136 @@
+/* Container for the hero section */
+.hero-right {
+    display: flex;
+    flex-direction: column;
+    padding: 3px;
+    background-color: var(--bd-content-bg);  /* Use theme's background color */
+    color: var(--bd-text-color);  /* Use theme's text color */
+}
+
+/* Title container styling */
+.shell-title-container {
+    text-align: center;
+    align-items: center;
+    margin-bottom: 3px;
+    font-size: 1rem;  /* 16px (default) */
+}
+
+/* Title text style */
+.shell-title {
+    font-size: 1.5rem;  /* Responsive font size */
+    font-weight: bold;
+    color: var(--bd-heading-color);  /* Theme heading color */
+}
+
+/* Flex Container for the interactive shell and lesson content */
+.numpy-shell-container {
+    display: flex;
+    position: relative;
+    flex-direction: row;
+    justify-content: space-between;  /* Ensure even space between sections */
+    align-items: stretch;  /* Ensure all children stretch to the same height */
+    margin: auto;
+    width: 100%;  /* Full width of the parent container */
+    height: 69vh;  /* Set the parent container to take 100% of its container's height */
+    max-width: 1500px;
+    min-height: 600px;
+}
+
+/* Lesson text container */
+.shell-lesson {
+    flex: 1;
+    text-align: left;
+    padding: 0 3px;
+}
+
+/* Code section (takes 33% of the width) */
+.shell-lesson.code-content {
+    flex: 0 0 33.3%;  /* Takes 33.3% of the width */
+    height: 100%;  /* Make sure this section stretches to match height of parent */
+    width: auto;  /* Allowing the code container to resize based on content */
+    overflow-y: auto;  /* Enable scrolling if content overflows */
+}
+
+/* Shell section (takes 66% of the width) */
+.shell-lesson.shell-content {
+    flex: 0 0 66.6%;  /* Takes 66.6% of the width */
+    height: 100%;  /* Make sure this section stretches to match height of parent */
+}
+
+/* Code highlighting and background styling */
+.shell-lesson .highlight {
+    height: 100%;
+    background-color: var(--code-bg);  /* Theme code background */
+    color: var(--code-fg);  /* Theme code foreground */
+}
+
+.shell-lesson .highlight pre {
+    height: 100%;
+    background-color: var(--pst-gray-800);
+}
+
+/* Code highlighting with specific color overrides */
+.shell-lesson .highlight pre code {
+    color: #f3c7ee;  /* Custom color for lesson code */
+}
+
+.shell-lesson > p {
+    margin: 2px 0 2px 0;
+    font-size: 0.9rem;  /* Responsive font size */
+}
+
+.shell-lesson > ul > li {
+    font-size: 0.8rem;  /* Responsive font size */
+}
+
+.highlight:not(:last-child) {
+    margin-bottom: 1px !important;
+}
+
+.code-container {
+    margin: 2px 0 2px 0;
+}
+
+.numpy-shell {
+    flex: 2;
+    border: 1px solid var(--bd-border-color);  /* Theme border color */
+    border-radius: var(--bd-radius-md);  /* Theme border radius */
+    height: 100%;  /* Make sure this section stretches to match height of parent */
+}
+
+/* Code editor specific styling */
+.CodeMirror {
+    max-height: 124px;
+    color: var(--code-fg);  /* Theme foreground color for code */
+}
+
+/* Cursor and lines within CodeMirror */
+.CodeMirror-lines {
+    min-height: 30px !important;
+}
+.CodeMirror pre {
+    color: rgb(255, 255, 255) !important;
+}
+.CodeMirror-cursor {
+    color: rgb(255, 255, 255) !important;
+    border-left: 1px solid white !important;
+}
+
+/* Responsive styling for smaller screens */
+@media only screen and (max-width: 800px) {
+    .numpy-shell-container {
+        flex-direction: column;  /* Stack sections vertically */
+        justify-content: space-around;
+        gap: 5px;  /* Reduce gap between sections */
+    }
+
+    /* For smaller screens, make both sections take full width (100%) */
+    .shell-lesson.code-content,
+    .shell-lesson.shell-content {
+        flex: 0 0 100%;  /* Each section takes 100% width */
+    }
+
+    .numpy-shell {
+        min-height: 600px;  /* Ensure shell has enough height */
+    }
+}

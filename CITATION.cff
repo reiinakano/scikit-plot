@@ -1,0 +1,32 @@
+# ---------------------------------------------------------
+# CITATION.cff file for scikit-plots
+# This file provides citation information for users
+# who want to cite the library, related papers, and books.
+# ---------------------------------------------------------
+
+cff-version: 1.2.0  # The version of the CFF format used.
+message: "If you use this software, please cite it using the following metadata."  
+title: "scikit-plots: Machine Learning Visualization in Python"  
+version: "latest"  
+doi: "10.5281/zenodo.13367000"  
+date-released: "2024-10-27"  
+
+# Authors and contributors of the software project.
+authors:
+  - team: "scikit-plots developers"
+    website:  "https://scikit-plots.github.io"
+
+# Repository information
+repository-code: "https://github.com/scikit-plots/scikit-plots"
+repository-artifact: "https://zenodo.org/records/13367000"
+
+# License for your softwarelicense: "BSD-3-Clause"
+type: software
+url: "https://scikit-plots.github.io"
+
+# Keywords related to your software
+keywords:
+  - Software
+  - Python
+  - scikit-plots
+  - Machine Learning Visualization

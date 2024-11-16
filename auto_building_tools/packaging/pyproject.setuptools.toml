@@ -1,0 +1,171 @@
+# This file is the modern replacement for setup.py, used to configure how your Python package is built.
+# 
+# https://packaging.python.org/en/latest/discussions/setup-py-deprecated/#setup-py-deprecated
+# https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#a-full-example
+# 
+# The [build-system] section specifies the build system requirements.
+# "setuptools.build_meta" is the default backend used by setuptools for building projects.
+# You can add other build dependencies as needed.
+[build-system]
+# "build-backend" specifies the Python backend to use for building the package.
+build-backend = "setuptools.build_meta"
+requires = [
+  "setuptools>=42",  # Ensures you have a recent version of setuptools
+  "wheel",           # Required for creating .whl distributions
+  # Add other dependencies here if needed
+]
+
+# [tool.setuptools]
+# ext-modules = [{
+#     name = "scikitplot.experimental",
+#     sources = [
+#         "foo.c"
+#     ]
+# }]
+
+# The [tool.setuptools] section is used to define how setuptools should find packages in your project.
+# In this case, it defines where to find packages and what to include/exclude.
+[tool.setuptools.packages.find]
+where   = ["."]
+include = [
+  "scikitplot", 
+]
+exclude = [
+  "auto_building_tools",
+  "docs", "docs.*",
+  "examples", "examples.*",
+  "notebooks", "notebooks.*",
+  "tests", "tests.*",
+  "paper", "paper.*",
+  "binder", "binder.*",
+  "register",
+  "fixtures",
+  "bin",
+]
+
+# The [tool.setuptools.dynamic] section allows you to dynamically determine the version of your package.
+# This is helpful if your version is stored in a module attribute (like scikitplot.__version__).
+# https://setuptools.pypa.io/en/latest/userguide/pyproject_config.html#dynamic-metadata
+[tool.setuptools.dynamic]
+version = {attr = "scikitplot.__version__"}
+
+# The [project] section contains metadata about your project.
+[project]
+name = "scikit-plots"  # The name of your project
+dynamic = ["version"]  # The version is determined dynamically
+description = "An intuitive library to add plotting functionality to scikit-learn objects."
+
+# [project.readme]
+# content-type = "text/x-rst"
+# The readme file is specified here. This is what users will see on your project's PyPI page.
+readme = "README.md"
+
+# Keywords to describe your project, useful for searchability
+keywords = [
+  "matplotlib",
+  "scikit-learn",
+  "xgboost",
+  "catboost",
+  "tensorflow",
+  "keras",
+  "pytorch",
+  "machine learning",
+  "data science",
+  "visualization",
+]
+
+# License information is critical. It's recommended to specify the license file.
+# license = {text = "MIT License"}
+license = {file = "LICENSE"}  # License file
+
+# List the authors of the project
+authors = [
+  {name = "Reiichiro Nakano", email = "reiichiro.s.nakano@gmail.com"},
+  # {name = "Prateek Sharma", email = "s.prateek3080@gmail.com"},
+]
+# Project maintainers
+maintainers = [
+  {name = "Muhammed Çelik", email = "muhammed.business.network@gmail.com"}
+]
+
+# Classifiers help users understand the maturity, audience, and compatible environments for your project.
+# https://pypi.org/pypi?%3Aaction=list_classifiers
+classifiers = [
+  "Development Status :: 4 - Beta",
+  "Intended Audience :: Developers",
+  "Intended Audience :: Science/Research",
+  'License :: OSI Approved :: BSD License',
+  'License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)',
+  "License :: OSI Approved :: MIT License",
+  "Natural Language :: English",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python",
+  "Programming Language :: Python :: 3",
+  "Programming Language :: Python :: 3.5",
+  "Programming Language :: Python :: 3.10",
+  "Programming Language :: Python :: 3.14",
+  "Programming Language :: Python :: Implementation :: CPython",
+  "Programming Language :: Python :: Implementation :: PyPy",
+  "Topic :: Scientific/Engineering :: Visualization",
+  "Topic :: Software Development :: Libraries :: Python Modules"
+]
+
+# This specifies the minimum Python version required for your project.
+requires-python = ">=3"
+
+# List of dependencies that your project needs to run
+dependencies = [
+  # Replace these with the actual dependencies from requirements.txt
+  "matplotlib>=1.4.0",
+  "scikit-learn>=0.21",
+  "scipy>=0.9",
+  "joblib>=0.10",
+  "pandas",
+]
+
+# Links to important pages related to the project
+[project.urls]
+Homepage      = "https://scikit-plots.github.io"
+Download      = "https://github.com/celik-muhammed/scikit-plot/tree/muhammed-dev"
+Documentation = "https://scikit-plots.github.io/stable/"
+Donate        = "https://github.com/celik-muhammed/scikit-plot#donate"
+Forum         = "https://github.com/celik-muhammed/scikit-plot/issues"
+Issues        = "https://github.com/celik-muhammed/scikit-plot/issues"
+Repo_Forked   = "https://github.com/reiinakano/scikit-plot"
+Repository    = "https://github.com/scikit-plots/scikit-plots"
+# The changelog, really useful for ongoing users of your project
+changelog     = "https://scikit-plots.github.io/dev/whats_new/whats_new.html"
+
+# Optional dependencies, for example for testing
+[project.optional-dependencies]
+testing = ["pytest"]
+
+# Configuration for the pytest testing framework
+[tool.pytest.ini_options]
+minversion = "6.0"  # Specify the minimum version of pytest
+addopts = "-ra -q"  # Add command-line options
+testpaths = [
+  "scikitplot",
+]  # Directories where tests are located
+
+# Black is a code formatter; this section configures its behavior.
+[tool.black]
+line-length = 100  # Maximum line length
+target-version = ['py35', 'py310', 'py314']  # Python versions to target
+preview = true     # Enable Black's preview features
+exclude = '''
+/(
+    \.eggs         # exclude a few common directories in the
+  | \.git          # root of the project
+  | \.mypy_cache
+  | \.vscode
+  | build
+  | dist
+  | doc/build
+  | doc/_build
+  | doc/auto_examples
+  | scikitplot/externals
+  | asv_benchmarks/env
+  | auto_building_tools/
+)/
+'''

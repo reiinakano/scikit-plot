@@ -1,0 +1,51 @@
+<div class="shell-lesson code-content">
+  <p>To try the examples in the browser:</p>
+  <ul>
+    <li>Type code in the input cell and press <code>Shift + Enter</code> to execute</li>
+    <li>Or copy-paste the code, and click on the <code>Run</code> button in the toolbar</li>
+    <li>Run <code>micropip.list()</code> to view installed packages.</li>
+  </ul>
+
+  <!-- First Code block with copy button -->
+  <div class="code-container">
+    <pre><code class="language-python" id="code-block-1"
+># Example code to try:
+from sklearn.datasets import (
+    make_classification,
+    load_breast_cancer as data_2_classes,
+    load_iris as data_3_classes,
+    load_digits as data_10_classes,
+)
+from sklearn.model_selection import train_test_split
+from sklearn.ensemble import RandomForestClassifier
+
+#import matplotlib.pyplot as plt
+import scikitplot as skplt
+
+# Load the data
+X, y = data_3_classes(return_X_y=True, as_frame=True)
+X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.5)
+
+# Create and train the model
+model = RandomForestClassifier().fit(X_train, y_train)
+
+# Plot feature importances
+ax, features = skplt.estimators.plot_feature_importances(
+    model, display_bar_label=False,
+    figsize=(12,5)
+);</code></pre>
+    <!-- Copy button with data-copy-target attribute -->
+    <button class="copy-btn" data-copy-target="code-block-1">&#128203; Copy</button>
+  </div>
+
+  <!-- Second Code block with copy button -->
+  <div class="code-container">
+    <pre><code class="language-python" id="code-block-2"
+>import micropip; micropip.list()</code></pre>
+    <!-- Copy button with data-copy-target attribute -->
+    <button class="copy-btn" data-copy-target="code-block-2">&#128203; Copy</button>
+  </div>
+
+  <!-- Add more code blocks with their respective copy buttons as needed -->
+
+</div>

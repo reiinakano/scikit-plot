@@ -1,0 +1,43 @@
+---
+name: "CodeQL"
+
+on:
+  push:
+    branches: [main, v*.x]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: [main]
+  schedule:
+    - cron: '45 19 * * 1'
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-latest
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: ['c-cpp', 'javascript', 'python']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: ${{ matrix.language }}
+
+      - name: Build compiled code
+        if: matrix.language == 'c-cpp'
+        run: |
+          pip install --user --upgrade pip
+          pip install --user -v .
+
+      - name: Perform CodeQL Analysis
+        uses: github/codeql-action/analyze@v3

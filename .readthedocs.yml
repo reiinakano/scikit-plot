@@ -1,5 +1,45 @@
-conda:
-    file: environment.yml
+## Read the Docs configuration file
+## See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
 
-requirements_file:
-    requirements.txt
+## Required
+version: 2
+formats:
+  - htmlzip
+
+## Set the OS, Python version, and other tools you might need
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.12"
+  # apt_packages:
+  #   - graphviz
+  # jobs:
+    ## before building the doc
+    # post_install:
+      # - pip install -r requirements.txt
+  # commands:
+  #   - pip install -r requirements.txt
+    # - sphinx-build -b html docs/source/ docs/build/
+
+# # Build documentation in the "docs/" directory with Sphinx
+# sphinx:
+#   configuration: docs/source/conf.py
+#   # You can configure Sphinx to use a different builder, for instance use the dirhtml builder for simpler URLs
+#   builder: "html"
+#   # Fail on all warnings to avoid broken references
+#   # fail_on_warning: true
+
+# Optionally build your docs in additional formats such as PDF and ePub
+# formats:
+#   - pdf
+#   - epub
+
+# Optionally, but recommended,
+# declare the Python requirements required to build your documentation
+# See https://docs.readthedocs.io/en/stable/guides/reproducible-builds.html
+python:
+    install:
+    - requirements: requirements.txt
+
+conda:
+    environment: environment.yml

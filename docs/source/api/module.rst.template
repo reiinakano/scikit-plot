@@ -1,0 +1,65 @@
+:html_theme.sidebar_secondary.remove:
+
+{%- set re = imp0rt("re") -%}
+{# Set the module name #}
+{%- set sk = "scikitplot" -%}
+
+{%- if module == sk -%}
+{%- set module_hook = sk -%}
+{%- elif module.startswith(sk + ".") -%}
+{%- set module_hook = module[sk|length + 1:] -%}
+{# If module starts underscore add beginning of '0' #}
+{%- set module_hook = "0" + module_hook if module_hook.startswith("_") else module_hook -%}
+{%- else -%}
+{%- set module_hook = None -%}
+{%- endif -%}
+
+{%- if module_hook %}
+
+.. _{{ module_hook }}_ref:
+{%- endif %}
+
+{{ module }}
+{{ "=" * module|length }}
+
+.. automodule:: {{ module }}
+
+{%- if module_info["description"] %}
+
+{{ module_info["description"] }}
+{%- endif -%}
+
+{%- for section in module_info["sections"] -%}
+{%- if section["title"] and module_hook -%}
+{# Convert title to lowercase #}
+{%- set title_lower = section["title"] | lower -%}
+{# Replace non-alphanumeric characters (except spaces) with hyphens #}
+{%- set title_slug = re.sub('[^a-z0-9 ]+', '-', title_lower ) -%}
+{# Replace spaces with hyphens #}
+{%- set title_slug = re.sub(' +', '-', title_slug ) -%}
+{# Remove leading or trailing hyphens #}
+{%- set title_slug = re.sub('^-|-$', '', title_slug ) %}
+
+.. _{{ module_hook }}_ref-{{ title_slug | lower | replace(" ", "-") }}:
+{%- endif -%}
+
+{%- if section["title"] %}
+
+{{ section["title"] }}
+{{ "-" * section["title"]|length }}
+{%- endif -%}
+
+{%- if section["description"] %}
+
+{{ section["description"] }}
+{%- endif %}
+
+.. autosummary::
+  :nosignatures:
+  :toctree: ../modules/generated/
+  :template: base.rst  
+  {% for obj in section["autosummary"] %}
+  {{ obj }}
+  {%- endfor %}
+
+{%- endfor -%}

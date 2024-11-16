@@ -1,0 +1,189 @@
+
+
+Examples using ``sklearn.datasets.load_iris``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. start-sphx-glr-thumbnails
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example showing the :py~scikitplot.api.metrics.plot_classifier_eval function used by a scikit-learn classifier.">
+
+.. only:: html
+
+  .. image:: /auto_examples/classification/images/thumb/sphx_glr_plot_classifier_eval_script_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_classification_plot_classifier_eval_script.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">plot_classifier_eval with examples</div>
+    </div>
+
+
+.. only:: not html
+
+ * :ref:`sphx_glr_auto_examples_classification_plot_classifier_eval_script.py`
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example showing the :py~scikitplot.api.estimators.plot_feature_importances function used by a scikit-learn classifier.">
+
+.. only:: html
+
+  .. image:: /auto_examples/classification/images/thumb/sphx_glr_plot_feature_importances_script_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_classification_plot_feature_importances_script.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">plot_feature_importances with examples</div>
+    </div>
+
+
+.. only:: not html
+
+ * :ref:`sphx_glr_auto_examples_classification_plot_feature_importances_script.py`
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example showing the :py~scikitplot.api.estimators.plot_elbow function used by a scikit-learn clusterer.">
+
+.. only:: html
+
+  .. image:: /auto_examples/clustering/images/thumb/sphx_glr_plot_elbow_script_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_clustering_plot_elbow_script.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">plot_elbow with examples</div>
+    </div>
+
+
+.. only:: not html
+
+ * :ref:`sphx_glr_auto_examples_clustering_plot_elbow_script.py`
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example showing the :py~scikitplot.api.metrics.plot_silhouette function used by a scikit-learn clusterer.">
+
+.. only:: html
+
+  .. image:: /auto_examples/clustering/images/thumb/sphx_glr_plot_silhouette_script_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_clustering_plot_silhouette_script.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">plot_silhouette with examples</div>
+    </div>
+
+
+.. only:: not html
+
+ * :ref:`sphx_glr_auto_examples_clustering_plot_silhouette_script.py`
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example showing the :py~scikitplot.api.decomposition.plot_pca_2d_projection function used by a scikit-learn PCA object.">
+
+.. only:: html
+
+  .. image:: /auto_examples/decomposition/images/thumb/sphx_glr_plot_pca_2d_projection_script_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_decomposition_plot_pca_2d_projection_script.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">plot_pca_2d_projection with examples</div>
+    </div>
+
+
+.. only:: not html
+
+ * :ref:`sphx_glr_auto_examples_decomposition_plot_pca_2d_projection_script.py`
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example showing the :py~scikitplot.api.decomposition.plot_pca_component_variance function used by a scikit-learn PCA object.">
+
+.. only:: html
+
+  .. image:: /auto_examples/decomposition/images/thumb/sphx_glr_plot_pca_component_variance_script_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_decomposition_plot_pca_component_variance_script.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">plot_pca_component_variance with examples</div>
+    </div>
+
+
+.. only:: not html
+
+ * :ref:`sphx_glr_auto_examples_decomposition_plot_pca_component_variance_script.py`
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example showing the :py~scikitplot.api.kds.plot_cumulative_gain function used by a scikit-learn classifier.">
+
+.. only:: html
+
+  .. image:: /auto_examples/kds/images/thumb/sphx_glr_plot_cumulative_gain_script_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_kds_plot_cumulative_gain_script.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">plot_cumulative_gain with examples</div>
+    </div>
+
+
+.. only:: not html
+
+ * :ref:`sphx_glr_auto_examples_kds_plot_cumulative_gain_script.py`
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="An example showing the :py~scikitplot.api.kds.plot_lift function used by a scikit-learn classifier.">
+
+.. only:: html
+
+  .. image:: /auto_examples/kds/images/thumb/sphx_glr_plot_lift_script_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_kds_plot_lift_script.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">plot_lift with examples</div>
+    </div>
+
+
+.. only:: not html
+
+ * :ref:`sphx_glr_auto_examples_kds_plot_lift_script.py`
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+

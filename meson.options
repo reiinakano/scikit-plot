@@ -1,0 +1,28 @@
+# Build options
+# Most non-trivial builds require user-settable options.
+# As an example a program may have two different data backends that are selectable at build time.
+# Meson provides for this by having an option definition file.
+# Its name is meson.options and it is placed at the root of your source tree.
+# For versions of meson before 1.1, this file was called meson_options.txt.
+
+# This file defines build options for the scikit-plots project.
+
+# Option to enable or disable tests.
+option('tests', type: 'boolean', value: true,
+       description: 'Build and run tests.')
+
+option('fortran', type: 'feature', value: 'auto',
+        description: 'Enable Fortran support (default: disabled)' + 
+                     'A feature option has three states: enabled, disabled or auto.')
+
+option('pythran', type: 'feature', value: 'auto',
+        description: 'Enable Pythran support (default: "disabled")' + 
+                     'If set to "disabled", disables using Pythran (it falls back ' + 
+                     'to either pure Python code or Cython code, depending on ' + 
+                     'the implementation).')
+
+option('numcpp_no_use_boost', type: 'boolean', value: true,
+        description: 'Do not use Boost libraries.')
+
+option('numcpp_use_multithread', type: 'boolean', value: false,
+        description: 'Enable multithreading support.')

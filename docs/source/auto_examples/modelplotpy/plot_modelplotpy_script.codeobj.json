@@ -1,0 +1,182 @@
+{
+ "LogisticRegression": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.linear_model",
+   "module_short": "sklearn.linear_model",
+   "name": "LogisticRegression"
+  }
+ ],
+ "RandomForestClassifier": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.ensemble",
+   "module_short": "sklearn.ensemble",
+   "name": "RandomForestClassifier"
+  }
+ ],
+ "io.BytesIO": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "io",
+   "module_short": "io",
+   "name": "BytesIO"
+  }
+ ],
+ "mp.modelplotpy": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "scikitplot.api.modelplotpy",
+   "module_short": "scikitplot.api.modelplotpy",
+   "name": "modelplotpy"
+  }
+ ],
+ "mp.plot_all": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "scikitplot.api.modelplotpy",
+   "module_short": "scikitplot.api.modelplotpy",
+   "name": "plot_all"
+  }
+ ],
+ "mp.plot_costsrevs": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "scikitplot.api.modelplotpy",
+   "module_short": "scikitplot.api.modelplotpy",
+   "name": "plot_costsrevs"
+  }
+ ],
+ "mp.plot_cumgains": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "scikitplot.api.modelplotpy",
+   "module_short": "scikitplot.api.modelplotpy",
+   "name": "plot_cumgains"
+  }
+ ],
+ "mp.plot_cumlift": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "scikitplot.api.modelplotpy",
+   "module_short": "scikitplot.api.modelplotpy",
+   "name": "plot_cumlift"
+  }
+ ],
+ "mp.plot_cumresponse": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "scikitplot.api.modelplotpy",
+   "module_short": "scikitplot.api.modelplotpy",
+   "name": "plot_cumresponse"
+  }
+ ],
+ "mp.plot_profit": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "scikitplot.api.modelplotpy",
+   "module_short": "scikitplot.api.modelplotpy",
+   "name": "plot_profit"
+  }
+ ],
+ "mp.plot_response": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "scikitplot.api.modelplotpy",
+   "module_short": "scikitplot.api.modelplotpy",
+   "name": "plot_response"
+  }
+ ],
+ "mp.plot_roi": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "scikitplot.api.modelplotpy",
+   "module_short": "scikitplot.api.modelplotpy",
+   "name": "plot_roi"
+  }
+ ],
+ "np.random.seed": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy.random",
+   "module_short": "numpy.random",
+   "name": "seed"
+  }
+ ],
+ "os.getcwd": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "os",
+   "module_short": "os",
+   "name": "getcwd"
+  }
+ ],
+ "pd.read_csv": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "pandas",
+   "module_short": "pandas",
+   "name": "read_csv"
+  }
+ ],
+ "requests.get": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "requests",
+   "module_short": "requests",
+   "name": "get"
+  }
+ ],
+ "scikitplot.api.modelplotpy.ModelPlotPy": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "scikitplot.api.modelplotpy",
+   "module_short": "scikitplot.api.modelplotpy",
+   "name": "ModelPlotPy"
+  }
+ ],
+ "train_test_split": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.model_selection",
+   "module_short": "sklearn.model_selection",
+   "name": "train_test_split"
+  }
+ ],
+ "warnings.filterwarnings": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "warnings",
+   "module_short": "warnings",
+   "name": "filterwarnings"
+  }
+ ],
+ "zipfile.ZipFile": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "zipfile",
+   "module_short": "zipfile",
+   "name": "ZipFile"
+  }
+ ]
+}

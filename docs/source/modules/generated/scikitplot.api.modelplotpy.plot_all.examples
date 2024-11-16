@@ -1,0 +1,42 @@
+
+
+Examples using ``scikitplot.api.modelplotpy.plot_all``
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
+.. start-sphx-glr-thumbnails
+
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbnails">
+
+.. thumbnail-parent-div-open
+
+.. raw:: html
+
+    <div class="sphx-glr-thumbcontainer" tooltip="To install the latest version (with pip)::">
+
+.. only:: html
+
+  .. image:: /auto_examples/modelplotpy/images/thumb/sphx_glr_plot_modelplotpy_script_thumb.png
+    :alt:
+
+  :ref:`sphx_glr_auto_examples_modelplotpy_plot_modelplotpy_script.py`
+
+.. raw:: html
+
+      <div class="sphx-glr-thumbnail-title">Introduction to modelplotpy</div>
+    </div>
+
+
+.. only:: not html
+
+ * :ref:`sphx_glr_auto_examples_modelplotpy_plot_modelplotpy_script.py`
+
+.. thumbnail-parent-div-close
+
+.. raw:: html
+
+    </div>
+

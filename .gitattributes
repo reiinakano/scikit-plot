@@ -1,0 +1,72 @@
+## Specify settings and behaviors for files
+
+## Set the default behavior, in case contributors don't have core.autocrlf set.
+## Line ending normalization
+## Windows systems uses: "crlf" \r\n (carriage return + line feed)
+## Unix-based  (like Linux and macOS) uses: "lf" \n (line feed)
+## end-of-line (EOL) treated as text or binary based on its content
+* text=auto eol=lf
+*.md text eol=lf
+*.py text eol=lf
+*.sh text eol=lf
+
+## Explicitly declare text files
+*.py text
+*.rst text
+*.md text
+*.json text
+*.ipynb text
+*.cfg text
+
+## Baseline images are binary and should not be modified
+*.png binary
+*.jpg binary
+*.pdf binary
+
+## Compressed files are binary and should not be modified
+*.gz binary
+*.npz binary
+*.zip binary
+
+
+## Git LFS for large files
+## specify which files should be stored in Git LFS rather than directly in the Git repository
+# *.jpg filter=lfs diff=lfs merge=lfs -text
+
+## Ignoring changes
+## excluded from the standard Git diff output
+## (e.g., when using git diff): ignore when tracking changes
+# *.log   -diff
+
+## Git not to include this file when generating an archive of the repository exports
+## (e.g., when using git archive) ignored during exports
+# secret.txt export-ignore
+
+## Filtering Files
+## commands that modify files during the checkout and commit processes.
+# *.docx filter=custom-filter
+
+## Custom Merge Drivers
+## merge: defining how certain files should be merged during conflicts.
+# *.csv merge=csv-merge-driver
+# *.docx merge=word
+# *.xml merge=union
+# *.txt merge=union
+
+## Attributes for Export 
+## export-subst: (Version: $Version$) dynamically update version information
+# version: export-subst
+
+## Git diff attributes
+## how files are displayed in git diff output
+# *.css diff=css
+
+## Language-Specific Settings
+## linguist-language: based on the programming language or linguistic considerations
+# *.py linguist-language=Python
+# *.py indent=spaces=4
+# *.js linguist-language=JavaScript
+
+## Identifying file types
+# *.txt text
+# *.jpg binary

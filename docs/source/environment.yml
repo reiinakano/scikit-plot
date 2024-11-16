@@ -1,0 +1,22 @@
+# https://github.com/jupyterlite/jupyterlite-sphinx/tree/main
+name: xeus-python-kernel
+channels:
+  # - defaults
+  - conda-forge
+  # - https://repo.mamba.pm/emscripten-forge
+dependencies:
+  # Conda packages
+  - python=3.11
+  # - xeus-python
+  - pip
+  - jupyter_server
+  - jupyterlite-core >=0.4.1,<0.5.0
+  # - jupyterlite-xeus>=2.0.0,<3  # environment.yml
+  # pip dependencies from requirements.txt
+  # - pip:
+      # Use another requirements file.
+      # Note that here also we can use relative paths.
+      # pip will be run from the environment file directory, if provided.
+      # - -r requirements.txt
+      # You can also install a local Python package
+      - ..

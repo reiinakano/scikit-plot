@@ -1,0 +1,65 @@
+{
+ "LogisticRegression": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.linear_model",
+   "module_short": "sklearn.linear_model",
+   "name": "LogisticRegression"
+  }
+ ],
+ "data_10_classes": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "sklearn.datasets",
+   "module_short": "sklearn.datasets",
+   "name": "load_digits"
+  }
+ ],
+ "np.random.seed": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "numpy.random",
+   "module_short": "numpy.random",
+   "name": "seed"
+  }
+ ],
+ "plt.show": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "show"
+  }
+ ],
+ "plt.tight_layout": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "matplotlib.pyplot",
+   "module_short": "matplotlib.pyplot",
+   "name": "tight_layout"
+  }
+ ],
+ "scikitplot.api.estimators.plot_learning_curve": [
+  {
+   "is_class": false,
+   "is_explicit": true,
+   "module": "scikitplot.api.estimators",
+   "module_short": "scikitplot.api.estimators",
+   "name": "plot_learning_curve"
+  }
+ ],
+ "skplt.estimators.plot_learning_curve": [
+  {
+   "is_class": false,
+   "is_explicit": false,
+   "module": "scikitplot.api.estimators",
+   "module_short": "scikitplot.api.estimators",
+   "name": "plot_learning_curve"
+  }
+ ]
+}

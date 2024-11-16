@@ -1,0 +1,50 @@
+{#-
+.. rst Comments
+.. https://sphinx-tutorial.readthedocs.io/cheatsheet/#rst-cheat-sheet
+.. https://docutils.sourceforge.io/docs/ref/rst/restructuredtext.html#comments
+.. Headings and Sections
+.. = Main title or top-level heading.
+.. - Second-level heading.
+.. ~ Third-level heading.
+.. ^ Fourth-level heading.
+.. " Fifth-level heading.
+#}
+.. Used for setting metadata like the document's title for processing tools.
+.. title:: Homepage
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Introduction
+   :hidden:
+
+   Introduction <introduction/index.rst>
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Documentation
+   :hidden:
+
+   User Guide <user_guide/index.rst>
+   APIs Reference <api/index.rst>
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Tutorials
+   :hidden:
+
+   Tutorials <auto_examples/index>
+
+.. toctree::
+   :maxdepth: 1
+   :caption: Community
+   :hidden:
+
+   Release Notes <whats_new/index.rst>
+   Community <https://zenodo.org/communities/scikit-plots>
+   {%- if development_link | default(false) %}
+   {#- if development_link is defined and development_link #}
+   Developer’s Guide <{{ development_link }}>
+   {#- else #}
+   {%- endif %}
+   Tags <_tags/tagsindex.rst>
+   About us <project/index.rst>

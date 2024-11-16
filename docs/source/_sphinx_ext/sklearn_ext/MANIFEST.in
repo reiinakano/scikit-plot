@@ -1,0 +1,5 @@
+recursive-include tests *.py
+# `-> Add all files under directories matching dir-pattern
+
+include *.txt *.rst
+# `-> matches file paths relative to the root of the project

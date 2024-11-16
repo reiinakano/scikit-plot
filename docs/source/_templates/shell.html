@@ -1,0 +1,32 @@
+{#- set shell = shell #}
+{%- set shell = {
+  "intro": [
+    {
+      "title": "Try scikit-plots",
+      "text": "Use the interactive shell to try scikit-plots in the browser"
+    },
+  ]
+} %}
+{%- set intro = shell.intro %}
+
+<div class="hero-right">
+  <!-- Include title section -->
+  <div class="flex-column shell-title-container">
+    {%- for item in intro %}
+      <div class="shell-title">{{ item.title }}</div>
+      <div class="shell-content-message">
+        <p>{{ item.text }}</p>
+        <p style="font-size:11px;">Pyodide uses older, compatible versions of some PyPI packages; latest versions may not be supported.</p>
+      </div>
+    {%- endfor %}
+  </div>
+  <div class="numpy-shell-container">
+
+    <!-- Include Python example code section -->
+    {% include 'shell_py_example.html' %}
+    
+    <!-- Include interactive shell section -->
+    {% include 'shell_interactive.html' %}
+    
+  </div>
+</div>

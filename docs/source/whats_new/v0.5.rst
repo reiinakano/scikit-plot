@@ -1,0 +1,37 @@
+.. include:: _contributors.rst
+
+.. include:: _changelog_legend.inc
+
+.. currentmodule:: scikitplot
+
+.. _release_notes_0_5:
+
+Version 0.5
+===========
+
+..
+  -- UNCOMMENT WHEN 0.5.0 IS RELEASED --
+  For a short description of the main highlights of the release, please refer to
+  :ref:`sphx_glr_auto_examples_release_highlights_plot_release_highlights_0_5_0.py`.
+..
+  DELETE WHEN 0.5.0 IS RELEASED
+  Since November 2024, DO NOT add your changelog entry in this file.
+..
+  Instead, create a file named `<PR_NUMBER>.<TYPE>.rst` in the relevant sub-folder in
+  `doc/whats_new/upcoming_changes/`. For full details, see:
+  https://github.com/scikit-learn/scikit-learn/blob/main/doc/whats_new/upcoming_changes/README.md
+
+.. town crier release notes start
+
+.. rubric:: Code and documentation contributors
+
+
+.. _changelog_0_5_0:
+
+Version 0.5.0
+---------------------------
+
+Thanks to everyone who has contributed to the maintenance and improvement of
+the project since version 0.5, including:
+
+TODO: update at the time of the release.

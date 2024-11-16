@@ -1,8 +1,7 @@
 language: python
 python:
-  - "2.7"
   - "3.5"
-  - "3.6"
+  - "3.10"
 # command to install dependencies
 before_script: # configure a headless display to test plot generation
 - "export DISPLAY=:99.0"

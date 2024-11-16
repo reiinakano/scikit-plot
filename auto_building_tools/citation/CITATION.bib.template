@@ -1,0 +1,82 @@
+{#-
+# https://docs.github.com/en/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-citation-files
+-#}
+{#-
+# Authors: The scikit-plots developers
+# SPDX-License-Identifier: BSD-3-Clause
+-#}
+% ---------------------------------------------------------
+% CITATION.bib file for {{ library_name }}
+% This file provides citation information for users
+% who want to cite the library, related papers, and books.
+% ---------------------------------------------------------
+{% if include_misc %}
+@misc{{ '{' }}{{ library_name }}:v{{ version }},
+  {#- The author(s) or maintainer(s) of the Python library #}
+  author = { {{ author }} },  
+  {#- The title of your Python library (name it appropriately) #}
+  title  = { {{ library_title }} },  
+  {#- Year of the library release or the latest significant update #}
+  year   = { {{ release_year }} },
+  {#- Optional: Add the version number of your library #}
+  version = { {{ version }} },
+  {#- The URL to your project repository (GitHub, GitLab, etc.) #}
+  url    = { {{ url }} },
+  {#- You can provide a short note, such as the purpose of the library or a brief description #}
+  note   = { {{ note }} },
+  {#- Optional: Add the DOI if your project has one (e.g., if you've archived it in Zenodo) #}
+  doi    = { {{ doi }} }
+}
+{%- endif %}
+
+{#-
+% ---------------------------------------------------------
+% ARTICLE TEMPLATE (Future use):
+% Commented out for now, uncomment when you need it.
+% ---------------------------------------------------------
+#}
+{%- if include_article %}
+@article{{ '{' }}{{ article_key }}:{{ article_year }},
+  author  = { {{ article_authors }} },
+  title   = { {{ article_title }} },
+  journal = { {{ article_journal }} },
+  year    = { {{ article_year }} },
+  volume  = { {{ article_volume }} },
+  number  = { {{ article_number }} },
+  pages   = { {{ article_pages }} },
+  doi     = { {{ article_doi }} },
+  url     = { {{ article_url }} }
+}
+{%- endif %}
+
+{#-
+% ---------------------------------------------------------
+% BOOK TEMPLATE (Future use):
+% Commented out for now, uncomment when you need it.
+% ---------------------------------------------------------
+#}
+{%- if include_book %}
+@book{{ '{' }}{{ book_key }}:{{ book_year }},
+  author    = { {{ book_author }} },
+  title     = { {{ book_title }} },
+  publisher = { {{ book_publisher }} },
+  year      = { {{ book_year }} },
+  edition   = { {{ book_edition }} },
+  url       = { {{ book_url }} },
+  isbn      = { {{ book_isbn }} }
+}
+{%- endif %}
+
+{#-
+% ---------------------------------------------------------
+% GUIDELINES FOR FUTURE UPDATES
+% ---------------------------------------------------------
+% 1. "author" field: List all the authors or contributors of the work.
+%    Format: {Last Name, First Name and Last Name, First Name}.
+% 2. "title" field: For articles, use the title of the paper. For books, use the book title.
+% 3. "year" field: Update the year accordingly.
+% 4. "journal" and "publisher": For articles, include the journal name. For books, include the publisher.
+% 5. "volume", "number", "pages": Applicable only to journal articles.
+% 6. "doi" and "url": Always include DOI if available; otherwise, provide a URL.
+% 7. "isbn": If your book has an ISBN, include it to make the citation more complete.
+-#}

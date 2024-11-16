@@ -1,0 +1,39 @@
+## Library Dependencies
+scipy>=0.9
+pandas
+polars
+matplotlib>=1.4.0
+scikit-learn>=0.24
+joblib>=0.10
+
+## Build Requirements (uncomment for deployment)
+# wheel>=0.35
+# twine>=3.3
+
+## Pre-Commit Requirements (uncomment to use pre-commit hooks)
+# pre-commit>=2.20.0
+
+## Testing Requirements
+# pytest>=6.1
+
+## Documentation Dependencies
+# packaging
+# numpydoc
+# pooch
+# sphinx
+# sphinx-gallery
+# sphinx-rtd-theme
+# pydata-sphinx-theme
+# scikit-image
+# jinja2
+# Pillow
+# seaborn
+# plotly
+# sphinx-prompt
+# sphinx-design
+# sphinx-copybutton
+# sphinx-remove-toctrees
+# sphinxext-opengraph
+# sphinxcontrib-sass
+# jupyter_sphinx
+# jupyterlite-sphinx

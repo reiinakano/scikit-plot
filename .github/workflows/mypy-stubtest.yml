@@ -1,0 +1,44 @@
+---
+name: Mypy Stubtest
+on: [pull_request]
+
+permissions:
+  contents: read
+  checks: write
+
+jobs:
+  mypy-stubtest:
+    name: mypy-stubtest
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python 3
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.10'
+
+      - name: Set up reviewdog
+        uses: reviewdog/action-setup@v1
+
+      - name: Install tox
+        run: python -m pip install tox
+
+      - name: Run mypy stubtest
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -o pipefail
+          tox -e stubtest | \
+              sed -e "s!.tox/stubtest/lib/python3.10/site-packages!lib!g" | \
+              reviewdog \
+                -efm '%Eerror: %m' \
+                -efm '%CStub: in file %f:%l' \
+                -efm '%CStub: in file %f' \
+                -efm '%+CRuntime:%.%#' \
+                -efm '%+CMISSING' \
+                -efm '%+Cdef %.%#' \
+                -efm '%+C<%.%#>' \
+                -efm '%Z' \
+                -reporter=github-check -tee -name=mypy-stubtest \
+                -filter-mode=nofilter

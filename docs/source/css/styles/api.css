@@ -1,0 +1,34 @@
+/**
+ * This is the styling for API reference pages, currently under `modules/generated`.
+ * Note that it should be applied *ONLY* to API reference pages, as the selectors are
+ * designed based on how `autodoc` and `autosummary` generate the stuff.
+ */
+div.versionadded,
+div.versionchanged,
+div.deprecated {
+  margin: 1rem auto; }
+  div.versionadded > p,
+  div.versionchanged > p,
+  div.deprecated > p {
+    margin: 0.3rem auto; }
+
+dd p:not(table *) {
+  margin-bottom: 0.5rem !important; }
+
+dd ul {
+  margin-bottom: 0.5rem !important;
+  padding-left: 2rem !important; }
+
+dl.py.method:first-of-type {
+  margin-top: 2rem; }
+
+dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.glossary):not(.simple) {
+  margin-bottom: 1.5rem; }
+  dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.glossary):not(.simple) dd {
+    margin-left: 1.2rem; }
+  dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.glossary):not(.simple) dt.field-odd,
+  dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.glossary):not(.simple) dt.field-even {
+    margin: 0.5rem 0; }
+    dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.glossary):not(.simple) dt.field-odd + dd > dl,
+    dl[class]:not(.option-list):not(.field-list):not(.footnote):not(.glossary):not(.simple) dt.field-even + dd > dl {
+      margin-bottom: 0.5rem; }

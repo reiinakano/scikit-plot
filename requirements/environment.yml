@@ -1,0 +1,11 @@
+name: skplt-env
+
+dependencies:
+- python=3
+- numpydoc
+- numpy
+- pandas
+- scipy
+- matplotlib
+- scikit-learn
+- joblib
