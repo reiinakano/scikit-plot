@@ -1,0 +1,103 @@
+version: '3.8'
+
+services:
+  # Development environment
+  dev:
+    build:
+      context: .
+      target: development
+    image: scikit-plot:dev
+    container_name: scikit-plot-dev
+    volumes:
+      - .:/app
+      - dev-cache:/root/.cache
+    ports:
+      - "8888:8888"  # Jupyter
+    environment:
+      - PYTHONPATH=/app
+      - JUPYTER_ENABLE_LAB=yes
+    command: >
+      bash -c "
+        pip install -e '.[dev]' &&
+        jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+      "
+    stdin_open: true
+    tty: true
+
+  # Testing environment
+  test:
+    build:
+      context: .
+      target: testing
+    image: scikit-plot:test
+    container_name: scikit-plot-test
+    volumes:
+      - .:/app
+      - test-cache:/root/.cache
+    environment:
+      - PYTHONPATH=/app
+      - PYTEST_CURRENT_TEST=1
+    command: >
+      bash -c "
+        pip install -e '.[test]' &&
+        pytest -v --cov=scikitplot --cov-report=term-missing
+      "
+
+  # Production environment
+  prod:
+    build:
+      context: .
+      target: production
+    image: scikit-plot:latest
+    container_name: scikit-plot-prod
+    environment:
+      - PYTHONUNBUFFERED=1
+    restart: unless-stopped
+
+  # Documentation server
+  docs:
+    build:
+      context: .
+      target: docs
+    image: scikit-plot:docs
+    container_name: scikit-plot-docs
+    volumes:
+      - ./docs:/app/docs
+      - docs-build:/app/docs/_build
+    ports:
+      - "8000:8000"
+    command: >
+      bash -c "
+        cd /app/docs &&
+        make html &&
+        python -m http.server 8000 --directory _build/html
+      "
+
+  # Jupyter notebook environment
+  notebook:
+    build:
+      context: .
+      target: development
+    image: scikit-plot:notebook
+    container_name: scikit-plot-notebook
+    volumes:
+      - .:/app
+      - ./examples:/home/jovyan/examples
+      - notebook-data:/home/jovyan/data
+    ports:
+      - "8889:8888"
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - JUPYTER_TOKEN=scikit-plot
+    command: >
+      bash -c "
+        pip install -e '.[dev]' &&
+        jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+          --NotebookApp.token='scikit-plot'
+      "
+
+volumes:
+  dev-cache:
+  test-cache:
+  docs-build:
+  notebook-data:

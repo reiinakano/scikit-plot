@@ -1,0 +1,226 @@
+version: '3'
+
+tasks:
+  default:
+    cmds:
+      - task --list
+
+  # Installation tasks
+  install:
+    desc: Install the package
+    cmds:
+      - pip install -e .
+
+  install-dev:
+    desc: Install with development dependencies
+    cmds:
+      - pip install -e ".[dev]"
+      - pre-commit install
+
+  install-test:
+    desc: Install with test dependencies
+    cmds:
+      - pip install -e ".[test]"
+
+  install-docs:
+    desc: Install with documentation dependencies
+    cmds:
+      - pip install -e ".[docs]"
+
+  install-notebook:
+    desc: Install with notebook dependencies
+    cmds:
+      - pip install -e ".[notebook]"
+
+  # Testing tasks
+  test:
+    desc: Run tests
+    cmds:
+      - pytest -v
+
+  test-cov:
+    desc: Run tests with coverage
+    cmds:
+      - pytest -v --cov=scikitplot --cov-report=term-missing --cov-report=html
+
+  test-fast:
+    desc: Run fast tests only (skip slow tests)
+    cmds:
+      - pytest -v -m "not slow"
+
+  test-notebook:
+    desc: Run notebook tests
+    cmds:
+      - pytest scikitplot/tests/notebooks/test_notebooks.py -v
+
+  test-notebook-fast:
+    desc: Run quick notebook sanity checks
+    cmds:
+      - pytest scikitplot/tests/notebooks/test_notebooks.py -v -m "not notebook"
+
+  test-notebook-full:
+    desc: Run all notebook tests with execution
+    cmds:
+      - pytest scikitplot/tests/notebooks/test_notebooks.py -v --tb=short
+
+  # Linting and formatting tasks
+  lint:
+    desc: Run linting checks
+    cmds:
+      - ruff check scikitplot
+      - mypy scikitplot --ignore-missing-imports
+
+  format:
+    desc: Format code
+    cmds:
+      - ruff check --fix scikitplot
+      - ruff format scikitplot
+      - isort scikitplot
+
+  format-check:
+    desc: Check code formatting
+    cmds:
+      - ruff format --check scikitplot
+      - isort --check-only scikitplot
+
+  pre-commit:
+    desc: Run pre-commit hooks on all files
+    cmds:
+      - pre-commit run --all-files
+
+  # Cleaning tasks
+  clean:
+    desc: Clean build artifacts
+    cmds:
+      - rm -rf build/ dist/ *.egg-info/
+      - rm -rf .pytest_cache/ .coverage htmlcov/
+      - rm -rf .mypy_cache/ .ruff_cache/
+      - find . -type d -name __pycache__ -exec rm -rf {} + 2>/dev/null || true
+      - find . -type f -name "*.pyc" -delete
+      - find . -type f -name "*.pyo" -delete
+
+  # Build tasks
+  build:
+    desc: Build package
+    cmds:
+      - python -m build
+
+  build-check:
+    desc: Check built package
+    cmds:
+      - twine check dist/*
+      - check-wheel-contents dist/*.whl
+
+  # Documentation tasks
+  docs:
+    desc: Build documentation
+    dir: docs
+    cmds:
+      - make html
+
+  docs-clean:
+    desc: Clean documentation build
+    dir: docs
+    cmds:
+      - make clean
+
+  docs-serve:
+    desc: Serve documentation locally
+    dir: docs/_build/html
+    cmds:
+      - python -m http.server 8000
+
+  docs-live:
+    desc: Serve documentation with auto-reload
+    dir: docs
+    cmds:
+      - sphinx-autobuild . _build/html --host 0.0.0.0 --port 8000
+
+  # Docker tasks
+  docker-build:
+    desc: Build Docker images
+    cmds:
+      - docker-compose build
+
+  docker-dev:
+    desc: Run development container
+    cmds:
+      - docker-compose up -d dev
+      - docker-compose logs -f dev
+
+  docker-test:
+    desc: Run tests in container
+    cmds:
+      - docker-compose run --rm test
+
+  docker-prod:
+    desc: Run production container
+    cmds:
+      - docker-compose up prod
+
+  docker-docs:
+    desc: Run documentation container
+    cmds:
+      - docker-compose up -d docs
+
+  docker-down:
+    desc: Stop Docker containers
+    cmds:
+      - docker-compose down -v
+
+  docker-clean:
+    desc: Clean Docker containers and images
+    cmds:
+      - docker-compose down -v --rmi all
+
+  # Release tasks
+  version:
+    desc: Show current version
+    cmds:
+      - python -c "import scikitplot; print(scikitplot.__version__)"
+
+  release-check:
+    desc: Check release readiness
+    cmds:
+      - python -m build
+      - twine check dist/*
+
+  release-test:
+    desc: Release to TestPyPI
+    cmds:
+      - twine upload --repository testpypi dist/*
+
+  release:
+    desc: Release to PyPI
+    cmds:
+      - twine upload dist/*
+
+  # CI tasks
+  ci:
+    desc: Run CI pipeline locally
+    cmds:
+      - task: lint
+      - task: test
+      - task: build
+
+  # All-in-one task
+  all:
+    desc: Run complete workflow
+    cmds:
+      - task: clean
+      - task: install-dev
+      - task: lint
+      - task: test-cov
+      - task: build
+    silent: true
+
+  # Development setup
+  dev-setup:
+    desc: Setup development environment
+    cmds:
+      - task: clean
+      - task: install-dev
+      - echo "Development environment setup complete!"
+      - echo "Run 'task test' to run tests"
+      - echo "Run 'task lint' to check code quality"
+      - echo "Run 'task format' to format code"

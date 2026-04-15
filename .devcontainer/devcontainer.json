@@ -1,0 +1,74 @@
+{
+  "name": "Scikit-plot Development",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/git:1": {},
+    "ghcr.io/devcontainers/features/github-cli:1": {},
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "charliermarsh.ruff",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "ms-python.mypy-type-checker",
+        "ms-toolsai.jupyter",
+        "ms-azuretools.vscode-docker",
+        "github.vscode-pull-request-github",
+        "eamodio.gitlens",
+        "redhat.vscode-yaml",
+        "tamasfe.even-better-toml",
+        "yzhang.markdown-all-in-one",
+        "gruntfuggly.todo-tree",
+        "usernamehw.errorlens",
+        "aaron-bond.better-comments"
+      ],
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python",
+        "python.analysis.typeCheckingMode": "basic",
+        "editor.formatOnSave": true,
+        "editor.codeActionsOnSave": {
+          "source.fixAll": "explicit",
+          "source.organizeImports": "explicit"
+        },
+        "python.linting.enabled": true,
+        "python.linting.ruffEnabled": true,
+        "python.formatting.provider": "ruff",
+        "ruff.organizeImports": true,
+        "ruff.fixAll": true,
+        "python.testing.pytestEnabled": true,
+        "python.testing.pytestArgs": ["scikitplot/tests", "-v"],
+        "editor.rulers": [100],
+        "editor.tabSize": 4,
+        "editor.insertSpaces": true
+      }
+    }
+  },
+  "forwardPorts": [8888, 8000, 8080],
+  "portsAttributes": {
+    "8888": {
+      "label": "Jupyter",
+      "onAutoForward": "notify"
+    },
+    "8000": {
+      "label": "Documentation",
+      "onAutoForward": "notify"
+    }
+  },
+  "postCreateCommand": "pip install -e '.[dev]' && pre-commit install",
+  "postStartCommand": "git config --global --add safe.directory /workspaces/scikit-plot",
+  "remoteUser": "vscode",
+  "remoteEnv": {
+    "PYTHONPATH": "/workspaces/scikit-plot"
+  },
+  "mounts": [
+    "source=${localWorkspaceFolder}/.devcontainer/bash_history,target=/home/vscode/.bash_history,type=bind,consistency=cached"
+  ],
+  "runArgs": ["--init"]
+}
