@@ -1,3 +1,37 @@
+# Include documentation files
 include README.md
 include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+
+# Include configuration files
+include pyproject.toml
 include requirements.txt
+
+# Include documentation
+recursive-include docs *.rst *.md *.py *.txt Makefile make.bat
+recursive-include docs/_static *.png *.jpg *.gif *.css *.js
+
+# Include examples
+recursive-include examples *.py *.ipynb *.png *.jpg
+
+# Include tests
+recursive-include scikitplot/tests *.py
+
+# Exclude files
+exclude .travis.yml
+exclude tox.ini
+exclude setup.py
+
+# Exclude directories
+exclude .github
+exclude .vscode
+exclude .devcontainer
+exclude .git
+exclude .pytest_cache
+exclude .mypy_cache
+exclude .ruff_cache
+exclude htmlcov
+exclude dist
+exclude build
+exclude *.egg-info

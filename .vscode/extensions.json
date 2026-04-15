@@ -1,0 +1,49 @@
+{
+  "recommendations": [
+    // Python development
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "charliermarsh.ruff",
+    "ms-python.black-formatter",
+    "ms-python.isort",
+    "ms-python.mypy-type-checker",
+
+    // Jupyter
+    "ms-toolsai.jupyter",
+    "ms-toolsai.jupyter-renderers",
+
+    // Docker
+    "ms-azuretools.vscode-docker",
+
+    // Git and GitHub
+    "github.vscode-pull-request-github",
+    "eamodio.gitlens",
+
+    // YAML and TOML
+    "redhat.vscode-yaml",
+    "tamasfe.even-better-toml",
+
+    // Markdown
+    "yzhang.markdown-all-in-one",
+    "davidanson.vscode-markdownlint",
+
+    // Code quality
+    "sonarsource.sonarlint-vscode",
+
+    // Utilities
+    "gruntfuggly.todo-tree",
+    "wayou.vscode-todo-highlight",
+    "usernamehw.errorlens",
+    "aaron-bond.better-comments",
+
+    // File icons
+    "pkief.material-icon-theme",
+
+    // Theme
+    "zhuangtongfa.material-theme"
+  ],
+  "unwantedRecommendations": [
+    "ms-python.flake8",
+    "ms-python.pylint"
+  ]
+}

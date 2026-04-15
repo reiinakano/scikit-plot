@@ -1,5 +1,43 @@
-conda:
-    file: environment.yml
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html
 
-requirements_file:
-    requirements.txt
+version: 2
+
+# Build configuration
+build:
+  os: ubuntu-22.04
+  tools:
+    python: "3.12"
+  apt_packages:
+    - graphviz
+    - libgirepository1.0-dev
+
+# Python configuration
+python:
+  install:
+    - method: pip
+      path: .
+      extra_requirements:
+        - docs
+
+# Sphinx configuration
+sphinx:
+  configuration: docs/conf.py
+  fail_on_warning: false
+
+# Formats
+formats:
+  - pdf
+  - epub
+
+# Search
+search:
+  ranking:
+    api/*: 5
+    examples/*: 2
+    Quickstart.html: 10
+
+# Submodules
+submodules:
+  include: all
+  recursive: true

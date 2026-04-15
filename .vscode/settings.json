@@ -1,0 +1,85 @@
+{
+  // Python settings
+  "python.defaultInterpreterPath": "${workspaceFolder}/venv/bin/python",
+  "python.analysis.typeCheckingMode": "basic",
+  "python.analysis.autoImportCompletions": true,
+  "python.analysis.completeFunctionParens": true,
+  "python.analysis.extraPaths": [
+    "${workspaceFolder}"
+  ],
+
+  // Linting and formatting
+  "editor.formatOnSave": true,
+  "editor.codeActionsOnSave": {
+    "source.fixAll": "explicit",
+    "source.organizeImports": "explicit"
+  },
+
+  // Ruff as the default linter and formatter
+  "python.linting.enabled": true,
+  "python.linting.ruffEnabled": true,
+  "python.formatting.provider": "ruff",
+  "ruff.organizeImports": true,
+  "ruff.fixAll": true,
+
+  // Black as backup formatter
+  "python.formatting.blackArgs": ["--line-length=100"],
+
+  // Testing
+  "python.testing.pytestEnabled": true,
+  "python.testing.unittestEnabled": false,
+  "python.testing.nosetestsEnabled": false,
+  "python.testing.pytestArgs": [
+    "scikitplot/tests",
+    "-v"
+  ],
+
+  // File associations
+  "files.associations": {
+    "*.py": "python",
+    "*.pyi": "python"
+  },
+
+  // Editor settings
+  "editor.rulers": [100],
+  "editor.tabSize": 4,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "files.trimTrailingWhitespace": true,
+  "files.insertFinalNewline": true,
+
+  // Search settings
+  "search.exclude": {
+    "**/venv": true,
+    "**/.venv": true,
+    "**/__pycache__": true,
+    "**/*.pyc": true,
+    "**/node_modules": true,
+    "**/dist": true,
+    "**/build": true,
+    "**/.git": true,
+    "**/.pytest_cache": true,
+    "**/.mypy_cache": true,
+    "**/.ruff_cache": true,
+    "**/htmlcov": true,
+    "**/docs/_build": true
+  },
+
+  // Terminal settings
+  "terminal.integrated.env.windows": {
+    "PYTHONPATH": "${workspaceFolder}"
+  },
+  "terminal.integrated.env.linux": {
+    "PYTHONPATH": "${workspaceFolder}"
+  },
+  "terminal.integrated.env.osx": {
+    "PYTHONPATH": "${workspaceFolder}"
+  },
+
+  // Jupyter settings
+  "jupyter.askKernelRestart": false,
+  "jupyter.interactiveWindow.creationMode": "perFile",
+
+  // Extension recommendations
+  "extensions.ignoreRecommendations": false
+}
