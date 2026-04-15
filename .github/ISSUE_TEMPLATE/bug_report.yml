@@ -1,0 +1,111 @@
+name: Bug Report
+description: Report a bug to help us improve
+labels: ["bug", "needs-triage"]
+assignees: []
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to fill out this bug report!
+        Please fill out the sections below to help us fix the issue.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of what the bug is
+      placeholder: "When I try to..."
+    validations:
+      required: true
+
+  - type: textarea
+    id: code
+    attributes:
+      label: Code to Reproduce
+      description: Please provide a minimal reproducible example
+      render: python
+      placeholder: |
+        import scikitplot as skplt
+        # Your code here
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: A clear and concise description of what you expected to happen
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: A clear and concise description of what actually happened
+    validations:
+      required: true
+
+  - type: textarea
+    id: error
+    attributes:
+      label: Error Messages
+      description: If applicable, add the full error traceback
+      render: python-traceback
+
+  - type: input
+    id: scikit-plot-version
+    attributes:
+      label: scikit-plot Version
+      description: What version of scikit-plot are you using?
+      placeholder: "e.g., 0.3.7"
+    validations:
+      required: true
+
+  - type: input
+    id: python-version
+    attributes:
+      label: Python Version
+      description: What version of Python are you using?
+      placeholder: "e.g., 3.11.0"
+    validations:
+      required: true
+
+  - type: input
+    id: os
+    attributes:
+      label: Operating System
+      description: What operating system are you using?
+      placeholder: "e.g., Ubuntu 22.04, macOS 13.0, Windows 11"
+    validations:
+      required: true
+
+  - type: textarea
+    id: dependencies
+    attributes:
+      label: Dependency Versions
+      description: Please provide versions of key dependencies
+      render: text
+      placeholder: |
+        matplotlib==3.8.0
+        scikit-learn==1.3.0
+        scipy==1.11.0
+        numpy==1.26.0
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Add any other context about the problem here
+
+  - type: checkboxes
+    id: terms
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched the existing issues
+          required: true
+        - label: I have read the documentation
+          required: true
+        - label: I have provided a minimal reproducible example
+          required: true

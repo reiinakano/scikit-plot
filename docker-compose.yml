@@ -1,0 +1,185 @@
+version: '3.8'
+
+services:
+  development:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+      args:
+        PYTHON_VERSION: "3.11"
+    image: scikit-plot:dev
+    container_name: scikit-plot-dev
+    volumes:
+      - .:/app
+      - pip-cache:/root/.cache/pip
+      - pre-commit-cache:/root/.cache/pre-commit
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MPLBACKEND=Agg
+      - JUPYTER_ENABLE_LAB=yes
+    ports:
+      - "8888:8888"
+    command: /bin/bash
+    networks:
+      - scikit-plot-network
+
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+      args:
+        PYTHON_VERSION: "3.11"
+    image: scikit-plot:test
+    container_name: scikit-plot-test
+    volumes:
+      - .:/app
+      - pytest-cache:/root/.cache/pytest
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MPLBACKEND=Agg
+      - CI=true
+    command: pytest -v --cov=scikitplot --cov-report=term-missing
+    networks:
+      - scikit-plot-network
+
+  test-39:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+      args:
+        PYTHON_VERSION: "3.9"
+    image: scikit-plot:test-py39
+    container_name: scikit-plot-test-py39
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MPLBACKEND=Agg
+    command: pytest -v
+    profiles:
+      - test-all
+
+  test-310:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+      args:
+        PYTHON_VERSION: "3.10"
+    image: scikit-plot:test-py310
+    container_name: scikit-plot-test-py310
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MPLBACKEND=Agg
+    command: pytest -v
+    profiles:
+      - test-all
+
+  test-312:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: test
+      args:
+        PYTHON_VERSION: "3.12"
+    image: scikit-plot:test-py312
+    container_name: scikit-plot-test-py312
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+      - MPLBACKEND=Agg
+    command: pytest -v
+    profiles:
+      - test-all
+
+  docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: docs
+      args:
+        PYTHON_VERSION: "3.11"
+    image: scikit-plot:docs
+    container_name: scikit-plot-docs
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    command: sh -c "make html && python -m http.server 8000 -d _build/html"
+    networks:
+      - scikit-plot-network
+
+  jupyter:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+      args:
+        PYTHON_VERSION: "3.11"
+    image: scikit-plot:jupyter
+    container_name: scikit-plot-jupyter
+    volumes:
+      - .:/app
+      - jupyter-data:/root/.jupyter
+    environment:
+      - PYTHONUNBUFFERED=1
+      - JUPYTER_ENABLE_LAB=yes
+    ports:
+      - "8888:8888"
+    command: jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=''
+    networks:
+      - scikit-plot-network
+
+  lint:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+      args:
+        PYTHON_VERSION: "3.11"
+    image: scikit-plot:lint
+    container_name: scikit-plot-lint
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: sh -c "ruff check . && black --check . && isort --check-only ."
+    networks:
+      - scikit-plot-network
+
+  production:
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+      args:
+        PYTHON_VERSION: "3.11"
+    image: scikit-plot:latest
+    container_name: scikit-plot-prod
+    environment:
+      - PYTHONUNBUFFERED=1
+    command: python -c "import scikitplot; print('Production ready!')"
+    networks:
+      - scikit-plot-network
+    profiles:
+      - production
+
+volumes:
+  pip-cache:
+    name: scikit-plot-pip-cache
+  pre-commit-cache:
+    name: scikit-plot-pre-commit-cache
+  pytest-cache:
+    name: scikit-plot-pytest-cache
+  jupyter-data:
+    name: scikit-plot-jupyter-data
+
+networks:
+  scikit-plot-network:
+    name: scikit-plot-network
+    driver: bridge

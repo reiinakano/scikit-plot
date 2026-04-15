@@ -1,3 +1,54 @@
 include README.md
 include LICENSE
+include pyproject.toml
 include requirements.txt
+
+recursive-include scikitplot *.py
+recursive-include scikitplot *.pyi
+recursive-include scikitplot py.typed
+
+recursive-include docs *.rst
+recursive-include docs *.py
+recursive-include docs Makefile
+recursive-include docs _static *
+
+recursive-include examples *.py
+recursive-include examples *.ipynb
+recursive-include examples *.png
+
+exclude .gitignore
+exclude .dockerignore
+exclude .pre-commit-config.yaml
+exclude .readthedocs.yml
+exclude Dockerfile
+exclude Dockerfile.prod
+exclude docker-compose.yml
+exclude Makefile
+exclude Taskfile.yml
+exclude tox.ini
+exclude ruff.toml
+exclude setup.py
+exclude setup.cfg
+
+prune .github
+prune .tox
+prune .venv
+prune .eggs
+prune .mypy_cache
+prune .pytest_cache
+prune .ruff_cache
+prune __pycache__
+prune build
+prune dist
+prune htmlcov
+prune docs/_build
+prune *.egg-info
+
+global-exclude __pycache__
+global-exclude *.py[cod]
+global-exclude *.so
+global-exclude .DS_Store
+global-exclude Thumbs.db
+global-exclude *.swp
+global-exclude *.swo
+global-exclude *~

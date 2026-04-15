@@ -1,0 +1,90 @@
+target-version = "py39"
+line-length = 100
+
+[lint]
+select = [
+    "E",      # pycodestyle errors
+    "W",      # pycodestyle warnings
+    "F",      # pyflakes
+    "I",      # isort
+    "B",      # flake8-bugbear
+    "C4",     # flake8-comprehensions
+    "UP",     # pyupgrade
+    "ARG",    # flake8-unused-arguments
+    "SIM",    # flake8-simplify
+    "S",      # flake8-bandit
+    "A",      # flake8-builtins
+    "COM",    # flake8-commas
+    "DTZ",    # flake8-datetimez
+    "T10",    # flake8-debugger
+    "EXE",    # flake8-executable
+    "ISC",    # flake8-implicit-str-concat
+    "ICN",    # flake8-import-conventions
+    "G",      # flake8-logging-format
+    "INP",    # flake8-no-pep420
+    "PIE",    # flake8-pie
+    "PYI",    # flake8-pyi
+    "PT",     # flake8-pytest-style
+    "Q",      # flake8-quotes
+    "RSE",    # flake8-raise
+    "RET",    # flake8-return
+    "SLF",    # flake8-self
+    "SLOT",   # flake8-slots
+    "TID",    # flake8-tidy-imports
+    "TCH",    # flake8-type-checking
+    "INT",    # flake8-gettext
+    "PTH",    # flake8-use-pathlib
+    "PL",     # pylint
+    "TRY",    # tryceratops
+    "FLY",    # flynt
+    "PERF",   # perflint
+    "RUF",    # ruff-specific rules
+]
+ignore = [
+    "E501",     # line too long (handled by black)
+    "B008",     # do not perform function calls in argument defaults
+    "B905",     # zip without strict
+    "ARG001",   # unused function argument
+    "ARG002",   # unused method argument
+    "S101",     # assert used
+    "PLR0913",  # too many arguments
+    "PLR2004",  # magic value comparison
+    "TRY003",   # long exception messages
+    "COM812",   # trailing comma missing (conflicts with formatter)
+    "ISC001",   # single-line implicit string concatenation (conflicts with formatter)
+]
+
+[lint.per-file-ignores]
+"__init__.py" = ["F401", "E402"]
+"tests/*" = ["ARG", "S101", "PLR2004", "PT011"]
+"examples/*" = ["INP001", "T201", "E402"]
+"docs/*" = ["INP001", "A001"]
+
+[lint.isort]
+known-first-party = ["scikitplot"]
+known-third-party = ["matplotlib", "sklearn", "scipy", "numpy", "pytest"]
+
+[lint.pylint]
+max-args = 10
+max-branches = 15
+max-returns = 8
+max-statements = 60
+
+[format]
+quote-style = "double"
+indent-style = "space"
+skip-magic-trailing-comma = false
+line-ending = "auto"
+docstring-code-format = true
+docstring-code-line-length = "dynamic"
+
+[exclude]
+"docs" = ["*"]
+"examples" = ["*"]
+".git" = ["*"]
+".mypy_cache" = ["*"]
+".tox" = ["*"]
+".venv" = ["*"]
+"_build" = ["*"]
+"build" = ["*"]
+"dist" = ["*"]

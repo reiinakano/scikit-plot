@@ -1,0 +1,253 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "scikit-plot"
+version = "0.3.7"
+description = "An intuitive library to add plotting functionality to scikit-learn objects."
+readme = "README.md"
+license = {text = "MIT"}
+authors = [
+    {name = "Reiichiro Nakano", email = "reiichiro.s.nakano@gmail.com"}
+]
+maintainers = [
+    {name = "Reiichiro Nakano", email = "reiichiro.s.nakano@gmail.com"}
+]
+keywords = [
+    "machine-learning",
+    "visualization",
+    "scikit-learn",
+    "matplotlib",
+    "data-science",
+    "plotting",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Visualization",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Typing :: Typed",
+]
+requires-python = ">=3.9"
+dependencies = [
+    "matplotlib>=1.4.0",
+    "scikit-learn>=0.18",
+    "scipy>=0.9",
+    "joblib>=0.10",
+]
+
+[project.optional-dependencies]
+dev = [
+    "build>=0.10.0",
+    "twine>=4.0.0",
+    "wheel>=0.40.0",
+    "setuptools>=61.0",
+]
+test = [
+    "pytest>=7.0.0",
+    "pytest-cov>=4.0.0",
+    "pytest-xdist>=3.0.0",
+    "pytest-mpl>=0.16.0",
+    "coverage[toml]>=7.0.0",
+]
+lint = [
+    "ruff>=0.1.0",
+    "black>=23.0.0",
+    "isort>=5.12.0",
+    "mypy>=1.0.0",
+    "pre-commit>=3.0.0",
+]
+docs = [
+    "sphinx>=5.0.0",
+    "sphinx-rtd-theme>=1.0.0",
+    "numpydoc>=1.5.0",
+    "nbsphinx>=0.9.0",
+    "ipython>=8.0.0",
+    "jupyter>=1.0.0",
+]
+all = [
+    "scikit-plot[dev,test,lint,docs]",
+]
+
+[project.urls]
+Homepage = "https://github.com/reiinakano/scikit-plot"
+Documentation = "https://scikit-plot.readthedocs.io"
+Repository = "https://github.com/reiinakano/scikit-plot.git"
+Issues = "https://github.com/reiinakano/scikit-plot/issues"
+Changelog = "https://github.com/reiinakano/scikit-plot/releases"
+
+[tool.setuptools]
+packages = ["scikitplot"]
+include-package-data = true
+
+[tool.setuptools.package-data]
+scikitplot = ["py.typed"]
+
+[tool.black]
+line-length = 100
+target-version = ["py39", "py310", "py311", "py312"]
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+    \.git
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+    | docs
+    | examples
+)/
+'''
+
+[tool.isort]
+profile = "black"
+line_length = 100
+multi_line_output = 3
+include_trailing_comma = true
+force_grid_wrap = 0
+use_parentheses = true
+ensure_newline_before_comments = true
+skip_gitignore = true
+skip = [".git", ".hg", ".mypy_cache", ".tox", ".venv", "_build", "buck-out", "build", "dist", "docs"]
+
+[tool.ruff]
+target-version = "py39"
+line-length = 100
+select = [
+    "E",
+    "W",
+    "F",
+    "I",
+    "B",
+    "C4",
+    "UP",
+    "ARG",
+    "SIM",
+]
+ignore = [
+    "E501",
+    "B008",
+    "B905",
+    "ARG001",
+    "ARG002",
+]
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "docs",
+    "examples",
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+"tests/*" = ["ARG", "S101"]
+
+[tool.ruff.isort]
+known-first-party = ["scikitplot"]
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+disallow_untyped_defs = false
+disallow_incomplete_defs = false
+check_untyped_defs = true
+ignore_missing_imports = true
+exclude = [
+    "docs",
+    "examples",
+    "tests",
+    "build",
+    "dist",
+]
+
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "-ra",
+    "-q",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=scikitplot",
+    "--cov-report=term-missing",
+    "--cov-report=xml:coverage.xml",
+    "--cov-report=html:htmlcov",
+]
+testpaths = ["scikitplot/tests"]
+pythonpath = ["."]
+filterwarnings = [
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+]
+markers = [
+    "slow: marks tests as slow (deselect with '-m \"not slow\"')",
+    "mpl: tests that use matplotlib",
+]
+
+[tool.coverage.run]
+source = ["scikitplot"]
+branch = true
+parallel = true
+omit = [
+    "scikitplot/tests/*",
+    "scikitplot/__init__.py",
+    "*/__pycache__/*",
+]
+
+[tool.coverage.paths]
+source = [
+    "scikitplot",
+]
+
+[tool.coverage.report]
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if __name__ == .__main__.:",
+    "if TYPE_CHECKING:",
+    "if typing.TYPE_CHECKING:",
+    "@abstractmethod",
+]
+fail_under = 50
+show_missing = true
+skip_covered = true
+
+[tool.coverage.html]
+directory = "htmlcov"
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+[tool.coverage.json]
+output = "coverage.json"
