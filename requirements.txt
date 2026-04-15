@@ -1,4 +1,13 @@
-matplotlib>=1.4.0
-scikit-learn>=0.18
-scipy>=0.9
-joblib>=0.10
+# Core dependencies for scikit-plot
+# Install with: pip install -r requirements.txt
+
+# Core scientific computing
+numpy>=1.21.0
+scipy>=1.7.0
+
+# Machine learning
+scikit-learn>=1.0.0
+joblib>=1.0.0
+
+# Visualization
+matplotlib>=3.5.0

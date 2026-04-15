@@ -1,0 +1,60 @@
+{
+    "name": "scikit-plot Development Container",
+    "image": "mcr.microsoft.com/devcontainers/python:3.11",
+    "features": {
+        "ghcr.io/devcontainers/features/git:1": {},
+        "ghcr.io/devcontainers/features/github-cli:1": {},
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.black-formatter",
+                "ms-python.isort",
+                "charliermarsh.ruff",
+                "ms-python.mypy-type-checker",
+                "ms-toolsai.jupyter",
+                "redhat.vscode-yaml",
+                "esbenp.prettier-vscode",
+                "github.vscode-github-actions",
+                "ms-azuretools.vscode-docker",
+                "eamodio.gitlens",
+                "usernamehw.errorlens",
+                "njpwerner.autodocstring"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.analysis.typeCheckingMode": "basic",
+                "python.formatting.provider": "black",
+                "python.formatting.blackArgs": ["--line-length", "100"],
+                "editor.formatOnSave": true,
+                "editor.codeActionsOnSave": {
+                    "source.organizeImports": "explicit"
+                },
+                "editor.rulers": [100]
+            }
+        }
+    },
+    "postCreateCommand": "pip install --upgrade pip && pip install -e '.[dev,docs,test]' && pre-commit install",
+    "postStartCommand": "git config --global --add safe.directory /workspaces/scikit-plot",
+    "remoteUser": "vscode",
+    "forwardPorts": [8000, 8888],
+    "portsAttributes": {
+        "8000": {
+            "label": "Documentation Server",
+            "onAutoForward": "notify"
+        },
+        "8888": {
+            "label": "Jupyter Server",
+            "onAutoForward": "notify"
+        }
+    },
+    "mounts": [
+        "source=${localEnv:HOME}/.ssh,target=/home/vscode/.ssh,type=bind,consistency=cached"
+    ],
+    "runArgs": [
+        "--network=host"
+    ]
+}

@@ -1,0 +1,177 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Install Development Dependencies",
+            "type": "shell",
+            "command": "pip install -e '.[dev]' && pre-commit install",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Run Tests",
+            "type": "shell",
+            "command": "pytest scikitplot/tests -v",
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            },
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Run Tests with Coverage",
+            "type": "shell",
+            "command": "pytest scikitplot/tests -v --cov=scikitplot --cov-report=html --cov-report=term",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Format Code",
+            "type": "shell",
+            "command": "black scikitplot && isort scikitplot",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Lint Code",
+            "type": "shell",
+            "command": "ruff check scikitplot && mypy scikitplot --ignore-missing-imports",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Build Package",
+            "type": "shell",
+            "command": "python -m build",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Build Documentation",
+            "type": "shell",
+            "command": "cd docs && make html",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Serve Documentation",
+            "type": "shell",
+            "command": "cd docs/_build/html && python -m http.server 8000",
+            "group": "build",
+            "isBackground": true,
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Clean Build Artifacts",
+            "type": "shell",
+            "command": "make clean",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Run Pre-commit Hooks",
+            "type": "shell",
+            "command": "pre-commit run --all-files",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Docker: Build Image",
+            "type": "shell",
+            "command": "docker build -t scikit-plot:latest .",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Docker: Run Tests",
+            "type": "shell",
+            "command": "docker-compose run --rm test",
+            "group": "test",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Docker: Start Dev Environment",
+            "type": "shell",
+            "command": "docker-compose up -d dev",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        },
+        {
+            "label": "Docker: Stop Dev Environment",
+            "type": "shell",
+            "command": "docker-compose down",
+            "group": "build",
+            "presentation": {
+                "echo": true,
+                "reveal": "always",
+                "focus": false,
+                "panel": "shared"
+            }
+        }
+    ]
+}

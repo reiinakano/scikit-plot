@@ -1,0 +1,133 @@
+# Docker Build and Push Workflow
+# Builds and pushes Docker images to GitHub Container Registry
+
+name: Docker
+
+on:
+  push:
+    branches: [master, main]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [master, main]
+    paths:
+      - 'Dockerfile'
+      - 'docker-compose.yml'
+      - '.github/workflows/docker.yml'
+  schedule:
+    # Rebuild weekly
+    - cron: '0 0 * * 0'
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  # ============================================================================
+  # Build and Test Docker Images
+  # ============================================================================
+  build:
+    name: Build Docker Images
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        target: [development, testing, production]
+        include:
+          - target: development
+            tag_suffix: -dev
+          - target: testing
+            tag_suffix: -test
+          - target: production
+            tag_suffix: ''
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to Container Registry
+        if: github.event_name != 'pull_request'
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extract metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=ref,event=branch,suffix=${{ matrix.tag_suffix }}
+            type=ref,event=pr,suffix=${{ matrix.tag_suffix }}
+            type=semver,pattern={{version}}${{ matrix.tag_suffix }}
+            type=semver,pattern={{major}}.{{minor}}${{ matrix.tag_suffix }}
+            type=semver,pattern={{major}}${{ matrix.tag_suffix }}
+            type=sha,suffix=${{ matrix.tag_suffix }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          target: ${{ matrix.target }}
+          push: ${{ github.event_name != 'pull_request' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  # ============================================================================
+  # Test Docker Images
+  # ============================================================================
+  test:
+    name: Test Docker Images
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request'
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build test image
+        run: docker build --target testing -t scikit-plot:test .
+
+      - name: Run tests in container
+        run: docker run --rm scikit-plot:test
+
+  # ============================================================================
+  # Scan for Vulnerabilities
+  # ============================================================================
+  scan:
+    name: Scan for Vulnerabilities
+    needs: build
+    runs-on: ubuntu-latest
+    if: github.event_name != 'pull_request'
+    permissions:
+      contents: read
+      packages: read
+      security-events: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          format: 'sarif'
+          output: 'trivy-results.sarif'
+
+      - name: Upload Trivy scan results
+        uses: github/codeql-action/upload-sarif@v2
+        if: always()
+        with:
+          sarif_file: 'trivy-results.sarif'

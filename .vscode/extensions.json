@@ -1,0 +1,22 @@
+{
+    "recommendations": [
+        "ms-python.python",
+        "ms-python.vscode-pylance",
+        "ms-python.black-formatter",
+        "ms-python.isort",
+        "charliermarsh.ruff",
+        "ms-python.mypy-type-checker",
+        "ms-toolsai.jupyter",
+        "redhat.vscode-yaml",
+        "esbenp.prettier-vscode",
+        "github.vscode-github-actions",
+        "ms-azuretools.vscode-docker",
+        "eamodio.gitlens",
+        "usernamehw.errorlens",
+        "njpwerner.autodocstring"
+    ],
+    "unwantedRecommendations": [
+        "ms-python.flake8",
+        "ms-python.pylint"
+    ]
+}

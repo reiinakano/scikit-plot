@@ -1,0 +1,112 @@
+version: "3.8"
+
+services:
+  # Development environment with full dependencies
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    image: scikit-plot:dev
+    container_name: scikit-plot-dev
+    volumes:
+      - .:/app
+      - scikit-plot-venv:/app/.venv
+    ports:
+      - "8888:8888"  # Jupyter
+      - "8000:8000"  # Documentation
+    environment:
+      - PYTHONPATH=/app
+      - JUPYTER_ENABLE_LAB=yes
+    command: >
+      bash -c "
+        pip install -e '.[dev,docs,test]' &&
+        jupyter lab --ip=0.0.0.0 --port=8888 --no-browser --allow-root
+        --NotebookApp.token='' --NotebookApp.password=''
+      "
+    stdin_open: true
+    tty: true
+
+  # Testing environment
+  test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: testing
+    image: scikit-plot:test
+    container_name: scikit-plot-test
+    volumes:
+      - .:/app
+    environment:
+      - PYTHONPATH=/app
+      - PYTEST_CURRENT_TEST=1
+    command: >
+      bash -c "
+        pip install -e '.[test]' &&
+        pytest scikitplot/tests -v --cov=scikitplot --cov-report=term-missing --cov-report=xml
+      "
+
+  # Production environment
+  prod:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    image: scikit-plot:latest
+    container_name: scikit-plot-prod
+    environment:
+      - PYTHONPATH=/app
+    command: >
+      python -c "import scikitplot; print(f'scikit-plot v{scikitplot.__version__} installed successfully')"
+
+  # Documentation server
+  docs:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: docs
+    image: scikit-plot:docs
+    container_name: scikit-plot-docs
+    volumes:
+      - ./docs:/app/docs
+      - ./scikitplot:/app/scikitplot
+    ports:
+      - "8000:8000"
+    environment:
+      - PYTHONPATH=/app
+    command: >
+      bash -c "
+        cd docs &&
+        make html &&
+        python -m http.server 8000 --directory _build/html
+      "
+
+  # Jupyter notebook server
+  notebook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    image: scikit-plot:dev
+    container_name: scikit-plot-notebook
+    volumes:
+      - .:/app
+      - ./examples/jupyter_notebooks:/app/notebooks
+    ports:
+      - "8888:8888"
+    environment:
+      - PYTHONPATH=/app
+      - JUPYTER_ENABLE_LAB=yes
+    working_dir: /app/notebooks
+    command: >
+      jupyter lab
+      --ip=0.0.0.0
+      --port=8888
+      --no-browser
+      --allow-root
+      --NotebookApp.token=''
+      --NotebookApp.password=''
+      --NotebookApp.notebook_dir=/app/notebooks
+
+volumes:
+  scikit-plot-venv:
