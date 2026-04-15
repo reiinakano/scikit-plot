@@ -1,3 +1,57 @@
+# Include essential documentation
 include README.md
 include LICENSE
+include CHANGELOG.md
+include CONTRIBUTING.md
+
+# Include requirements
 include requirements.txt
+
+# Include configuration files
+include pyproject.toml
+include MANIFEST.in
+
+# Include documentation
+recursive-include docs *.rst *.md *.py
+recursive-include docs/_static *.png *.jpg *.jpeg *.gif *.ico
+
+# Include examples
+recursive-include examples *.py *.ipynb *.md
+
+# Include tests
+recursive-include scikitplot/tests *.py
+
+# Exclude unnecessary files
+global-exclude *.pyc
+global-exclude *.pyo
+global-exclude *.so
+global-exclude *.dylib
+global-exclude __pycache__
+global-exclude .DS_Store
+
+# Exclude development files
+exclude .gitignore
+exclude .pre-commit-config.yaml
+exclude Makefile
+exclude tox.ini
+exclude .travis.yml
+
+# Exclude CI/CD
+recursive-exclude .github *
+exclude .github
+
+# Exclude Docker files
+exclude Dockerfile
+exclude docker-compose.yml
+exclude .dockerignore
+
+# Exclude IDE files
+recursive-exclude .vscode *
+recursive-exclude .idea *
+exclude .vscode
+exclude .idea
+
+# Exclude build artifacts
+recursive-exclude build *
+recursive-exclude dist *
+recursive-exclude *.egg-info *

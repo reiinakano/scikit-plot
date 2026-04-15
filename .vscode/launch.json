@@ -1,0 +1,68 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python: Current File",
+            "type": "python",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        },
+        {
+            "name": "Python: Run Tests",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "scikitplot/tests",
+                "-v"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Debug Test",
+            "type": "python",
+            "request": "launch",
+            "module": "pytest",
+            "args": [
+                "${file}",
+                "-v",
+                "--no-cov"
+            ],
+            "console": "integratedTerminal",
+            "justMyCode": false
+        },
+        {
+            "name": "Python: Run Example",
+            "type": "python",
+            "request": "launch",
+            "program": "${workspaceFolder}/examples/${input:exampleFile}",
+            "console": "integratedTerminal",
+            "justMyCode": true
+        }
+    ],
+    "inputs": [
+        {
+            "id": "exampleFile",
+            "type": "pickString",
+            "description": "Select an example to run",
+            "options": [
+                "plot_roc.py",
+                "plot_confusion_matrix.py",
+                "plot_precision_recall.py",
+                "plot_learning_curve.py",
+                "plot_calibration_curve.py",
+                "plot_ks_statistic.py",
+                "plot_cumulative_gain.py",
+                "plot_lift_curve.py",
+                "plot_elbow_curve.py",
+                "plot_silhouette.py",
+                "plot_pca_2d_projection.py",
+                "plot_pca_component_variance.py",
+                "plot_feature_importances.py"
+            ]
+        }
+    ]
+}

@@ -1,0 +1,25 @@
+version: "3.8"
+
+services:
+  app:
+    build:
+      context: ..
+      dockerfile: .devcontainer/Dockerfile
+    volumes:
+      - ..:/workspaces/scikit-plot:cached
+      - scikit-plot-venv:/workspaces/scikit-plot/.venv
+    command: sleep infinity
+    environment:
+      - PYTHONPATH=/workspaces/scikit-plot
+    ports:
+      - "8000:8000"
+      - "8888:8888"
+    networks:
+      - scikit-plot-network
+
+volumes:
+  scikit-plot-venv:
+
+networks:
+  scikit-plot-network:
+    driver: bridge
