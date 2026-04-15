@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Documentation
+    url: https://scikit-plot.readthedocs.io
+    about: Check the documentation for usage examples and API reference
+  - name: Question
+    url: https://github.com/reiinakano/scikit-plot/discussions
+    about: Ask questions and discuss with the community

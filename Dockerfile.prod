@@ -1,0 +1,47 @@
+ARG PYTHON_VERSION=3.11
+FROM python:${PYTHON_VERSION}-slim AS builder
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PIP_NO_CACHE_DIR=1 \
+    PIP_DISABLE_PIP_VERSION_CHECK=1
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY pyproject.toml ./
+COPY scikitplot/ ./scikitplot/
+COPY README.md LICENSE ./
+
+RUN pip install --upgrade pip build wheel && \
+    python -m build --wheel
+
+FROM python:${PYTHON_VERSION}-slim AS runtime
+
+WORKDIR /app
+
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1 \
+    PYTHONFAULTHANDLER=1
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    libgomp1 \
+    && rm -rf /var/lib/apt/lists/* \
+    && useradd --create-home --shell /bin/bash appuser
+
+COPY --from=builder /app/dist/*.whl /tmp/
+RUN pip install --no-cache-dir /tmp/*.whl && rm /tmp/*.whl
+
+USER appuser
+WORKDIR /home/appuser
+
+LABEL org.opencontainers.image.title="scikit-plot" \
+      org.opencontainers.image.description="An intuitive library to add plotting functionality to scikit-learn objects" \
+      org.opencontainers.image.url="https://github.com/reiinakano/scikit-plot" \
+      org.opencontainers.image.source="https://github.com/reiinakano/scikit-plot" \
+      org.opencontainers.image.licenses="MIT"
+
+CMD ["python", "-c", "import scikitplot; print('scikit-plot ready!')"]

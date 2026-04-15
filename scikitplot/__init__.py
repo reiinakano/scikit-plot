@@ -1,7 +1,21 @@
-from __future__ import absolute_import, division, print_function, unicode_literals
-from . import metrics, cluster, decomposition, estimators
-__version__ = '0.3.7'
+__all__ = [
+    "classifiers",
+    "cluster",
+    "clustering",
+    "decomposition",
+    "estimators",
+    "helpers",
+    "metrics",
+    "plotters",
+]
 
+__version__ = "0.3.7"
 
-from scikitplot.classifiers import classifier_factory
-from scikitplot.clustering import clustering_factory
+from scikitplot import classifiers
+from scikitplot import cluster
+from scikitplot import clustering
+from scikitplot import decomposition
+from scikitplot import estimators
+from scikitplot import helpers
+from scikitplot import metrics
+from scikitplot import plotters

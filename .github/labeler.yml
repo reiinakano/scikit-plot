@@ -1,0 +1,19 @@
+documentation:
+  - changed-files:
+      - any-glob-to-any-file: ['docs/**', '*.md', '*.rst']
+
+test:
+  - changed-files:
+      - any-glob-to-any-file: ['scikitplot/tests/**', 'conftest.py']
+
+ci:
+  - changed-files:
+      - any-glob-to-any-file: ['.github/**', '.pre-commit-config.yaml']
+
+dependencies:
+  - changed-files:
+      - any-glob-to-any-file: ['pyproject.toml', 'requirements*.txt']
+
+examples:
+  - changed-files:
+      - any-glob-to-any-file: ['examples/**']

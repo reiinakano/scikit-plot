@@ -1,0 +1,111 @@
+{
+    "name": "scikit-plot Development",
+    "build": {
+        "dockerfile": "Dockerfile",
+        "target": "development",
+        "args": {
+            "PYTHON_VERSION": "3.11"
+        }
+    },
+    "features": {
+        "ghcr.io/devcontainers/features/common-utils:2": {
+            "installZsh": true,
+            "configureZshAsDefaultShell": true,
+            "installOhMyZsh": true,
+            "upgradePackages": true
+        },
+        "ghcr.io/devcontainers/features/git:1": {
+            "version": "latest"
+        },
+        "ghcr.io/devcontainers/features/github-cli:1": {}
+    },
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "ms-python.python",
+                "ms-python.vscode-pylance",
+                "ms-python.black-formatter",
+                "ms-python.isort",
+                "charliermarsh.ruff",
+                "ms-python.mypy-type-checker",
+                "njpwerner.autodocstring",
+                "eamodio.gitlens",
+                "GitHub.copilot",
+                "GitHub.vscode-github-actions",
+                "redhat.vscode-yaml",
+                "tamasfe.even-better-toml",
+                "yzhang.markdown-all-in-one",
+                "shd101wyy.markdown-preview-enhanced",
+                "mechatroner.rainbow-csv"
+            ],
+            "settings": {
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.terminal.activateEnvironment": true,
+                "python.analysis.typeCheckingMode": "basic",
+                "python.analysis.autoImportCompletions": true,
+                "python.formatting.provider": "none",
+                "[python]": {
+                    "editor.formatOnSave": true,
+                    "editor.defaultFormatter": "ms-python.black-formatter",
+                    "editor.codeActionsOnSave": {
+                        "source.organizeImports": "explicit",
+                        "source.fixAll": "explicit"
+                    }
+                },
+                "black-formatter.args": [
+                    "--line-length=100"
+                ],
+                "isort.args": [
+                    "--profile=black",
+                    "--line-length=100"
+                ],
+                "ruff.lint.args": [
+                    "--config=ruff.toml"
+                ],
+                "editor.rulers": [100],
+                "editor.renderWhitespace": "boundary",
+                "files.trimTrailingWhitespace": true,
+                "files.insertFinalNewline": true,
+                "files.exclude": {
+                    "**/__pycache__": true,
+                    "**/.pytest_cache": true,
+                    "**/.mypy_cache": true,
+                    "**/.ruff_cache": true,
+                    "**/*.pyc": true,
+                    "**/.git": true
+                },
+                "search.exclude": {
+                    "**/node_modules": true,
+                    "**/bower_components": true,
+                    "**/*.code-search": true,
+                    "**/__pycache__": true,
+                    "**/.pytest_cache": true,
+                    "**/.mypy_cache": true,
+                    "**/htmlcov": true
+                },
+                "git.autofetch": true,
+                "git.confirmSync": false,
+                "github.copilot.enable": {
+                    "*": true,
+                    "yaml": false,
+                    "plaintext": false
+                }
+            }
+        }
+    },
+    "forwardPorts": [8888],
+    "postCreateCommand": "pip install -e '.[all]' && pre-commit install",
+    "postStartCommand": "git config --global --add safe.directory ${containerWorkspaceFolder}",
+    "remoteUser": "root",
+    "mounts": [
+        "source=${localEnv:HOME}/.ssh,target=/root/.ssh,type=bind,consistency=cached",
+        "source=${localEnv:HOME}/.gitconfig,target=/root/.gitconfig,type=bind,consistency=cached"
+    ],
+    "containerEnv": {
+        "PYTHONUNBUFFERED": "1",
+        "MPLBACKEND": "Agg"
+    },
+    "runArgs": [
+        "--network=host"
+    ]
+}
